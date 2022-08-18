@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import styled from "styled-components";
+import { useGlobalContext } from '../globalContext';
 import {Cell} from "../types"
 type StyledProps = {
   bgClr: string;
@@ -33,17 +34,17 @@ const StyledSudokuCell = styled.div<StyledProps>`
 
 type Props = {
   maxNumber: number;
-  value: number | "";
   cell: Cell;
-  modifyBoard: (arg0: number, arg1: number, arg2: number) => void;
 }
 
-export default function SudokuCell({maxNumber, cell, value, modifyBoard}: Props) {
+export default function SudokuCell({maxNumber, cell}: Props) {
   const {row, column} = cell;
 
+  const {modifyBoard, selectCell} = useGlobalContext();
 
   const SIZE_SMALL = 3;
 
+  
 
   function getBorderStyles(row: number, column: number) : string{
     const borderBottom = `${(row + 1) % SIZE_SMALL === 0 ? "border-bottom: 3px solid var(--gridGapClr);": ""}`;
@@ -52,13 +53,26 @@ export default function SudokuCell({maxNumber, cell, value, modifyBoard}: Props)
     return borderStyles ?  borderStyles : ""
   }
 
+  function getCellClr(cell:Cell): string{
+    if (cell.isSelected) {
+      return "var(--selectedCellClr)"
+    } else if (cell.isHighlighted) {
+      return "var(--highlightCellClr)"
+    }
+    return 'var(--notSelectedCellClr)'
+  }
+
   return (
-    <StyledSudokuCell bgClr="var(--standOutClr)" border={getBorderStyles(row, column)} >
+    <StyledSudokuCell 
+    bgClr={getCellClr(cell)}
+    border={getBorderStyles(row, column)} 
+    onFocus={() => selectCell(row, column, cell)}
+    >
       <input className={`number-input`} 
       type="number" 
       min={1} 
       max={maxNumber}
-      value={value}
+      value={cell.value > 0 ? cell.value : " "}
       onChange={(e) => modifyBoard(row, column, Number(e.target.value)) }/>
     </StyledSudokuCell>
   )

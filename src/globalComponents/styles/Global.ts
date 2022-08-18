@@ -6,6 +6,10 @@ const GlobalStyle = createGlobalStyle<{theme: Theme}>`
   --bgClr: ${({theme})=> theme.colors.bgClr};
   --standOutClr: ${({theme})=> theme.colors.standOutClr}; 
   --gridGapClr: ${({theme})=> theme.colors.gridGapClr}; 
+  --selectedCellClr: ${({theme})=> theme.colors.selectedCellClr};
+  --notSelectedCellClr: ${({theme})=> theme.colors.notSelectedCellClr};
+  --highlightCellClr: ${({theme})=> theme.colors.highlightCellClr};
+
 
   }
 

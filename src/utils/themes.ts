@@ -4,9 +4,10 @@ const lightTheme: Theme = {
   colors: {
     bgClr: '#f0f8f5',
     standOutClr: '#0066FF',
-    emptyCellClr: '#f0f8f5',
-    filledCellClr: '#272729',
+    notSelectedCellClr: '#f0f8f5',
+    selectedCellClr: '#00BDFF',
     gridGapClr: '#0f0f0f',
+    highlightCellClr: '#92BDFF'
   }
 }
 

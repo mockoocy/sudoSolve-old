@@ -2,18 +2,22 @@ export type Theme = {
   colors: {
     bgClr: string;
     standOutClr: string;
-    emptyCellClr: string;
-    filledCellClr: string;
+    notSelectedCellClr: string;
+    selectedCellClr: string;
     gridGapClr: string;
+    highlightCellClr: string;
   }
 }
 
 export type Cell = {
   row: number;
   column: number;
+  value: number ;
+  isSelected: boolean;
+  isHighlighted: boolean;
 }
 
-type row = number[];
+type row = Cell[];
 export type Board = row[];
 
 

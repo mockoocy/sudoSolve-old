@@ -20,23 +20,18 @@ const StyledSudokuBoard = styled.div`
 export default function SudokuBoard() {
 
   const SUDOKU_SIZE = 9;
-  const {boardState, modifyBoard, options } = useGlobalContext();
+  const {boardState, options } = useGlobalContext();
 
 
   const sudokuCellElements : JSX.Element[][] = boardState.map((row, rowId) => row.map((cell,col) => (
     <SudokuCell 
     key={`sudokuCell-${rowId}-${col}`} 
     maxNumber={options.SUDOKU_SIZE} 
-    value={cell ? cell : ""} 
-    cell={{
-      row: rowId,
-      column: col
-    }}
-    modifyBoard={modifyBoard}
+    cell={cell}
     />
   )))
 
-
+    console.log(boardState)
   return (
     <StyledSudokuBoard>
       {sudokuCellElements}
