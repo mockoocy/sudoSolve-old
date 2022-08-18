@@ -1,26 +1,23 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { useState } from 'react';
+import { ThemeProvider } from 'styled-components';
+import {Theme} from "./types";
+import themes from "./utils/themes";
+import GlobalStyle from './globalComponents/styles/Global';
+import Navbar from './globalComponents/Navbar';
+import SudokuBoard from './globalComponents/SudokuBoard';
+import { SudokuProvider } from './globalContext';
 
-function App() {
+export default function App() {
+
+  const [theme, setTheme] = useState<Theme>(themes.lightTheme)
+  
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    <SudokuProvider>
+      <ThemeProvider theme={theme}>
+        <GlobalStyle/>
+        <Navbar/>
+        <SudokuBoard/>
+      </ThemeProvider>
+    </SudokuProvider>
+  )
 }
-
-export default App;
