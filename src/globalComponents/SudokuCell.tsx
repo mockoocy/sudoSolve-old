@@ -71,7 +71,7 @@ const  SudokuCell = React.forwardRef<HTMLInputElement, Props>(({maxNumber, cell}
       <input className={`number-input`} 
       type="number" 
       min={1} 
-      ref={ref => console.log(ref)}
+      ref={ref}
       max={maxNumber}
       value={cell.value > 0 ? cell.value : " "}
       onChange={(e) => modifyBoard(row, column, Number(e.target.value)) }/>

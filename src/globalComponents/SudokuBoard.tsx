@@ -23,7 +23,6 @@ export default function SudokuBoard() {
 
   const cellRefs : React.MutableRefObject<any[]> = useRef([]);
 
-  console.log(cellRefs)
     
   const sudokuCellElements: JSX.Element[][] = boardState.map((row, rowId) => {
     return row.map((cell, col)=>{
