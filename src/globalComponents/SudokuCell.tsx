@@ -35,19 +35,18 @@ const StyledSudokuCell = styled.div<StyledProps>`
 type Props = {
   maxNumber: number;
   cell: Cell;
+  moveOnBoard: Function;
 }
 
-const  SudokuCell = React.forwardRef<HTMLInputElement, Props>(({maxNumber, cell}: Props, ref) =>{
+const  SudokuCell = React.forwardRef<HTMLInputElement, Props>(({maxNumber, cell, moveOnBoard}: Props, ref) =>{
   const {row, column} = cell;
-  const {modifyBoard, selectCell} = useGlobalContext();
-
-  const SIZE_SMALL = 3;
+  const {modifyBoard, selectCell, options} = useGlobalContext();
 
 
 
   function getBorderStyles(row: number, column: number) : string{
-    const borderBottom = `${(row + 1) % SIZE_SMALL === 0 ? "border-bottom: 3px solid var(--gridGapClr);": ""}`;
-    const borderRight = `${(column + 1) % SIZE_SMALL === 0 ? "border-right: 3px solid var(--gridGapClr);": ""}`;
+    const borderBottom = `${(row + 1) % options.SMALL_GRID_SIZE === 0 ? "border-bottom: 3px solid var(--gridGapClr);": ""}`;
+    const borderRight = `${(column + 1) % options.SMALL_GRID_SIZE === 0 ? "border-right: 3px solid var(--gridGapClr);": ""}`;
     const borderStyles = borderBottom + borderRight;
     return borderStyles ?  borderStyles : ""
   }
@@ -67,6 +66,9 @@ const  SudokuCell = React.forwardRef<HTMLInputElement, Props>(({maxNumber, cell}
     bgClr={getCellClr(cell)}
     border={getBorderStyles(row, column)} 
     onFocus={() => selectCell(row, column, cell)}
+    // Using onKeyDown event, because then I can prevent numbers from (in/de)crementing on pressing
+    // up/down arrow
+    onKeyDown={e => moveOnBoard(e, row, column)}
     >
       <input className={`number-input`} 
       type="number" 
