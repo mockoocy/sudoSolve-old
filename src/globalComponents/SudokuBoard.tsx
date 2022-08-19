@@ -23,6 +23,44 @@ export default function SudokuBoard() {
 
   const cellRefs : React.MutableRefObject<any[]> = useRef([]);
 
+
+  function moveOnBoard(e: React.KeyboardEvent<HTMLDivElement>, row: number, col: number){
+    const { code } = e;
+    const moveAmount = 1;
+    let [nextRow, nextCol] = [row, col]
+    let nextInputId;
+
+    const getNextInputId = (nextRow: number, nextCol: number) => nextRow * options.SUDOKU_SIZE + nextCol
+
+    switch (code){
+      case "ArrowUp":
+        nextRow = row - moveAmount>= 0 ? row - moveAmount: row;
+        nextInputId = getNextInputId(nextRow, nextCol)
+        break;
+      case "ArrowDown":
+        nextRow = row + moveAmount <= options.SUDOKU_SIZE ? row + moveAmount: row;
+        nextInputId = getNextInputId(nextRow, nextCol)
+        break;
+      case "ArrowLeft":
+        nextCol = col - moveAmount >= 0 ? col - moveAmount : col;
+        nextInputId = getNextInputId(nextRow, nextCol)
+        break;
+      case "ArrowRight":
+        nextCol = col + moveAmount <= options.SUDOKU_SIZE ? col + moveAmount: col;
+        nextInputId = getNextInputId(nextRow, nextCol)
+        break;
+      }
+    if (nextInputId !== undefined &&  nextInputId >= 0 && nextInputId < options.SUDOKU_SIZE ** 2){
+      const nextInput = cellRefs.current[nextInputId];
+      console.log(nextInputId)
+      nextInput.focus();
+      nextInput.select();
+      e.preventDefault();
+
+    }
+
+  }
+
     
   const sudokuCellElements: JSX.Element[][] = boardState.map((row, rowId) => {
     return row.map((cell, col)=>{
@@ -33,6 +71,7 @@ export default function SudokuBoard() {
         ref={(el) => (cellRefs.current[cellId] = el)}
         maxNumber={options.SUDOKU_SIZE} 
         cell={cell}
+        moveOnBoard={moveOnBoard}
         />
       )
     })
