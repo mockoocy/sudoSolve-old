@@ -73,8 +73,8 @@ export function SudokuProvider({children}: Props){
       for (let col=0; col<options.SUDOKU_SIZE; col++){
         if (boardState[currentRow][col].value === value) valid = false
       }
-      for (let row=0; row<options.SMALL_GRID_SIZE; row++){
-        for (let col=0; col<options.SMALL_GRID_SIZE; col++){
+      for (let row=currentGrid.rowStart; row<currentGrid.rowEnd; row++){
+        for (let col=currentGrid.colStart; col<currentGrid.colEnd; col++){
           if (boardState[row][col].value === value) valid = false
         }
       }
@@ -85,6 +85,7 @@ export function SudokuProvider({children}: Props){
     // if the field is already filled, the previous number is replaced with the new one
     // because then the value is like <prevNum><newNum>, so % 10 leaves only <newNum>
     setBoardState(board => board.map((rows, row) => rows.map((cell, col) => {
+      if (cell.value == value) return cell;
       if (row === currentRow && col === currentColumn) {
         return value ? {...cell, value:value, isValid: isMoveValid()} : {...cell, value: 0}
       }
