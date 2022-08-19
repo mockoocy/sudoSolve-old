@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import styled from "styled-components";
 import { useGlobalContext } from '../globalContext';
 import {Cell} from "../types"
@@ -37,14 +37,13 @@ type Props = {
   cell: Cell;
 }
 
-export default function SudokuCell({maxNumber, cell}: Props) {
+const  SudokuCell = React.forwardRef<HTMLInputElement, Props>(({maxNumber, cell}: Props, ref) =>{
   const {row, column} = cell;
-
   const {modifyBoard, selectCell} = useGlobalContext();
 
   const SIZE_SMALL = 3;
 
-  
+
 
   function getBorderStyles(row: number, column: number) : string{
     const borderBottom = `${(row + 1) % SIZE_SMALL === 0 ? "border-bottom: 3px solid var(--gridGapClr);": ""}`;
@@ -62,6 +61,7 @@ export default function SudokuCell({maxNumber, cell}: Props) {
     return 'var(--notSelectedCellClr)'
   }
 
+
   return (
     <StyledSudokuCell 
     bgClr={getCellClr(cell)}
@@ -71,9 +71,12 @@ export default function SudokuCell({maxNumber, cell}: Props) {
       <input className={`number-input`} 
       type="number" 
       min={1} 
+      ref={ref => console.log(ref)}
       max={maxNumber}
       value={cell.value > 0 ? cell.value : " "}
       onChange={(e) => modifyBoard(row, column, Number(e.target.value)) }/>
     </StyledSudokuCell>
   )
-}
+})
+
+export default SudokuCell;

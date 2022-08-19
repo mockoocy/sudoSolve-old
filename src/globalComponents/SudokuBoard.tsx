@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useRef } from 'react'
 import styled from 'styled-components';
 import { useGlobalContext } from '../globalContext';
 import SudokuCell from './SudokuCell';
@@ -19,19 +19,27 @@ const StyledSudokuBoard = styled.div`
 
 export default function SudokuBoard() {
 
-  const SUDOKU_SIZE = 9;
   const {boardState, options } = useGlobalContext();
 
+  const cellRefs : React.MutableRefObject<any[]> = useRef([]);
 
-  const sudokuCellElements : JSX.Element[][] = boardState.map((row, rowId) => row.map((cell,col) => (
-    <SudokuCell 
-    key={`sudokuCell-${rowId}-${col}`} 
-    maxNumber={options.SUDOKU_SIZE} 
-    cell={cell}
-    />
-  )))
+  console.log(cellRefs)
+    
+  const sudokuCellElements: JSX.Element[][] = boardState.map((row, rowId) => {
+    return row.map((cell, col)=>{
+      const cellId = rowId * options.SUDOKU_SIZE + col;
+      return (
+        <SudokuCell 
+        key={`sudokuCell-${rowId}-${col}`} 
+        ref={(el) => (cellRefs.current[cellId] = el)}
+        maxNumber={options.SUDOKU_SIZE} 
+        cell={cell}
+        />
+      )
+    })
+  })
 
-    console.log(boardState)
+
   return (
     <StyledSudokuBoard>
       {sudokuCellElements}
