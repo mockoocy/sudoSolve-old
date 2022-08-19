@@ -1,6 +1,7 @@
 import React, { useRef } from 'react'
 import styled from 'styled-components';
 import { useGlobalContext } from '../globalContext';
+import { Board } from '../types';
 import SudokuCell from './SudokuCell';
 
 const StyledSudokuBoard = styled.div`
@@ -18,9 +19,7 @@ const StyledSudokuBoard = styled.div`
 `
 
 export default function SudokuBoard() {
-
   const {boardState, options } = useGlobalContext();
-
   const cellRefs : React.MutableRefObject<any[]> = useRef([]);
 
 
@@ -56,9 +55,7 @@ export default function SudokuBoard() {
       nextInput.focus();
       nextInput.select();
       e.preventDefault();
-
     }
-
   }
 
     

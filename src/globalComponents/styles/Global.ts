@@ -9,6 +9,8 @@ const GlobalStyle = createGlobalStyle<{theme: Theme}>`
   --selectedCellClr: ${({theme})=> theme.colors.selectedCellClr};
   --notSelectedCellClr: ${({theme})=> theme.colors.notSelectedCellClr};
   --highlightCellClr: ${({theme})=> theme.colors.highlightCellClr};
+  --invalidCellClr: ${({theme})=> theme.colors.invalidCellClr};
+
 
 
   }

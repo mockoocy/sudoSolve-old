@@ -52,7 +52,9 @@ const  SudokuCell = React.forwardRef<HTMLInputElement, Props>(({maxNumber, cell,
   }
 
   function getCellClr(cell:Cell): string{
-    if (cell.isSelected) {
+    if (!cell.isValid){
+      return "var(--invalidCellClr)"
+    } else if (cell.isSelected) {
       return "var(--selectedCellClr)"
     } else if (cell.isHighlighted) {
       return "var(--highlightCellClr)"

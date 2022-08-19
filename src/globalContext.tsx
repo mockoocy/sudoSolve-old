@@ -40,7 +40,8 @@ const INITIAL_BOARD_STATE : Cell[][] = INITIAL_BOARD.map((rows, row) => rows.map
     column: col,
     value: cell,
     isSelected: false,
-    isHighlighted: false
+    isHighlighted: false,
+    isValid: true,
   }) 
   ))
 
@@ -52,22 +53,46 @@ export function SudokuProvider({children}: Props){
   })
 
   const [boardState, setBoardState] = useState<Board>(INITIAL_BOARD_STATE)
-
+  
+  function getCurrentGrid(currentRow: number, currentColumn: number){
+    const rowStart = Math.floor(currentRow/options.SMALL_GRID_SIZE) * options.SMALL_GRID_SIZE;
+    const rowEnd = rowStart + options.SMALL_GRID_SIZE;
+    const colStart = Math.floor(currentColumn / options.SMALL_GRID_SIZE)* options.SMALL_GRID_SIZE;
+    const colEnd = colStart + options.SMALL_GRID_SIZE
+    return {rowStart, rowEnd, colStart, colEnd}
+  }
   function modifyBoard(currentRow: number, currentColumn: number, value: number){
+
+
+    function isMoveValid(){
+      let valid = true;
+      const currentGrid = getCurrentGrid(currentRow, currentColumn)
+      for (let row=0; row< options.SUDOKU_SIZE; row++){
+        if (boardState[row][currentColumn].value === value) valid = false
+      }
+      for (let col=0; col<options.SUDOKU_SIZE; col++){
+        if (boardState[currentRow][col].value === value) valid = false
+      }
+      for (let row=0; row<options.SMALL_GRID_SIZE; row++){
+        for (let col=0; col<options.SMALL_GRID_SIZE; col++){
+          if (boardState[row][col].value === value) valid = false
+        }
+      }
+      return valid
+    }
+
     if (value > options.SUDOKU_SIZE) return;
     setBoardState(board => board.map((rows, row) => rows.map((cell, col) => {
       if (row === currentRow && col === currentColumn) {
-        return value ? {...cell, value:value} : {...cell, value: 0}
+        return value ? {...cell, value:value, isValid: isMoveValid()} : {...cell, value: 0}
       }
       return cell
     })))
   }
 
+
   function selectCell(currentRow: number, currentColumn: number){
-    const currentGridStart = [
-      Math.floor(currentRow / options.SMALL_GRID_SIZE) * options.SMALL_GRID_SIZE,
-      Math.floor(currentColumn / options.SMALL_GRID_SIZE)* options.SMALL_GRID_SIZE
-    ]
+    const currentGrid = getCurrentGrid(currentRow, currentColumn)
     // Cell is Selected -> if I just select it lol, if it's in the same 
     // row || column || small grid, it's highlighted
     setBoardState(prevBoard =>prevBoard.map((rows,row) => {
@@ -77,10 +102,10 @@ export function SudokuProvider({children}: Props){
         }else if (row === currentRow || col === currentColumn) {
           return {...cell, isSelected: false, isHighlighted: true}
         }else if (
-          row >= currentGridStart[0] 
-          && row  < currentGridStart[0] + options.SMALL_GRID_SIZE
-          && col >= currentGridStart[1] 
-          && col  < currentGridStart[1] + options.SMALL_GRID_SIZE
+          row >= currentGrid.rowStart 
+          && row  < currentGrid.rowEnd
+          && col >= currentGrid.colStart 
+          && col  < currentGrid.colEnd
           ){
             return {...cell, isSelected: false, isHighlighted: true}
         }

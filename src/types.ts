@@ -6,6 +6,7 @@ export type Theme = {
     selectedCellClr: string;
     gridGapClr: string;
     highlightCellClr: string;
+    invalidCellClr: string;
   }
 }
 
@@ -15,6 +16,7 @@ export type Cell = {
   value: number ;
   isSelected: boolean;
   isHighlighted: boolean;
+  isValid: boolean;
 }
 
 type row = Cell[];
