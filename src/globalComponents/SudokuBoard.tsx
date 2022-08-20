@@ -38,7 +38,7 @@ export default function SudokuBoard() {
     switch (code){
       case "ArrowUp":
         nextRow = row - moveAmount>= 0 ? row - moveAmount: row;
-        nextInputId = getNextInputId(nextRow, nextCol)
+        nextInputId = getNextInputId(nextRow, nextCol);
         break;
       case "ArrowDown":
         nextRow = row + moveAmount <= options.SUDOKU_SIZE ? row + moveAmount: row;

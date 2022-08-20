@@ -22,6 +22,7 @@ const StyledSudokuCell = styled.div<StyledProps>`
     height: 100%;
     font-size: 2rem;
     text-align: center;
+    font-family: var(--fontDefault);
     -moz-appearance: textfield;
     
   } 

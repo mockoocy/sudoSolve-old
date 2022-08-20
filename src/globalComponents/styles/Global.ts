@@ -1,8 +1,9 @@
 import { createGlobalStyle } from "styled-components";
 import { Theme } from "../../types";
 
-const GlobalStyle = createGlobalStyle<{theme: Theme}>`
+const GlobalStyle = createGlobalStyle<{theme: Theme, font: string}>`
   :root{
+/* Colors */
   --bgClr: ${({theme})=> theme.colors.bgClr};
   --standOutClr: ${({theme})=> theme.colors.standOutClr}; 
   --gridGapClr: ${({theme})=> theme.colors.gridGapClr}; 
@@ -10,7 +11,8 @@ const GlobalStyle = createGlobalStyle<{theme: Theme}>`
   --notSelectedCellClr: ${({theme})=> theme.colors.notSelectedCellClr};
   --highlightCellClr: ${({theme})=> theme.colors.highlightCellClr};
   --invalidCellClr: ${({theme})=> theme.colors.invalidCellClr};
-
+/* Fonts */
+  --fontDefault: ${({font}) => font}
 
 
   }

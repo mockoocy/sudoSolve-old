@@ -1,7 +1,6 @@
 import React, {useState, useContext, useEffect} from "react";
 import { Board, Cell, Options } from "./types";
 import generateSudoku from "./utils/generateSudoku";
-import { findEmpty } from "./utils/solveSudoku";
 import getCurrentGrid from "./utils/getCurrentGrid";
 import isValid from "./utils/isValid";
 
@@ -22,7 +21,9 @@ export const SudokuContext = React.createContext<ContextValue>({
   setBoardState: () => {},
   modifyBoard: () => {},
   options: {SUDOKU_SIZE: 9,
-  SMALL_GRID_SIZE: 3},
+  SMALL_GRID_SIZE: 3,
+  SELECTED_FONT: "Inter, sans-serif"
+},
   selectCell: () => {}
 });
 
@@ -33,7 +34,8 @@ export function SudokuProvider({children}: Props){
   const [options, setOptions] = useState<Options>({
     SUDOKU_SIZE: 9,
     SMALL_GRID_SIZE: 3,
-    FILLED_CELLS_AMOUNT: 32
+    FILLED_CELLS_AMOUNT: 32,
+    SELECTED_FONT: "Rubik moonrocks"
   })
   const initialBoard = generateSudoku(options.SUDOKU_SIZE, options.FILLED_CELLS_AMOUNT);
   const initialBoardState : Cell[][] = initialBoard.map((rows, row) => rows.map((cell, col) => (
@@ -47,7 +49,6 @@ export function SudokuProvider({children}: Props){
   ))
 
   const [boardState, setBoardState] = useState<Board>(initialBoardState);
- 
   function modifyBoard(currentRow: number, currentColumn: number, value: number){
 
 
@@ -55,11 +56,11 @@ export function SudokuProvider({children}: Props){
     // if the field is already filled, the previous number is replaced with the new one
     // because then the value is like <prevNum><newNum>, so % 10 leaves only <newNum>
     setBoardState(board => board.map((rows, row) => rows.map((cell, col) => {
-      if (cell.value == value) return cell;
+      if (cell.value === value) return cell;
       if (row === currentRow && col === currentColumn) {
-        return value ? {...cell, value:value, isValid: isValid(boardState,
+        return value ? {...cell, value:value, isValid: isValid(board,
           cell,
-          cell.value,
+          value,
           options.SMALL_GRID_SIZE)} : {...cell, value: 0}
       }
       return cell
@@ -94,7 +95,7 @@ export function SudokuProvider({children}: Props){
     if (!boardState.some(row => row.some(cell => cell.value === 0 || !cell.isValid)) && !gameWon){
       setGameWon(true)
     }
-  },[boardState])
+  },[boardState, gameWon])
 
   useEffect(()=>{
     if (gameWon){

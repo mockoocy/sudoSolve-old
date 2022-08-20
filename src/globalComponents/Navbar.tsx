@@ -6,7 +6,7 @@ const StyledNavbar = styled.nav`
   width: 100vw;
   height: 10%;
   padding: 0 2.5%;
-  border-bottom: 2px solid var(--standOutClr);
+  box-shadow: .125rem 0 .25rem var(--standOutClr);
   display: flex;
   align-items: center;
 

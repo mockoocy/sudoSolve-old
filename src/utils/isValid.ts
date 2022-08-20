@@ -10,7 +10,8 @@ export default function isValid(board: Board, currentCell: Cell, value: number, 
   let valid = true;
   const currentGrid = getCurrentGrid(currentRow, currentColumn, smallGridSize);
   for (let row=0; row<sudokuSize; row++){
-    if (board[row][currentColumn].value === value) valid = false
+    if (board[row][currentColumn].value === value) {
+      valid = false}
   }
   for (let col=0; col<sudokuSize; col++){
     if (board[currentRow][col].value === value) valid = false
