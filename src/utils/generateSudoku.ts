@@ -11,12 +11,28 @@ export default function generateSudoku(sudokuSize: number, filledCelsAmount: num
     return Array.from(Array(end).keys()).map(i => i + start)
   }
 
-  const rows: number[] = randomSample(range(sudokuSize), sudokuSize);
-  const cols: number[] = randomSample(range(sudokuSize), sudokuSize);
-  const nums: number[] = randomSample(range(sudokuSize, 1), sudokuSize);
+  const shuffle = (arr: any[]) => randomSample(arr,arr.length)
 
-  const board = rows.map(row => {
-    return cols.map(col => {
+  const baseRange = range(base);
+  const rows: number[] = [];
+  shuffle(baseRange).forEach(row => {
+    shuffle(baseRange).forEach(num => {
+      rows.push(num * base + row)
+    })
+  })
+  
+  const cols: number[] = [];
+  
+  shuffle(baseRange).forEach(col => {
+    shuffle(baseRange).forEach(num => {
+      cols.push(num * base + col)
+    })
+  })
+  
+  const nums: number[] = randomSample(range(sudokuSize, 1),sudokuSize);
+
+  const board = rows.map(row=> {
+    return cols.map(col =>{
       return nums[basePattern(row,col)]
     })
   })

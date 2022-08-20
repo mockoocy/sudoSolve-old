@@ -5,13 +5,17 @@ import { Board } from '../types';
 import generateSudoku from '../utils/generateSudoku';
 import SudokuCell from './SudokuCell';
 
-const StyledSudokuBoard = styled.div`
+
+type StyledProps = {
+  sudokuSize: number
+}
+const StyledSudokuBoard = styled.div<StyledProps>`
   display: grid;
   margin: 1.25% 2.5%;
   width: 40vw;
   height: auto;
-  grid-template-columns: repeat(9, 1fr);  
-  grid-template-rows: repeat(9, 1fr);
+  grid-template-columns: repeat(${props => props.sudokuSize}, 1fr);  
+  grid-template-rows: repeat(${props => props.sudokuSize}, 1fr);
 
   @media (max-width:820px){
     width: 80vw;
@@ -59,8 +63,7 @@ export default function SudokuBoard() {
     }
   }
 
-  generateSudoku(9,20)
-  const sudokuCellElements: JSX.Element[][] = boardState.map((row, rowId) => {
+    const sudokuCellElements: JSX.Element[][] = boardState.map((row, rowId) => {
     return row.map((cell, col)=>{
       const cellId = rowId * options.SUDOKU_SIZE + col;
       return (
@@ -77,7 +80,7 @@ export default function SudokuBoard() {
 
 
   return (
-    <StyledSudokuBoard>
+    <StyledSudokuBoard sudokuSize={options.SUDOKU_SIZE}>
       {sudokuCellElements}
     </StyledSudokuBoard>
   )
