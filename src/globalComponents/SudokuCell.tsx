@@ -78,7 +78,7 @@ const  SudokuCell = React.forwardRef<HTMLInputElement, Props>(({maxNumber, cell,
       ref={ref}
       max={maxNumber}
       value={cell.value > 0 ? cell.value : " "}
-      onChange={(e) => modifyBoard(row, column, Number(e.target.value)) }/>
+      onChange={(e) => modifyBoard(row, column, e.target.valueAsNumber) }/>
     </StyledSudokuCell>
   )
 })

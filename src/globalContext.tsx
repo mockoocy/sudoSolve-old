@@ -1,5 +1,6 @@
 import React, {useState, useContext} from "react";
 import { Board, Cell, Options } from "./types";
+import generateSudoku from "./utils/generateSudoku";
 
 
 
@@ -24,18 +25,15 @@ export const SudokuContext = React.createContext<ContextValue>({
   selectCell: () => {}
 });
 
-const INITIAL_BOARD = [
-  [0,0,0,6,9,0,7,0,2],
-  [0,0,0,0,0,1,0,0,0],
-  [2,0,0,0,8,0,1,0,5],
-  [0,0,0,0,6,0,4,3,0],
-  [1,0,3,0,4,0,5,0,8],
-  [0,7,6,0,3,0,0,0,0],
-  [3,0,2,0,7,0,0,0,4],
-  [0,0,0,2,0,0,0,0,0],
-  [8,0,9,0,1,6,0,0,0],
-]
-const INITIAL_BOARD_STATE : Cell[][] = INITIAL_BOARD.map((rows, row) => rows.map((cell, col) => (
+
+
+export function SudokuProvider({children}: Props){
+  const [options, setOptions] = useState<Options>({
+    SUDOKU_SIZE: 9,
+    SMALL_GRID_SIZE: 3
+  })
+  const initialBoard = generateSudoku(options.SUDOKU_SIZE, 1);
+  const initialBoardState : Cell[][] = initialBoard.map((rows, row) => rows.map((cell, col) => (
     {row: row,
     column: col,
     value: cell,
@@ -45,14 +43,7 @@ const INITIAL_BOARD_STATE : Cell[][] = INITIAL_BOARD.map((rows, row) => rows.map
   }) 
   ))
 
-
-export function SudokuProvider({children}: Props){
-  const [options, setOptions] = useState<Options>({
-    SUDOKU_SIZE: 9,
-    SMALL_GRID_SIZE: 3
-  })
-
-  const [boardState, setBoardState] = useState<Board>(INITIAL_BOARD_STATE)
+  const [boardState, setBoardState] = useState<Board>(initialBoardState)
   
   function getCurrentGrid(currentRow: number, currentColumn: number){
     const rowStart = Math.floor(currentRow/options.SMALL_GRID_SIZE) * options.SMALL_GRID_SIZE;

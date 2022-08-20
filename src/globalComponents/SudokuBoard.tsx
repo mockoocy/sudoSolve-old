@@ -2,6 +2,7 @@ import React, { useRef } from 'react'
 import styled from 'styled-components';
 import { useGlobalContext } from '../globalContext';
 import { Board } from '../types';
+import generateSudoku from '../utils/generateSudoku';
 import SudokuCell from './SudokuCell';
 
 const StyledSudokuBoard = styled.div`
@@ -58,7 +59,7 @@ export default function SudokuBoard() {
     }
   }
 
-    
+  generateSudoku(9,20)
   const sudokuCellElements: JSX.Element[][] = boardState.map((row, rowId) => {
     return row.map((cell, col)=>{
       const cellId = rowId * options.SUDOKU_SIZE + col;
