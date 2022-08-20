@@ -1,6 +1,6 @@
 import randomSample from "./randomSample";
 
-export default function generateSudoku(sudokuSize: number, filledCelsAmount: number){
+export default function generateSudoku(sudokuSize: number, filledCellsAmount=27){
   //generates valid sudoku board of sudokuSize x sudokuSize dimensions
   const base = Math.sqrt(sudokuSize); // length of a small grid's side
   // size is the direction of one of sudoku board's side, the classic one would be size = 9;
@@ -36,7 +36,13 @@ export default function generateSudoku(sudokuSize: number, filledCelsAmount: num
       return nums[basePattern(row,col)]
     })
   })
-
+  const cellsAmount = sudokuSize * sudokuSize;
+  const emptyCells = cellsAmount - filledCellsAmount ;
+  const emptyCellIndices = randomSample(range(cellsAmount), emptyCells)
+  emptyCellIndices.forEach(index => {
+    const [currentRow, currentCol] = [Math.floor(index / sudokuSize), index % sudokuSize ]
+    board[currentRow][currentCol] = 0;
+  })
 
   return board
 

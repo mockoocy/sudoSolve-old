@@ -30,9 +30,10 @@ export const SudokuContext = React.createContext<ContextValue>({
 export function SudokuProvider({children}: Props){
   const [options, setOptions] = useState<Options>({
     SUDOKU_SIZE: 9,
-    SMALL_GRID_SIZE: 3
+    SMALL_GRID_SIZE: 3,
+    FILLED_CELLS_AMOUNT: 40
   })
-  const initialBoard = generateSudoku(options.SUDOKU_SIZE, 1);
+  const initialBoard = generateSudoku(options.SUDOKU_SIZE, options.FILLED_CELLS_AMOUNT);
   const initialBoardState : Cell[][] = initialBoard.map((rows, row) => rows.map((cell, col) => (
     {row: row,
     column: col,
