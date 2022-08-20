@@ -28,3 +28,10 @@ export type Options = {
   SMALL_GRID_SIZE: number;
   FILLED_CELLS_AMOUNT?: number;
 }
+
+export type SmallGrid = {
+  rowStart: number;
+  rowEnd: number;
+  colStart: number;
+  colEnd: number
+}

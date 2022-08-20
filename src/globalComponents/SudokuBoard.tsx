@@ -1,8 +1,7 @@
 import React, { useRef } from 'react'
 import styled from 'styled-components';
 import { useGlobalContext } from '../globalContext';
-import { Board } from '../types';
-import generateSudoku from '../utils/generateSudoku';
+import solveSudoku from '../utils/solveSudoku';
 import SudokuCell from './SudokuCell';
 
 
@@ -24,7 +23,7 @@ const StyledSudokuBoard = styled.div<StyledProps>`
 `
 
 export default function SudokuBoard() {
-  const {boardState, options } = useGlobalContext();
+  const {boardState,setBoardState, options } = useGlobalContext();
   const cellRefs : React.MutableRefObject<any[]> = useRef([]);
 
 
@@ -63,6 +62,10 @@ export default function SudokuBoard() {
     }
   }
 
+  function displaySolvedSudoku(){
+    setBoardState(solveSudoku(structuredClone(boardState), options.SMALL_GRID_SIZE))
+  }
+
     const sudokuCellElements: JSX.Element[][] = boardState.map((row, rowId) => {
     return row.map((cell, col)=>{
       const cellId = rowId * options.SUDOKU_SIZE + col;
@@ -82,6 +85,7 @@ export default function SudokuBoard() {
   return (
     <StyledSudokuBoard sudokuSize={options.SUDOKU_SIZE}>
       {sudokuCellElements}
+      <button onClick={() => displaySolvedSudoku()}></button>
     </StyledSudokuBoard>
   )
 }
