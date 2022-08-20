@@ -1,4 +1,4 @@
-import React, {useState, useContext} from "react";
+import React, {useState, useContext, useEffect} from "react";
 import { Board, Cell, Options } from "./types";
 import generateSudoku from "./utils/generateSudoku";
 
@@ -28,10 +28,11 @@ export const SudokuContext = React.createContext<ContextValue>({
 
 
 export function SudokuProvider({children}: Props){
+  const [gameWon, setGameWon] = useState(false)
   const [options, setOptions] = useState<Options>({
     SUDOKU_SIZE: 9,
     SMALL_GRID_SIZE: 3,
-    FILLED_CELLS_AMOUNT: 40
+    FILLED_CELLS_AMOUNT: 78
   })
   const initialBoard = generateSudoku(options.SUDOKU_SIZE, options.FILLED_CELLS_AMOUNT);
   const initialBoardState : Cell[][] = initialBoard.map((rows, row) => rows.map((cell, col) => (
@@ -83,6 +84,7 @@ export function SudokuProvider({children}: Props){
       }
       return cell
     })))
+
   }
 
 
@@ -108,6 +110,17 @@ export function SudokuProvider({children}: Props){
       })
     }))
   }
+  useEffect(()=>{
+    if (!boardState.some(row => row.some(cell => cell.value === 0 || !cell.isValid)) && !gameWon){
+      setGameWon(true)
+    }
+  },[boardState])
+
+  useEffect(()=>{
+    if (gameWon){
+      alert("You won!!")
+    }
+  },[gameWon])
   
   return (
     <SudokuContext.Provider value= {{
