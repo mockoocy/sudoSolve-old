@@ -19,8 +19,8 @@ export type Cell = {
   isValid: boolean;
 }
 
-type row = Cell[];
-export type Board = row[];
+type Row = Cell[];
+export type Board = Row[];
 
 
 export type Options = {
@@ -35,4 +35,8 @@ export type SmallGrid = {
   rowEnd: number;
   colStart: number;
   colEnd: number
+}
+
+export type SudokuCache = {
+  [key: number] : number[]
 }

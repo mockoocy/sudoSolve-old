@@ -1,7 +1,7 @@
 import React, { useRef } from 'react'
 import styled from 'styled-components';
 import { useGlobalContext } from '../globalContext';
-import solveSudoku from '../utils/solveSudoku';
+import solveSudoku, { cacheValidValues } from '../utils/solveSudoku';
 import SudokuCell from './SudokuCell';
 
 
@@ -63,9 +63,12 @@ export default function SudokuBoard() {
   }
 
   function displaySolvedSudoku(){
-    setBoardState(solveSudoku(structuredClone(boardState), options.SMALL_GRID_SIZE))
+    const startTime = Date.now();
+    const boardCopy = structuredClone(boardState);
+    solveSudoku(boardCopy,cacheValidValues(boardState, options.SMALL_GRID_SIZE), options.SMALL_GRID_SIZE)
+    setBoardState(boardCopy)
+    console.log(`%csolving took ${Date.now() - startTime}ms`, 'color: #7fffd4; font-size: 2rem; font-weight: 600; text-shadow: .25rem .25rem .5rem #f0f8f5')
   }
-
     const sudokuCellElements: JSX.Element[][] = boardState.map((row, rowId) => {
     return row.map((cell, col)=>{
       const cellId = rowId * options.SUDOKU_SIZE + col;

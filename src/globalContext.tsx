@@ -99,7 +99,6 @@ export function SudokuProvider({children}: Props){
 
   useEffect(()=>{
     if (gameWon){
-      alert("You won!!")
     }
   },[gameWon])
   
