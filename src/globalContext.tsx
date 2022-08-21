@@ -32,8 +32,8 @@ export const SudokuContext = React.createContext<ContextValue>({
 export function SudokuProvider({children}: Props){
   const [gameWon, setGameWon] = useState(false)
   const [options, setOptions] = useState<Options>({
-    SUDOKU_SIZE: 9,
-    SMALL_GRID_SIZE: 3,
+    SUDOKU_SIZE: 16,
+    SMALL_GRID_SIZE: 4,
     FILLED_CELLS_AMOUNT: 32,
     SELECTED_FONT: "Rubik moonrocks"
   })
