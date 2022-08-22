@@ -1,9 +1,11 @@
 import React, { useRef } from 'react'
 import styled from 'styled-components';
 import { useGlobalContext } from '../globalContext';
-import { Cell } from '../types';
+import { Board, Coords } from '../types';
 import generateSudoku from '../utils/generateSudoku';
+import nestedNumbersToSudoku from '../utils/nestedNumbersToSudoku';
 import solveSudoku, { cacheValidValues } from '../utils/solveSudoku';
+import sudokuToNestedNumbers from '../utils/sudokuToNestedNumbers';
 import SudokuCell from './SudokuCell';
 
 
@@ -25,7 +27,7 @@ const StyledSudokuBoard = styled.div<StyledProps>`
 `
 
 export default function SudokuBoard() {
-  const {boardState,setBoardState, options } = useGlobalContext();
+  const {boardState,setBoardState, options, initialBoardFilled } = useGlobalContext();
   const cellRefs : React.MutableRefObject<any[]> = useRef([]);
 
 
@@ -66,26 +68,24 @@ export default function SudokuBoard() {
 
   function displaySolvedSudoku(){
     const startTime = Date.now();
-    for(let i=0; i<50; i++){
-      const newBoard = generateSudoku(options.SUDOKU_SIZE, 17).board;
-      const newSudoku : Cell[][] = newBoard.map((rows, row) => rows.map((cell, col) => (
-        {row: row,
-          column: col,
-          value: cell,
-          isSelected: false,
-          isHighlighted: false,
-          isValid: true,
-        })))
-        const sudokuCache = cacheValidValues(newSudoku, options.SMALL_GRID_SIZE)
-        solveSudoku(newSudoku,sudokuCache, options.SMALL_GRID_SIZE)
+
+    for (let i=0; i<25; i++){
+      const newBoard = generateSudoku(options.SUDOKU_SIZE, options.FILLED_CELLS_AMOUNT).board;
+      const sudokuCache = cacheValidValues(newBoard, options.SMALL_GRID_SIZE);
+      solveSudoku(newBoard, sudokuCache, options.SMALL_GRID_SIZE)
     }
 
-    // const boardCopy = structuredClone(boardState);
-    // const sudokuCache  = cacheValidValues(boardCopy, options.SMALL_GRID_SIZE)
-    // solveSudoku(boardCopy, sudokuCache, options.SMALL_GRID_SIZE)
-    // setBoardState(boardCopy)
-    console.log(`%csolving took ${Date.now() - startTime}ms`, 'color: #7fffd4; font-size: 2rem; font-weight: 600; text-shadow: .25rem .25rem .5rem #f0f8f5')
-  
+    const boardCopy: Board = structuredClone(boardState);
+    const tempBoard = sudokuToNestedNumbers(boardCopy)
+    const sudokuCache  = cacheValidValues(tempBoard, options.SMALL_GRID_SIZE)
+    solveSudoku(tempBoard, sudokuCache, options.SMALL_GRID_SIZE)
+    setBoardState(nestedNumbersToSudoku(tempBoard));
+    console.log(`%csolving took ${Date.now() - startTime}ms, avg:${(Date.now() - startTime)/options.FILLED_CELLS_AMOUNT}`, 'color: #7fffd4; font-size: 2rem; font-weight: 600; text-shadow: .25rem .25rem .5rem #f0f8f5')
+  }
+
+  function fastSolve(){
+    setBoardState(nestedNumbersToSudoku(initialBoardFilled))
+
   }
     const sudokuCellElements: JSX.Element[][] = boardState.map((row, rowId) => {
     return row.map((cell, col)=>{
@@ -107,6 +107,8 @@ export default function SudokuBoard() {
     <StyledSudokuBoard sudokuSize={options.SUDOKU_SIZE}>
       {sudokuCellElements}
       <button onClick={() => displaySolvedSudoku()}></button>
+      <button onClick={() => fastSolve()}></button>
+
     </StyledSudokuBoard>
   )
 }
