@@ -37,7 +37,9 @@ export function SudokuProvider({children}: Props){
     FILLED_CELLS_AMOUNT: 17,
     SELECTED_FONT: "Rubik moonrocks"
   })
-  const initialBoard = generateSudoku(options.SUDOKU_SIZE, options.FILLED_CELLS_AMOUNT);
+  const initialBoardInfo = generateSudoku(options.SUDOKU_SIZE, options.FILLED_CELLS_AMOUNT);
+  const initialBoardFilled = initialBoardInfo.filledBoard;
+  const initialBoard = initialBoardInfo.board
   const initialBoardState : Cell[][] = initialBoard.map((rows, row) => rows.map((cell, col) => (
     {row: row,
     column: col,

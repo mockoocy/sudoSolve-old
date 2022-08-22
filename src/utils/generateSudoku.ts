@@ -1,15 +1,16 @@
+import { SudokuBoard } from "../types";
 import randomSample from "./randomSample";
 
-export default function generateSudoku(sudokuSize: number, filledCellsAmount=27){
+function range(end: number, start=0){
+  return Array.from(Array(end).keys()).map(i => i + start)
+}
+
+export function generateSudokuFilled(sudokuSize: number) : SudokuBoard{
   //generates valid sudoku board of sudokuSize x sudokuSize dimensions
   const base = Math.sqrt(sudokuSize); // length of a small grid's side
   // size is the direction of one of sudoku board's side, the classic one would be size = 9;
   const basePattern = (row: number, col: number) => (base * (row%base) + Math.floor(row/base) +col) % sudokuSize;
 
-
-  function range(end: number, start=0){
-    return Array.from(Array(end).keys()).map(i => i + start)
-  }
 
   const shuffle = (arr: any[]) => randomSample(arr,arr.length)
 
@@ -36,6 +37,13 @@ export default function generateSudoku(sudokuSize: number, filledCellsAmount=27)
       return nums[basePattern(row,col)]
     })
   })
+  return board
+}
+
+export default function generateSudoku(sudokuSize: number, filledCellsAmount=27) 
+: {board: SudokuBoard, filledBoard: SudokuBoard} {
+  const board = generateSudokuFilled(sudokuSize);
+  const filledBoard = structuredClone(board)
   const cellsAmount = sudokuSize * sudokuSize;
   const emptyCells = cellsAmount - filledCellsAmount ;
   const emptyCellIndices = randomSample(range(cellsAmount), emptyCells)
@@ -43,7 +51,5 @@ export default function generateSudoku(sudokuSize: number, filledCellsAmount=27)
     const [currentRow, currentCol] = [Math.floor(index / sudokuSize), index % sudokuSize ]
     board[currentRow][currentCol] = 0;
   })
-
-  return board
-
+  return {board, filledBoard}
 }

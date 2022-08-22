@@ -3,7 +3,6 @@ import styled from 'styled-components';
 import { useGlobalContext } from '../globalContext';
 import { Cell } from '../types';
 import generateSudoku from '../utils/generateSudoku';
-import isValid from '../utils/isValid';
 import solveSudoku, { cacheValidValues } from '../utils/solveSudoku';
 import SudokuCell from './SudokuCell';
 
@@ -67,18 +66,18 @@ export default function SudokuBoard() {
 
   function displaySolvedSudoku(){
     const startTime = Date.now();
-    for(let i=0; i<10000; i++){
-      const newBoard = generateSudoku(options.SUDOKU_SIZE, 50);
+    for(let i=0; i<50; i++){
+      const newBoard = generateSudoku(options.SUDOKU_SIZE, 17).board;
       const newSudoku : Cell[][] = newBoard.map((rows, row) => rows.map((cell, col) => (
         {row: row,
-        column: col,
-        value: cell,
-        isSelected: false,
-        isHighlighted: false,
-        isValid: true,
-      })))
-      const sudokuCache = cacheValidValues(newSudoku, options.SMALL_GRID_SIZE)
-      solveSudoku(newSudoku,sudokuCache, options.SMALL_GRID_SIZE)
+          column: col,
+          value: cell,
+          isSelected: false,
+          isHighlighted: false,
+          isValid: true,
+        })))
+        const sudokuCache = cacheValidValues(newSudoku, options.SMALL_GRID_SIZE)
+        solveSudoku(newSudoku,sudokuCache, options.SMALL_GRID_SIZE)
     }
 
     // const boardCopy = structuredClone(boardState);
