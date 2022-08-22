@@ -22,6 +22,8 @@ export type Cell = {
 type Row = Cell[];
 export type Board = Row[];
 
+export type SudokuBoard = number[][];
+
 
 export type Options = {
   SUDOKU_SIZE: number;

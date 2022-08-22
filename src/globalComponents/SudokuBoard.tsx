@@ -3,7 +3,8 @@ import styled from 'styled-components';
 import { useGlobalContext } from '../globalContext';
 import { Cell } from '../types';
 import generateSudoku from '../utils/generateSudoku';
-import solveSudoku, { cacheValidValues, preFillSudoku } from '../utils/solveSudoku';
+import isValid from '../utils/isValid';
+import solveSudoku, { cacheValidValues } from '../utils/solveSudoku';
 import SudokuCell from './SudokuCell';
 
 
@@ -66,7 +67,7 @@ export default function SudokuBoard() {
 
   function displaySolvedSudoku(){
     const startTime = Date.now();
-    for(let i=0; i<1000; i++){
+    for(let i=0; i<10000; i++){
       const newBoard = generateSudoku(options.SUDOKU_SIZE, 50);
       const newSudoku : Cell[][] = newBoard.map((rows, row) => rows.map((cell, col) => (
         {row: row,
@@ -82,7 +83,7 @@ export default function SudokuBoard() {
 
     // const boardCopy = structuredClone(boardState);
     // const sudokuCache  = cacheValidValues(boardCopy, options.SMALL_GRID_SIZE)
-    // solveSudoku(boardCopy,sudokuCache, options.SMALL_GRID_SIZE)
+    // solveSudoku(boardCopy, sudokuCache, options.SMALL_GRID_SIZE)
     // setBoardState(boardCopy)
     console.log(`%csolving took ${Date.now() - startTime}ms`, 'color: #7fffd4; font-size: 2rem; font-weight: 600; text-shadow: .25rem .25rem .5rem #f0f8f5')
   

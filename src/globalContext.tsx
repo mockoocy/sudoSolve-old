@@ -34,7 +34,7 @@ export function SudokuProvider({children}: Props){
   const [options, setOptions] = useState<Options>({
     SUDOKU_SIZE: 9,
     SMALL_GRID_SIZE: 3,
-    FILLED_CELLS_AMOUNT: 32,
+    FILLED_CELLS_AMOUNT: 17,
     SELECTED_FONT: "Rubik moonrocks"
   })
   const initialBoard = generateSudoku(options.SUDOKU_SIZE, options.FILLED_CELLS_AMOUNT);
