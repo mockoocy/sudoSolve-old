@@ -1,8 +1,10 @@
 import React, {useState, useContext, useEffect} from "react";
-import { Board, Cell, Options } from "./types";
+import { Board, Cell, Options, SudokuBoard } from "./types";
 import generateSudoku from "./utils/generateSudoku";
 import getCurrentGrid from "./utils/getCurrentGrid";
 import isValid from "./utils/isValid";
+import nestedNumbersToSudoku from "./utils/nestedNumbersToSudoku";
+import sudokuToNestedNumbers from "./utils/sudokuToNestedNumbers";
 
 type Props = {
   children: React.ReactNode[] | React.ReactNode
@@ -14,17 +16,22 @@ type ContextValue = {
   modifyBoard: (arg0: number, arg1: number, arg2: number) => void;
   options: Options;
   selectCell: (arg0:number, arg1: number, arg2: Cell) => void;
+  initialBoard: SudokuBoard;
+  initialBoardFilled: SudokuBoard;
 }
 
-export const SudokuContext = React.createContext<ContextValue>({
+export const SudokuContext = React.createContext<ContextValue >({
   boardState: [],
   setBoardState: () => {},
   modifyBoard: () => {},
   options: {SUDOKU_SIZE: 9,
   SMALL_GRID_SIZE: 3,
+  FILLED_CELLS_AMOUNT: 17 ,
   SELECTED_FONT: "Inter, sans-serif"
 },
-  selectCell: () => {}
+  selectCell: () => {},
+  initialBoard: [],
+  initialBoardFilled: []
 });
 
 
@@ -34,20 +41,14 @@ export function SudokuProvider({children}: Props){
   const [options, setOptions] = useState<Options>({
     SUDOKU_SIZE: 9,
     SMALL_GRID_SIZE: 3,
-    FILLED_CELLS_AMOUNT: 17,
+    FILLED_CELLS_AMOUNT: 17 ,
     SELECTED_FONT: "Rubik moonrocks"
   })
   const initialBoardInfo = generateSudoku(options.SUDOKU_SIZE, options.FILLED_CELLS_AMOUNT);
   const initialBoardFilled = initialBoardInfo.filledBoard;
   const initialBoard = initialBoardInfo.board
-  const initialBoardState : Cell[][] = initialBoard.map((rows, row) => rows.map((cell, col) => (
-    {row: row,
-    column: col,
-    value: cell,
-    isSelected: false,
-    isHighlighted: false,
-    isValid: true,
-  })))
+  const initialBoardState: Board = nestedNumbersToSudoku(initialBoard)
+
 
   const [boardState, setBoardState] = useState<Board>(initialBoardState);
   function modifyBoard(currentRow: number, currentColumn: number, value: number){
@@ -59,7 +60,8 @@ export function SudokuProvider({children}: Props){
     setBoardState(board => board.map((rows, row) => rows.map((cell, col) => {
       if (cell.value === value) return cell;
       if (row === currentRow && col === currentColumn) {
-        return value ? {...cell, value:value, isValid: isValid(board,
+        return value ? {...cell, value:value, isValid: isValid(
+          sudokuToNestedNumbers(board),
           cell,
           value,
           options.SMALL_GRID_SIZE)} : {...cell, value: 0}
@@ -109,7 +111,9 @@ export function SudokuProvider({children}: Props){
       setBoardState,
       modifyBoard,
       options,
-      selectCell
+      selectCell,
+      initialBoard,
+      initialBoardFilled
     }}>
       {children}
     </SudokuContext.Provider>

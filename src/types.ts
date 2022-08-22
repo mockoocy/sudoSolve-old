@@ -19,6 +19,11 @@ export type Cell = {
   isValid: boolean;
 }
 
+export type Coords = {
+  row: number;
+  column: number;
+}
+
 type Row = Cell[];
 export type Board = Row[];
 
@@ -28,7 +33,7 @@ export type SudokuBoard = number[][];
 export type Options = {
   SUDOKU_SIZE: number;
   SMALL_GRID_SIZE: number;
-  FILLED_CELLS_AMOUNT?: number;
+  FILLED_CELLS_AMOUNT: number;
   SELECTED_FONT: string;
 }
 

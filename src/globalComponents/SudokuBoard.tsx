@@ -75,11 +75,8 @@ export default function SudokuBoard() {
       solveSudoku(newBoard, sudokuCache, options.SMALL_GRID_SIZE)
     }
 
-    const boardCopy: Board = structuredClone(boardState);
-    const tempBoard = sudokuToNestedNumbers(boardCopy)
-    const sudokuCache  = cacheValidValues(tempBoard, options.SMALL_GRID_SIZE)
-    solveSudoku(tempBoard, sudokuCache, options.SMALL_GRID_SIZE)
-    setBoardState(nestedNumbersToSudoku(tempBoard));
+
+    
     console.log(`%csolving took ${Date.now() - startTime}ms, avg:${(Date.now() - startTime)/options.FILLED_CELLS_AMOUNT}`, 'color: #7fffd4; font-size: 2rem; font-weight: 600; text-shadow: .25rem .25rem .5rem #f0f8f5')
   }
 

@@ -1,26 +1,26 @@
-import { Board, Counter, SudokuCache } from "../types";
+import { Coords, Counter, SudokuBoard, SudokuCache } from "../types";
 import isValid from "./isValid";
 import getCurrentGrid from "./getCurrentGrid";
 import counter from "./counter";
 
 
-export function findEmpty(board: Board){
-  for (let row of board){
-    for (let cell of row){
-      if (cell.value === 0) return cell
+export function findEmpty(board: SudokuBoard) : (Coords | null){
+  for (let row=0; row<board.length; row++){
+    for(let col=0; col<board.length; col++){
+      if (board[row][col] === 0) return {row, column: col}
     }
   }
   return null
 }
 
-function allowedValues(board: Board, currentRow: number, currentCol: number, smallGridSize: number){
+function allowedValues(board: SudokuBoard, currentRow: number, currentCol: number, smallGridSize: number){
   const numbersList: number[] = [];
 
   for (let num=1; num<=board.length; num++){
     let found = false;
 
     for (let row=0; row<board.length; row++){
-      if (board[row][currentCol].value === num) {
+      if (board[row][currentCol] === num) {
         found = true;
         break
       }
@@ -28,7 +28,7 @@ function allowedValues(board: Board, currentRow: number, currentCol: number, sma
 
     if (!found){
       for (let col=0; col<board.length; col++){
-        if (board[currentRow][col].value === num) {
+        if (board[currentRow][col] === num) {
           found = true;
           break
         }
@@ -38,7 +38,7 @@ function allowedValues(board: Board, currentRow: number, currentCol: number, sma
       const currentGrid = getCurrentGrid(currentRow, currentCol, smallGridSize)
       for (let row=currentGrid.rowStart; row<currentGrid.rowEnd; row++){
         for (let col=currentGrid.colStart; col<currentGrid.colEnd; col++){
-          if (board[row][col].value === num){
+          if (board[row][col] === num){
             found = true;
             break
           }
@@ -50,12 +50,12 @@ function allowedValues(board: Board, currentRow: number, currentCol: number, sma
   return numbersList
 }
 
-export function cacheValidValues(board: Board, smallGridSize: number){
+export function cacheValidValues(board: SudokuBoard, smallGridSize: number){
   const cache : SudokuCache = {};
   for (let row=0; row<board.length; row++){
     for (let col=0; col<board.length; col++){
       const cellIndex = row * board.length + col
-      if (board[row][col].value === 0) cache[cellIndex] = allowedValues(board, row, col,smallGridSize)
+      if (board[row][col] === 0) cache[cellIndex] = allowedValues(board, row, col,smallGridSize)
     }
   }
   return cache
@@ -63,7 +63,7 @@ export function cacheValidValues(board: Board, smallGridSize: number){
 
 
 
-function orderValidValues(board: Board, cache: SudokuCache, smallGridSize: number) : [boolean, SudokuCache]{
+function orderValidValues(board: SudokuBoard, cache: SudokuCache, smallGridSize: number) : [boolean, SudokuCache]{
 
   const cachePriority: SudokuCache = {};
   const countAppearanceRow: Counter[] = new Array(board.length);
@@ -169,7 +169,7 @@ function orderValidValues(board: Board, cache: SudokuCache, smallGridSize: numbe
             ||countAppearanceRow[row][val] === 1
             ||countAppearanceSmallGrid[smallGridId][val] === 1
           ){
-            board[row][col].value = val;
+            board[row][col] = val;
             valuesChanged = true;
           }
         }
@@ -178,38 +178,32 @@ function orderValidValues(board: Board, cache: SudokuCache, smallGridSize: numbe
   }
   return [valuesChanged, cache]
 }
-export default function solveSudoku(board: Board, cache: SudokuCache, smallGridSize: number){
+export default function solveSudoku(board: SudokuBoard, cache: SudokuCache, smallGridSize: number){
 
-  let valuesFound = true
+  let valuesFound = true;
 
   while (valuesFound){
     const cacheValid = cacheValidValues(board, smallGridSize);
     const orderedCacheReturn = orderValidValues(board, cacheValid, smallGridSize);
     valuesFound = orderedCacheReturn[0]
     cache = orderedCacheReturn[1];
-    console.log("IN!")
   }
-
-
   const blank = findEmpty(board);
   if (!blank){
     return true;
   }
 
   const {row, column} = blank;
-  const cellIndex = row* board.length + column;
-  //console.log(`current Cell:${cellIndex}`)
+  const cellIndex = row * board.length + column;
   for (let val of cache[cellIndex]){
     if (isValid(board, blank, val, smallGridSize)){
-      board[row][column].value = val;
-
+      board[row][column] = val;
 
       if (solveSudoku(board, cache, smallGridSize)){
         return true;
       }
-      board[row][column].value = 0;
+      board[row][column] = 0;
     }
   }
-
   return false
 }
