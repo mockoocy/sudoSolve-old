@@ -32,8 +32,8 @@ export const SudokuContext = React.createContext<ContextValue>({
 export function SudokuProvider({children}: Props){
   const [gameWon, setGameWon] = useState(false)
   const [options, setOptions] = useState<Options>({
-    SUDOKU_SIZE: 16,
-    SMALL_GRID_SIZE: 4,
+    SUDOKU_SIZE: 9,
+    SMALL_GRID_SIZE: 3,
     FILLED_CELLS_AMOUNT: 32,
     SELECTED_FONT: "Rubik moonrocks"
   })
@@ -45,8 +45,7 @@ export function SudokuProvider({children}: Props){
     isSelected: false,
     isHighlighted: false,
     isValid: true,
-  }) 
-  ))
+  })))
 
   const [boardState, setBoardState] = useState<Board>(initialBoardState);
   function modifyBoard(currentRow: number, currentColumn: number, value: number){

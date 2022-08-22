@@ -40,3 +40,7 @@ export type SmallGrid = {
 export type SudokuCache = {
   [key: number] : number[]
 }
+
+export type Counter = {
+  [key: (number | string) ] : number
+}

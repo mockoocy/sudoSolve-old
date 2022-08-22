@@ -1,4 +1,4 @@
-import { Board, SudokuCache } from "../types";
+import { Board, Counter, SudokuCache } from "../types";
 import isValid from "./isValid";
 import getCurrentGrid from "./getCurrentGrid";
 import counter from "./counter";
@@ -62,23 +62,27 @@ export function cacheValidValues(board: Board, smallGridSize: number){
 }
 
 function getAppearanceCounts(board: Board, cache: SudokuCache, smallGridSize: number){
-  const countAppearanceRow = []
-  const countAppearanceColumn = []
-  const countAppearanceSmallGrid = []
-  
+  const countAppearanceRow: Counter[] = [];
+  const countAppearanceColumn: Counter[] = [];
+  const countAppearanceSmallGrid: Counter[] = [];
+
+  const tempArraySmallGrid: number[][] = new Array(board.length).fill([]);
   for (let row=0; row<board.length; row++){
-    const tempArrayRow: number[] = [];
-    const tempArraySmallGrid: number[] = []
+    const tempArrayRow: number[] = new Array(board.length);
     for (let col=0; col<board.length; col++){
       const cellIndex = row * board.length + col;
       const smallGridId = Math.floor(col / smallGridSize) + smallGridSize * Math.floor(row / smallGridSize)
       if (cache[cellIndex]) for (let val of cache[cellIndex]){
-        tempArrayRow.push(val)
-        countAppearanceSmallGrid[smallGridId] = tempArraySmallGrid
+        tempArrayRow.push(val);
+        tempArraySmallGrid[smallGridId].push(val)
       }
     }
     countAppearanceRow[row] = counter(tempArrayRow)
   }
+
+  tempArraySmallGrid.forEach((smallGrid, id)=> {
+    countAppearanceSmallGrid[id] = counter(smallGrid)
+  })
 
   for (let col=0; col<board.length; col++){
     const tempArray = [];
@@ -125,12 +129,16 @@ export default function solveSudoku(board: Board, cache: SudokuCache, smallGridS
   if (!blank){
     return true;
   }
+
   const {row, column} = blank;
   const cellIndex = row* board.length + column;
-  console.log(`current Cell:${cellIndex}`)
+  //console.log(`current Cell:${cellIndex}`)
   for (let val of cache[cellIndex]){
     if (isValid(board, blank, val, smallGridSize)){
       board[row][column].value = val;
+      cache = cacheValidValues(board, smallGridSize);
+      preFillSudoku(board, cache, smallGridSize)
+
 
       if (solveSudoku(board, cache, smallGridSize)){
         return true;
