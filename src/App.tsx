@@ -6,6 +6,7 @@ import GlobalStyle from './globalComponents/styles/Global';
 import Navbar from './globalComponents/Navbar';
 import SudokuBoard from './globalComponents/SudokuBoard';
 import { SudokuProvider, useGlobalContext } from './globalContext';
+import SudokuMenu from './globalComponents/SudokuMenu';
 
 export default function App() {
 
@@ -18,7 +19,7 @@ export default function App() {
       <ThemeProvider theme={theme}>
         <GlobalStyle font={options.SELECTED_FONT}/>
         <Navbar/>
-        <SudokuBoard/>
+        <SudokuMenu/>
       </ThemeProvider>
     </SudokuProvider>
   )

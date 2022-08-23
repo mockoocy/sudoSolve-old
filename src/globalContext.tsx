@@ -26,7 +26,7 @@ export const SudokuContext = React.createContext<ContextValue >({
   modifyBoard: () => {},
   options: {SUDOKU_SIZE: 9,
   SMALL_GRID_SIZE: 3,
-  FILLED_CELLS_AMOUNT: 17 ,
+  FILLED_CELLS_AMOUNT: 60 ,
   SELECTED_FONT: "Inter, sans-serif"
 },
   selectCell: () => {},
@@ -39,9 +39,9 @@ export const SudokuContext = React.createContext<ContextValue >({
 export function SudokuProvider({children}: Props){
   const [gameWon, setGameWon] = useState(false)
   const [options, setOptions] = useState<Options>({
-    SUDOKU_SIZE: 16,
-    SMALL_GRID_SIZE: 4,
-    FILLED_CELLS_AMOUNT: 60 ,
+    SUDOKU_SIZE: 9,
+    SMALL_GRID_SIZE: 3,
+    FILLED_CELLS_AMOUNT: 17 ,
     SELECTED_FONT: "Rubik moonrocks"
   })
   const initialBoardInfo = generateSudoku(options.SUDOKU_SIZE, options.FILLED_CELLS_AMOUNT);
