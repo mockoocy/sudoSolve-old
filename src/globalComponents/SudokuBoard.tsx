@@ -69,14 +69,18 @@ export default function SudokuBoard() {
   function displaySolvedSudoku(){
     const startTime = Date.now();
 
-    for (let i=0; i<25; i++){
-      const newBoard = generateSudoku(options.SUDOKU_SIZE, options.FILLED_CELLS_AMOUNT).board;
-      const sudokuCache = cacheValidValues(newBoard, options.SMALL_GRID_SIZE);
-      solveSudoku(newBoard, sudokuCache, options.SMALL_GRID_SIZE)
-    }
+    // for (let i=0; i<25; i++){
+    //   const newBoard = generateSudoku(options.SUDOKU_SIZE, options.FILLED_CELLS_AMOUNT).board;
+    //   const sudokuCache = cacheValidValues(newBoard, options.SMALL_GRID_SIZE);
+    //   solveSudoku(newBoard, options.SMALL_GRID_SIZE)
+    // }
+    const boardCopy = structuredClone(boardState);
+    const sudokuBoard = sudokuToNestedNumbers(boardCopy);
+    solveSudoku(sudokuBoard, options.SMALL_GRID_SIZE);
+    setBoardState(nestedNumbersToSudoku(sudokuBoard))
 
 
-    
+
     console.log(`%csolving took ${Date.now() - startTime}ms, avg:${(Date.now() - startTime)/options.FILLED_CELLS_AMOUNT}`, 'color: #7fffd4; font-size: 2rem; font-weight: 600; text-shadow: .25rem .25rem .5rem #f0f8f5')
   }
 

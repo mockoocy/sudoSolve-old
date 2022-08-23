@@ -178,12 +178,10 @@ function orderValidValues(board: SudokuBoard, cache: SudokuCache, smallGridSize:
   }
   return [valuesChanged, cache]
 }
-export default function solveSudoku(board: SudokuBoard, cache: SudokuCache, smallGridSize: number){
-
-  let valuesFound = true;
+export default function solveSudoku(board: SudokuBoard, smallGridSize: number, cache = cacheValidValues(board, smallGridSize), valuesFound = true){
 
   while (valuesFound){
-    const cacheValid = cacheValidValues(board, smallGridSize);
+    const cacheValid = cacheValidValues(board, smallGridSize)
     const orderedCacheReturn = orderValidValues(board, cacheValid, smallGridSize);
     valuesFound = orderedCacheReturn[0]
     cache = orderedCacheReturn[1];
@@ -199,7 +197,7 @@ export default function solveSudoku(board: SudokuBoard, cache: SudokuCache, smal
     if (isValid(board, blank, val, smallGridSize)){
       board[row][column] = val;
 
-      if (solveSudoku(board, cache, smallGridSize)){
+      if (solveSudoku(board, smallGridSize, cache, valuesFound)){
         return true;
       }
       board[row][column] = 0;
