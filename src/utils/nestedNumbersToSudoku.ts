@@ -10,6 +10,7 @@ export default function nestedNumbersToSudoku(board: SudokuBoard) : Board{
         isSelected: false,
         isHighlighted: false,
         isValid: true,
+        isRemovable: cell === 0 ? true : false
       }
     ))
   })

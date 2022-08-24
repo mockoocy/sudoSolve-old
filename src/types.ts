@@ -17,6 +17,7 @@ export type Cell = {
   isSelected: boolean;
   isHighlighted: boolean;
   isValid: boolean;
+  isRemovable: boolean;
 }
 
 export type Coords = {

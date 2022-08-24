@@ -14,8 +14,7 @@ type StyledProps = {
 }
 const StyledSudokuBoard = styled.div<StyledProps>`
   display: grid;
-  margin: 1.25% 2.5%;
-  width: 100%;
+  width: 80%;
   height: auto;
   grid-template-columns: repeat(${props => props.sudokuSize}, 1fr);  
   grid-template-rows: repeat(${props => props.sudokuSize}, 1fr);

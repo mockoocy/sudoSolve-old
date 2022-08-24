@@ -50,15 +50,22 @@ export function SudokuProvider({children}: Props){
   const initialBoardState: Board = nestedNumbersToSudoku(initialBoard)
 
 
+  // function setRemovable(board: Board){
+  //   setBoardState(board => board.map((rows, row) =>{
+  //     return rows.map((cell, col) => {
+  //       return {...cell, isRemovable: false}
+  //     })
+  //   }))
+  // }
+
   const [boardState, setBoardState] = useState<Board>(initialBoardState);
   function modifyBoard(currentRow: number, currentColumn: number, value: number){
-
 
     if (value > options.SUDOKU_SIZE) value %= 10;
     // if the field is already filled, the previous number is replaced with the new one
     // because then the value is like <prevNum><newNum>, so % 10 leaves only <newNum>
     setBoardState(board => board.map((rows, row) => rows.map((cell, col) => {
-      if (cell.value === value) return cell;
+      if (cell.value === value || !cell.isRemovable) return cell;
       if (row === currentRow && col === currentColumn) {
         return value ? {...cell, value:value, isValid: isValid(
           sudokuToNestedNumbers(board),

@@ -7,6 +7,8 @@ import nestedNumbersToSudoku from '../utils/nestedNumbersToSudoku';
 import solveSudoku from '../utils/solveSudoku';
 
 const StyledSudokuMenu = styled.div`
+  margin: 1.25% 5%;
+
   width: 50vw;
   @media (max-width: 820px){
     width: 80vw
@@ -26,7 +28,7 @@ const StyledSudokuMenu = styled.div`
 
 export default function SudokuMenu() {
 
-  const {initialBoardFilled, boardState, setBoardState, options} = useGlobalContext();
+  const {initialBoardFilled, initialBoard, boardState, setBoardState, options} = useGlobalContext();
 
 
   function displaySolvedSudoku(){
@@ -49,13 +51,17 @@ export default function SudokuMenu() {
     setBoardState(nestedNumbersToSudoku(initialBoardFilled))
   }
 
+  function unSolve(){
+    setBoardState(nestedNumbersToSudoku(initialBoard))
+  }
+
   return (
     <StyledSudokuMenu>
       <SudokuBoard />
       <div className="buttons">
-        <button onClick={()=> displaySolvedSudoku() }></button>
-        <button onClick={()=> fastSolve()}></button>
-
+        <button onClick={()=> displaySolvedSudoku() }>Slow solve</button>
+        <button onClick={()=> fastSolve()}>Fast solve</button>
+        <button onClick={()=> unSolve()}>unsolve</button>
       </div>
       
     </StyledSudokuMenu>
