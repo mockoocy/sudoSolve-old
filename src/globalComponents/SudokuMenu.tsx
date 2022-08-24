@@ -28,7 +28,7 @@ const StyledSudokuMenu = styled.div`
 
 export default function SudokuMenu() {
 
-  const {initialBoardFilled, initialBoard, boardState, setBoardState, options} = useGlobalContext();
+  const {initialBoardInfo, boardState, setBoardState, options} = useGlobalContext();
 
 
   function displaySolvedSudoku(){
@@ -48,11 +48,11 @@ export default function SudokuMenu() {
   }
 
   function fastSolve(){
-    setBoardState(nestedNumbersToSudoku(initialBoardFilled))
+    setBoardState(nestedNumbersToSudoku(initialBoardInfo.filledBoard))
   }
 
   function unSolve(){
-    setBoardState(nestedNumbersToSudoku(initialBoard))
+    setBoardState(nestedNumbersToSudoku(initialBoardInfo.board))
   }
 
   return (

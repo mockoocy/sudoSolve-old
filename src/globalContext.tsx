@@ -16,8 +16,7 @@ type ContextValue = {
   modifyBoard: (arg0: number, arg1: number, arg2: number) => void;
   options: Options;
   selectCell: (arg0:number, arg1: number, arg2: Cell) => void;
-  initialBoard: SudokuBoard;
-  initialBoardFilled: SudokuBoard;
+  initialBoardInfo: {board: SudokuBoard, filledBoard: SudokuBoard};
 }
 
 export const SudokuContext = React.createContext<ContextValue >({
@@ -30,8 +29,7 @@ export const SudokuContext = React.createContext<ContextValue >({
   SELECTED_FONT: "Inter, sans-serif"
 },
   selectCell: () => {},
-  initialBoard: [],
-  initialBoardFilled: []
+  initialBoardInfo: {board: [], filledBoard: []},
 });
 
 
@@ -44,10 +42,18 @@ export function SudokuProvider({children}: Props){
     FILLED_CELLS_AMOUNT: 75  ,
     SELECTED_FONT: "Rubik moonrocks"
   })
-  const initialBoardInfo = generateSudoku(options.SUDOKU_SIZE, options.FILLED_CELLS_AMOUNT);
-  const initialBoardFilled = initialBoardInfo.filledBoard;
-  const initialBoard = initialBoardInfo.board
-  const initialBoardState: Board = nestedNumbersToSudoku(initialBoard)
+  const [boardState, setBoardState] = useState<Board>([]);
+  const [initialBoardInfo, setInitialBoardInfo] = useState<{board: SudokuBoard, filledBoard: SudokuBoard}>({board: [], filledBoard: []})
+
+  useEffect(()=>{
+    const initialBoardInfo = generateSudoku(options.SUDOKU_SIZE, options.FILLED_CELLS_AMOUNT);
+    const initialBoardFilled = initialBoardInfo.filledBoard;
+    const initialBoard = initialBoardInfo.board
+    const initialBoardState: Board = nestedNumbersToSudoku(initialBoard);
+    setInitialBoardInfo({board: initialBoard, filledBoard: initialBoardFilled})
+    setBoardState(initialBoardState)
+  }, [])
+
 
 
   // function setRemovable(board: Board){
@@ -58,9 +64,7 @@ export function SudokuProvider({children}: Props){
   //   }))
   // }
 
-  const [boardState, setBoardState] = useState<Board>(initialBoardState);
   function modifyBoard(currentRow: number, currentColumn: number, value: number){
-
     if (value > options.SUDOKU_SIZE) value %= 10;
     // if the field is already filled, the previous number is replaced with the new one
     // because then the value is like <prevNum><newNum>, so % 10 leaves only <newNum>
@@ -119,8 +123,7 @@ export function SudokuProvider({children}: Props){
       modifyBoard,
       options,
       selectCell,
-      initialBoard,
-      initialBoardFilled
+      initialBoardInfo
     }}>
       {children}
     </SudokuContext.Provider>
