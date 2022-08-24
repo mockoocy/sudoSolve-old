@@ -1,11 +1,6 @@
 import React, { useRef } from 'react'
 import styled from 'styled-components';
 import { useGlobalContext } from '../globalContext';
-import { Board, Coords } from '../types';
-import generateSudoku from '../utils/generateSudoku';
-import nestedNumbersToSudoku from '../utils/nestedNumbersToSudoku';
-import solveSudoku, { cacheValidValues } from '../utils/solveSudoku';
-import sudokuToNestedNumbers from '../utils/sudokuToNestedNumbers';
 import SudokuCell from './SudokuCell';
 
 

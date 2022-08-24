@@ -7,6 +7,7 @@ export type Theme = {
     gridGapClr: string;
     highlightCellClr: string;
     invalidCellClr: string;
+    prefilledCellClr: string;
   }
 }
 

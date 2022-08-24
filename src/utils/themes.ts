@@ -8,7 +8,8 @@ const lightTheme: Theme = {
     selectedCellClr: '#00BDFF',
     gridGapClr: '#0f0f0f',
     highlightCellClr: '#92BDFF',
-    invalidCellClr: '#f04848'
+    invalidCellClr: '#f04848',
+    prefilledCellClr: '#f0f0ff '
   }
 }
 

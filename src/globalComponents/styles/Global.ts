@@ -11,6 +11,8 @@ const GlobalStyle = createGlobalStyle<{theme: Theme, font: string}>`
   --notSelectedCellClr: ${({theme})=> theme.colors.notSelectedCellClr};
   --highlightCellClr: ${({theme})=> theme.colors.highlightCellClr};
   --invalidCellClr: ${({theme})=> theme.colors.invalidCellClr};
+  --prefilledCellClr: ${({theme})=> theme.colors.prefilledCellClr};
+
 /* Fonts */
   --fontDefault: ${({font}) => font}
 
