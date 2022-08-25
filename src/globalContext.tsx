@@ -15,6 +15,7 @@ type ContextValue = {
   setBoardState: Function;
   modifyBoard: (arg0: number, arg1: number, arg2: number) => void;
   options: Options;
+  setOptions:  Function;
   selectCell: (arg0:number, arg1: number, arg2: Cell) => void;
   initialBoardInfo: {board: SudokuBoard, filledBoard: SudokuBoard};
 }
@@ -24,10 +25,11 @@ export const SudokuContext = React.createContext<ContextValue >({
   setBoardState: () => {},
   modifyBoard: () => {},
   options: {SUDOKU_SIZE: 0,
-  SMALL_GRID_SIZE: 0,
-  FILLED_CELLS_AMOUNT: 0 ,
-  SELECTED_FONT: "Inter, sans-serif"
-},
+    SMALL_GRID_SIZE: 0,
+    FILLED_CELLS_AMOUNT: 0 ,
+    SELECTED_FONT: "Inter, sans-serif"
+  },
+  setOptions: () => {},
   selectCell: () => {},
   initialBoardInfo: {board: [], filledBoard: []},
 });
@@ -122,6 +124,7 @@ export function SudokuProvider({children}: Props){
       setBoardState,
       modifyBoard,
       options,
+      setOptions,
       selectCell,
       initialBoardInfo
     }}>
