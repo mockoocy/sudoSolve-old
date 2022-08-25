@@ -3,12 +3,13 @@ import styled from 'styled-components';
 import {Icon} from "@iconify/react";
 import { useGlobalContext } from '../globalContext';
 import DropDownMenu from './DropDownMenu';
+import { Options } from '../types';
 
 
 const StyledNavbar = styled.nav`
   width: 100vw;
   height: 10%;
-  padding: 0 2.5%;
+  padding: 0 5%;
   box-shadow: .125rem 0 .25rem var(--standOutClr);
   display: flex;
   align-items: center;
@@ -63,6 +64,45 @@ export default function Navbar() {
         elo
       </li>]
 
+  function incrementGridSize(){
+    const newOptions: Options = {...options, SMALL_GRID_SIZE: options.SMALL_GRID_SIZE + 1,
+    SUDOKU_SIZE: (options.SMALL_GRID_SIZE + 1)  * (options.SMALL_GRID_SIZE + 1)}
+    setOptions(newOptions)
+  }
+  function decrementGridSize(){
+    const newOptions: Options = {...options,
+      SMALL_GRID_SIZE: options.SMALL_GRID_SIZE - 1
+    , SUDOKU_SIZE: (options.SMALL_GRID_SIZE -1)  * (options.SMALL_GRID_SIZE -1) }
+    setOptions(newOptions)
+  }
+
+  function changeFilledCellsAmount(e: React.ChangeEvent<HTMLInputElement>){
+    const newAmount = Number(e.target.value);
+    if (newAmount < 0 || newAmount > options.SUDOKU_SIZE * options.SUDOKU_SIZE) return;
+    const newOptions: Options= {...options, FILLED_CELLS_AMOUNT: newAmount}
+    setOptions(newOptions)
+  }
+
+  const optionsElements = [
+    <li key={"Option-SudokuSize"}>  
+      Sudoku Size
+      <div className="size-selector">
+        <Icon icon="akar-icons:circle-minus" onClick={decrementGridSize}/>
+        {options.SMALL_GRID_SIZE}
+        <Icon icon="akar-icons:circle-plus" onClick={incrementGridSize}/>
+      </div>
+    </li>,
+    <li key={"Option-filledCells"}>
+      Filled cells
+      <input type="number" 
+      min={0} 
+      max={options.SUDOKU_SIZE*options.SUDOKU_SIZE} 
+      className="cells-amount" 
+      value={options.FILLED_CELLS_AMOUNT} 
+      onChange={e => changeFilledCellsAmount(e)}/>
+    </li>,
+  ]
+
   return (
     <StyledNavbar>
       <div className="logo-container">
@@ -71,11 +111,12 @@ export default function Navbar() {
       </div>
       <div className="btn-container">
         <DropDownMenu 
-          icon={<Icon icon="eva:options-2-outline" id="options-btn" className="svg"/>}
+          icon={<Icon icon="carbon:color-palette" id="options-btn" className="svg"/>}
           listElements={listEls}
         />
         <DropDownMenu
-          icon={<Icon icon="carbon:color-palette" id="theme-selector-btn" className="svg"/>}
+          icon={<Icon icon="eva:options-2-outline" id="theme-selector-btn" className="svg"/>}
+          listElements={optionsElements}
         />
 
       </div>

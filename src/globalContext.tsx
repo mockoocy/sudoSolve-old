@@ -108,15 +108,23 @@ export function SudokuProvider({children}: Props){
     }))
   }
   useEffect(()=>{
-    if (!boardState.some(row => row.some(cell => cell.value === 0 || !cell.isValid)) && !gameWon){
+    if (boardState.length > 0 && !boardState.some(row => row.some(cell => cell.value === 0 || cell.isValid)) && !gameWon){
       setGameWon(true)
     }
   },[boardState, gameWon])
 
   useEffect(()=>{
-    if (gameWon){
+    if (gameWon) {
+      alert('you won')
     }
   },[gameWon])
+
+  useEffect(()=> {
+    const newBoardInfo = generateSudoku(options.SUDOKU_SIZE, options.FILLED_CELLS_AMOUNT);
+    setInitialBoardInfo(newBoardInfo)
+    setBoardState(nestedNumbersToSudoku(newBoardInfo.board))
+
+  }, [options.SUDOKU_SIZE, options.FILLED_CELLS_AMOUNT])
   
   return (
     <SudokuContext.Provider value= {{
@@ -126,7 +134,7 @@ export function SudokuProvider({children}: Props){
       options,
       setOptions,
       selectCell,
-      initialBoardInfo
+      initialBoardInfo,
     }}>
       {children}
     </SudokuContext.Provider>

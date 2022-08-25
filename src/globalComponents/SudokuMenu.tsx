@@ -59,7 +59,7 @@ export default function SudokuMenu() {
     <StyledSudokuMenu>
       <SudokuBoard />
       <div className="buttons">
-        {options.SUDOKU_SIZE === 9 && <button onClick={()=> displaySolvedSudoku() }>Slow solve</button>}
+        {options.SUDOKU_SIZE <= 9 && <button onClick={()=> displaySolvedSudoku() }>Slow solve</button>}
         <button onClick={()=> fastSolve()}>Fast solve</button>
         <button onClick={()=> unSolve()}>unsolve</button>
       </div>
