@@ -42,7 +42,6 @@ export function generateSudokuFilled(sudokuSize: number) : SudokuBoard{
 
 export default function generateSudoku(sudokuSize: number, filledCellsAmount=27) 
 : {board: SudokuBoard, filledBoard: SudokuBoard} {
-  console.log('ee')
   const board = generateSudokuFilled(sudokuSize);
   const filledBoard = structuredClone(board)
   const cellsAmount = sudokuSize * sudokuSize;
