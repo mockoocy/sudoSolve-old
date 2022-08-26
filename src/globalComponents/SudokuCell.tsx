@@ -49,8 +49,11 @@ const  SudokuCell = React.forwardRef<HTMLInputElement, Props>(({maxNumber, cell,
   function getBorderStyles(row: number, column: number) : string{
     const borderBottom = `${(row + 1) % options.SMALL_GRID_SIZE === 0 ? "border-bottom: 3px solid var(--gridGapClr);": ""}`;
     const borderRight = `${(column + 1) % options.SMALL_GRID_SIZE === 0 ? "border-right: 3px solid var(--gridGapClr);": ""}`;
-    const borderStyles = borderBottom + borderRight;
-    return borderStyles ?  borderStyles : ""
+    const borderLeft = `${column === 0 ? "border-left: 3px solid var(--gridGapClr);" : ""}`
+    const borderTop = `${row === 0 ? "border-top: 3px solid var(--gridGapClr);" : ""}`
+    
+    const borderStyles = borderBottom + borderRight + borderLeft + borderTop;
+    return borderStyles ?? ""
   }
 
   function getCellClr(cell:Cell): string{
