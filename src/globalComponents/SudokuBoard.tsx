@@ -37,15 +37,15 @@ export default function SudokuBoard() {
         nextInputId = getNextInputId(nextRow, nextCol);
         break;
       case "ArrowDown":
-        nextRow = row + moveAmount <= options.SUDOKU_SIZE ? row + moveAmount: row;
+        nextRow = row + moveAmount < options.SUDOKU_SIZE ? row + moveAmount: row;
         nextInputId = getNextInputId(nextRow, nextCol)
         break;
       case "ArrowLeft":
-        nextCol = col - moveAmount >= 0 ? col - moveAmount : col;
+        nextCol = col - moveAmount;
         nextInputId = getNextInputId(nextRow, nextCol)
         break;
       case "ArrowRight":
-        nextCol = col + moveAmount <= options.SUDOKU_SIZE ? col + moveAmount: col;
+        nextCol = col + moveAmount;
         nextInputId = getNextInputId(nextRow, nextCol)
         break;
       }

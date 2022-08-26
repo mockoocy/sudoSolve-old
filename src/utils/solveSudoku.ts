@@ -3,6 +3,7 @@ import isValid from "./isValid";
 import getCurrentGrid from "./getCurrentGrid";
 import counter from "./counter";
 
+const getCellIndex = (row:number, col: number, sudokuSize : number) => row * sudokuSize + col
 
 export function findEmpty(board: SudokuBoard) : (Coords | null){
   for (let row=0; row<board.length; row++){
@@ -54,7 +55,7 @@ export function cacheValidValues(board: SudokuBoard, smallGridSize: number){
   const cache : SudokuCache = {};
   for (let row=0; row<board.length; row++){
     for (let col=0; col<board.length; col++){
-      const cellIndex = row * board.length + col
+      const cellIndex = getCellIndex(row, col, board.length)
       if (board[row][col] === 0) cache[cellIndex] = allowedValues(board, row, col,smallGridSize)
     }
   }
@@ -78,7 +79,7 @@ function orderValidValues(board: SudokuBoard, cache: SudokuCache, smallGridSize:
     const tempRowArray: number[] = new Array(board.length);
 
     for (let col=0; col<board.length; col++){
-      const cellIndex = row * board.length + col;
+      const cellIndex = getCellIndex(row, col, board.length)
       const smallGridId = Math.floor(col / smallGridSize) + smallGridSize * Math.floor(row / smallGridSize)
       if (cache[cellIndex]) {
         for (let val of cache[cellIndex]){
@@ -103,7 +104,7 @@ function orderValidValues(board: SudokuBoard, cache: SudokuCache, smallGridSize:
   for (let col = 0; col < board.length; col++) {
     const tempColArray: number[] = new Array(board.length);
     for (let row=0; row<board.length; row++){
-      const cellIndex = row * board.length + col
+      const cellIndex = getCellIndex(row, col, board.length)
       if (cache[cellIndex]) for (let val of cache[cellIndex]){
         tempColArray.push(val)
       }
@@ -114,7 +115,7 @@ function orderValidValues(board: SudokuBoard, cache: SudokuCache, smallGridSize:
   for (let row=0; row<board.length; row++){
     for (let col=0; col<board.length; col++){
       const tempArray = [];
-      const cellIndex = row * board.length + col;
+      const cellIndex = getCellIndex(row, col, board.length)
       const smallGridId = smallGridSize * Math.floor(row / smallGridSize) 
         + Math.floor(col / smallGridSize);
       if (cache[cellIndex]) {
@@ -139,7 +140,7 @@ function orderValidValues(board: SudokuBoard, cache: SudokuCache, smallGridSize:
 
   for (let row=0; row<board.length;row++){
     for (let col=0; col<board.length; col++){
-      const cellIndex = row * board.length + col;
+      const cellIndex = getCellIndex(row, col, board.length)
       if (cache[cellIndex]){
         const tuples: [number,number][] = []
         for (let i=0; i<cache[cellIndex].length; i++){
@@ -160,7 +161,7 @@ function orderValidValues(board: SudokuBoard, cache: SudokuCache, smallGridSize:
 
   for (let row=0; row<board.length; row++){
     for (let col=0; col<board.length; col++){
-      const cellIndex = row * board.length + col;
+      const cellIndex = getCellIndex(row, col, board.length)
       const smallGridId = smallGridSize * Math.floor(row / smallGridSize) + Math.floor(col / smallGridSize)
       if (cache[cellIndex]){
         for (let val of cache[cellIndex]){
@@ -192,7 +193,7 @@ export default function solveSudoku(board: SudokuBoard, smallGridSize: number, c
   }
 
   const {row, column} = blank;
-  const cellIndex = row * board.length + column;
+  const cellIndex = getCellIndex(row, column, board.length)
   for (let val of cache[cellIndex]){
     if (isValid(board, blank, val, smallGridSize)){
       board[row][column] = val;
