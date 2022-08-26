@@ -13,8 +13,22 @@ const lightTheme: Theme = {
   }
 }
 
+const darkTheme: Theme = {
+  colors: {
+    bgClr: '#0e0e10',
+    standOutClr: '#7b2df5',
+    notSelectedCellClr: '#272729',
+    selectedCellClr: '#9B2CF5',
+    gridGapClr: '#f0f8f5',
+    highlightCellClr: '#E02CF5',
+    invalidCellClr: '#f04848',
+    prefilledCellClr: '#1f1f1a '
+  }
+}
+
 const themes = {
-  lightTheme
+  lightTheme,
+  darkTheme
 }
 
 export default themes;

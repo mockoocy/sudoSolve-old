@@ -10,7 +10,7 @@ import SudokuMenu from './globalComponents/SudokuMenu';
 
 export default function App() {
 
-  const [theme, setTheme] = useState<Theme>(themes.lightTheme);
+  const [theme, setTheme] = useState<Theme>(themes.darkTheme);
 
   const {options} = useGlobalContext();
   

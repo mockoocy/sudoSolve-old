@@ -3,13 +3,13 @@ import styled from "styled-components";
 import { useGlobalContext } from '../globalContext';
 import {Cell} from "../types"
 type StyledProps = {
-  bgClr: string;
+  cellClr: string;
   border: string;
 }
 
 const StyledSudokuCell = styled.div<StyledProps>`
   outline: 1px solid var(--gridGapClr);
-  background-color: ${props => props.bgClr};
+  background-color: ${props => props.cellClr};
   aspect-ratio: 1;
   border-top: 3px solid black;
   border-left: 3px solid black;
@@ -21,6 +21,7 @@ const StyledSudokuCell = styled.div<StyledProps>`
     width: 100%;
     height: 100%;
     font-size: 2rem;
+    color: var(--gridGapClr);
     text-align: center;
     font-family: var(--fontDefault);
     -moz-appearance: textfield;
@@ -59,7 +60,7 @@ const  SudokuCell = React.forwardRef<HTMLInputElement, Props>(({maxNumber, cell,
     }else if (cell.isHighlighted) {
       return "var(--highlightCellClr)"
     } else if (!cell.isRemovable){
-      return "var(--prefillCellClr)"
+      return "var(--prefilledCellClr)"
     } else if (cell.isSelected) {
       return "var(--selectedCellClr)"
     } 
@@ -69,7 +70,7 @@ const  SudokuCell = React.forwardRef<HTMLInputElement, Props>(({maxNumber, cell,
 
   return (
     <StyledSudokuCell 
-    bgClr={getCellClr(cell)}
+    cellClr={getCellClr(cell)}
     border={getBorderStyles(row, column)} 
     onFocus={() => selectCell(row, column, cell)}
     // Using onKeyDown event, because then I can prevent numbers from (in/de)crementing on pressing
