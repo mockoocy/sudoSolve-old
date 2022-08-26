@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from "styled-components";
 import { useGlobalContext } from '../globalContext';
-import {Cell} from "../types"
+import {Cell, Colors} from "../types"
 type StyledProps = {
   cellClr: string;
   border: string;
@@ -59,15 +59,16 @@ const  SudokuCell = React.forwardRef<HTMLInputElement, Props>(({maxNumber, cell,
   function getCellClr(cell:Cell): string{
 
     if (!cell.isValid){
-      return "var(--invalidCellClr)"
-    }else if (cell.isHighlighted) {
-      return "var(--highlightCellClr)"
+      return Colors.invalidCellClr
+    } else if(cell.isSelected){
+      return Colors.selectedCellClr
+    }
+    else if (cell.isHighlighted) {
+      return Colors.highlightCellClr
     } else if (!cell.isRemovable){
-      return "var(--prefilledCellClr)"
-    } else if (cell.isSelected) {
-      return "var(--selectedCellClr)"
-    } 
-    return 'var(--notSelectedCellClr)'
+      return Colors.prefilledCellClr
+    }
+    return Colors.notSelectedCellClr
   }
 
 

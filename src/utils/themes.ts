@@ -1,6 +1,9 @@
 import { Theme } from "../types";
 
 const lightTheme: Theme = {
+  info: {
+    displayName: "light"
+  },
   colors: {
     bgClr: '#f0f8f5',
     standOutClr: '#0066FF',
@@ -14,6 +17,9 @@ const lightTheme: Theme = {
 }
 
 const darkTheme: Theme = {
+  info: {
+    displayName: "dark"
+  },
   colors: {
     bgClr: '#0e0e10',
     standOutClr: '#7b2df5',

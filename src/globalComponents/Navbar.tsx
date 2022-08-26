@@ -3,7 +3,8 @@ import styled from 'styled-components';
 import {Icon} from "@iconify/react";
 import { useGlobalContext } from '../globalContext';
 import DropDownMenu from './DropDownMenu';
-import { Options } from '../types';
+import { Options, Theme } from '../types';
+import themes from '../utils/themes';
 
 
 const StyledNavbar = styled.nav`
@@ -44,25 +45,21 @@ const StyledNavbar = styled.nav`
 
 `
 
-export default function Navbar() {
+type Props = {
+  setTheme: React.Dispatch<React.SetStateAction<Theme>>;
+}
+
+export default function Navbar({setTheme}: Props) {
 
   const {options, setOptions} = useGlobalContext();
 
-  const listEls = [   <li> 
-    elo
-  </li>,
-     <li> 
-     elo
-   </li>,
-      <li> 
-      elo
-    </li>,
-       <li> 
-       elo
-     </li>,
-        <li> 
-        elo
-      </li>]
+  const listEls = Object.values(themes).map((theme, id) => (
+    <li 
+    key={`themeOption-${id}`}
+    onClick={() => setTheme(theme)}>
+      {theme.info.displayName}
+    </li>
+  ))
 
   function incrementGridSize(){
     const newOptions: Options = {...options, SMALL_GRID_SIZE: options.SMALL_GRID_SIZE + 1,
@@ -87,9 +84,9 @@ export default function Navbar() {
     <li key={"Option-SudokuSize"}>  
       Sudoku Size
       <div className="size-selector">
-        <Icon icon="akar-icons:circle-minus" onClick={decrementGridSize}/>
+        <Icon icon="akar-icons:circle-minus" onClick={decrementGridSize} className="sizer"/>
         {options.SMALL_GRID_SIZE}
-        <Icon icon="akar-icons:circle-plus" onClick={incrementGridSize}/>
+        <Icon icon="akar-icons:circle-plus" onClick={incrementGridSize} className="sizer"/>
       </div>
     </li>,
     <li key={"Option-filledCells"}>

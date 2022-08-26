@@ -27,7 +27,7 @@ const StyledDropDownMenu = styled.div`
 
     &>li{
       position: relative;
-      width: 100%;
+      width: 95%;
       height: 3rem;
       font-family: Lato, sans-serif;
       font-size: 1.25rem;
@@ -35,7 +35,7 @@ const StyledDropDownMenu = styled.div`
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 0 .25rem;
+      padding: 0 2.5%;
       transition: all 250ms ease-in-out;
 
       @media (max-width:820px){
@@ -58,6 +58,13 @@ const StyledDropDownMenu = styled.div`
         display: flex;
         align-items: center;
         font-size: 1.5rem;
+        gap: .25rem;
+
+        .sizer:hover {
+          cursor: pointer;  
+          transform: scale(1.15);
+          transition: all 250ms ease-in-out;
+        }
       }
       .cells-amount{
         all: unset;

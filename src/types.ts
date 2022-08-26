@@ -1,4 +1,7 @@
 export type Theme = {
+  info : {
+    displayName: string;
+  },
   colors: {
     bgClr: string;
     standOutClr: string;
@@ -52,4 +55,15 @@ export type SudokuCache = {
 
 export type Counter = {
   [key: (number | string) ] : number
+}
+
+export enum Colors {
+  bgClr = "var(--bgClr)",
+  standOutClr= "var(--standOutClr)",
+  notSelectedCellClr= "var(--notSelectedCellClr)",
+  selectedCellClr= "var(--selectedCellClr)",
+  gridGapClr= "var(--gridGapClr)",
+  highlightCellClr= "var(--highlightCellClr)",
+  invalidCellClr= "var(--invalidCellClr)",
+  prefilledCellClr= "var(--prefilledCellClr)",
 }

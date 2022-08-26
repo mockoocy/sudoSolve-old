@@ -18,7 +18,7 @@ export default function App() {
     <SudokuProvider>
       <ThemeProvider theme={theme}>
         <GlobalStyle font={options.SELECTED_FONT}/>
-        <Navbar/>
+        <Navbar setTheme={setTheme} />
         <SudokuMenu/>
       </ThemeProvider>
     </SudokuProvider>
