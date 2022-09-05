@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import SudokuBoard from './SudokuBoard';
 import styled from 'styled-components';
 import { useGlobalContext } from '../globalContext';
 import sudokuToNestedNumbers from '../utils/sudokuToNestedNumbers';
 import nestedNumbersToSudoku from '../utils/nestedNumbersToSudoku';
 import solveSudoku from '../utils/solveSudoku';
+import axios from "axios"
 
 const StyledSudokuMenu = styled.div`
   margin: 1.25% 5%;
@@ -16,12 +17,22 @@ const StyledSudokuMenu = styled.div`
     .buttons {
     display: flex;
     width: 100%;
+    gap: .25rem;
 
 
     button {
       width: 20%;
       height: 3rem;
       background-color: var(--standOutClr);
+      border: 0;
+      margin: .25rem;
+      padding: 0;
+      border-radius: 1rem;
+
+      :hover {
+        transform: scale(1.1);
+        transition: all 250ms ease-in-out
+      }
     }
   }
 `
@@ -29,10 +40,11 @@ const StyledSudokuMenu = styled.div`
 export default function SudokuMenu() {
 
   const {initialBoardInfo, boardState, setBoardState, options} = useGlobalContext();
+  const [sudokuImage, setSudokuImage] = useState<File | null>(null);
 
 
   function displaySolvedSudoku(){
-    const startTime = Date.now();
+    const startTime = Date.now(); 
 
     // for (let i=0; i<25; i++){
     //   const newBoard = generateSudoku(options.SUDOKU_SIZE, options.FILLED_CELLS_AMOUNT).board;
@@ -55,13 +67,29 @@ export default function SudokuMenu() {
     setBoardState(nestedNumbersToSudoku(initialBoardInfo.board))
   }
 
-  return (
+  function sendSudokuImage(e: React.ChangeEvent<HTMLInputElement>){
+    if (e.target.files) setSudokuImage(e.target.files[0])
+  }
+
+  function uploadSudokuImage(){
+    if (!sudokuImage) return;
+    const formData = new FormData();
+    formData.append('image', sudokuImage, sudokuImage.name)
+    axios.post("http://localhost:8000/postImage", formData,{
+      onUploadProgress: ProgressEvent => console.log(`Upload Progress: ${ProgressEvent.loaded / ProgressEvent.total*100}`)
+    })
+      .then(res => console.log(res.data))
+  }
+
+  return (  
     <StyledSudokuMenu>
       <SudokuBoard />
       <div className="buttons">
         {options.SUDOKU_SIZE <= 9 && <button onClick={()=> displaySolvedSudoku() }>Slow solve</button>}
         <button onClick={()=> fastSolve()}>Fast solve</button>
         <button onClick={()=> unSolve()}>unsolve</button>
+        <input type="file" accept='image/*' onChange={e => sendSudokuImage(e)}/>
+        <button onClick={uploadSudokuImage}></button>
       </div>
       
     </StyledSudokuMenu>
