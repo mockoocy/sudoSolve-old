@@ -6,11 +6,22 @@ import { nestedNumbersToSudoku, sudokuToNestedNumbers, arrayToSquareMatrix  } fr
 import solveSudoku from '../utils/solveSudoku';
 import apiClient from '../utils/apiClient';
 import { useMutation } from '@tanstack/react-query';
+import { Icon } from '@iconify/react';
 
-const StyledSudokuMenu = styled.div`
-  margin: 1.25% 5%;
+type StyledProps = {
+  sudokuSize: number
+}
 
-  width: 50vw;
+const StyledSudokuMenu = styled.div<StyledProps>`
+  margin: 1.25% 10%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+
+  /* width: calc(${props => props.sudokuSize}*1.125vw + 36vw);
+   */
+  width: 80vw;
   @media (max-width: 820px){
     width: 80vw
   }
@@ -20,7 +31,7 @@ const StyledSudokuMenu = styled.div`
     gap: .25rem;
 
 
-    button {
+    .btn {
       width: 20%;
       height: 3rem;
       background-color: var(--standOutClr);
@@ -33,6 +44,22 @@ const StyledSudokuMenu = styled.div`
         transform: scale(1.1);
         transition: all 250ms ease-in-out
       }
+    }
+    #file-label {
+      font-size: 1.125rem;
+      opacity: 0.8;
+      background-color: var(--standOutClr);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      .icon {
+        width: 1em;
+        height: 1em
+      }
+    }
+    #file-selector {
+      display: none;
     }
   }
 `
@@ -64,11 +91,9 @@ export default function SudokuMenu() {
 
   function sendSudokuImage(e: React.ChangeEvent<HTMLInputElement>){
     if (e.target.files) setLoadedImage(e.target.files[0])
-    // setOptions(prevOptions => ({...prevOptions, SUDOKU_SIZE: 9, SMALL_GRID_SIZE: 3 }))
-
   }
 
-  const {mutate: getSudokuBoard} = useMutation(getSudokuFromImage, {
+  const {isLoading: isSudokuLoading, mutate: getSudokuBoard} = useMutation(getSudokuFromImage, {
     onSuccess: res => {
       if (!res) return;
       const loadedBoard: number[] = res.data
@@ -90,6 +115,16 @@ export default function SudokuMenu() {
     }
   })
 
+
+  function chooseSolver(){
+    if (options.SUDOKU_SIZE <= 9){
+      displaySolvedSudoku()
+  } else {
+    fastSolve()
+  }
+}
+
+
   async function getSudokuFromImage(){
     if (!loadedImage) return;
     const formData = new FormData();
@@ -103,16 +138,19 @@ export default function SudokuMenu() {
 
 
   return (  
-    <StyledSudokuMenu>
+    <StyledSudokuMenu sudokuSize={options.SUDOKU_SIZE}>
       <SudokuBoard />
       <div className="buttons">
-        {options.SUDOKU_SIZE <= 9 && <button onClick={()=> displaySolvedSudoku() }>Slow solve</button>}
-        {!loadedImage &&
-          <button onClick={()=> fastSolve()}>Fast solve</button>
-        }
-        <button onClick={()=> unSolve()}>unsolve</button>
-        <input type="file" accept='image/*' onChange={e => sendSudokuImage(e)}/>
-        <button onClick={() => getSudokuBoard()}></button>
+        <button className="btn" onClick={()=> chooseSolver()}>solve</button>
+        <button className="btn" onClick={()=> unSolve()}>unsolve</button>
+        <label htmlFor="file-selector" id="file-label" className='btn'>
+          Upload an image!
+          <Icon id="icon upload-icon" icon="ic:baseline-file-upload" />
+        </label>
+        <input id="file-selector" type="file" accept='image/*' onChange={e => sendSudokuImage(e)}/>
+        <button className="btn" id="file-submit" onClick={() => getSudokuBoard()}>
+          {isSudokuLoading ? "Proccessing image..." : "Submit image" }
+        </button>
 
       </div>
       

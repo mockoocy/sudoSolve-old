@@ -10,7 +10,7 @@ import asyncio
 
 Matrix2D = NDArray[NDArray[np.uint8 | np.float32]]
 Matrix3D = NDArray[NDArray[NDArray[np.uint8 | np.float32]]]
-# Idk if it doesnt work this way, I want to somehow specify that these are nested, besides the name
+# Idc if it doesnt work this way, I want to somehow specify that these are nested, besides the name
 SUDOKU_SIZE = 9
 CELL_DIMENSIONS = (28, 28)
 

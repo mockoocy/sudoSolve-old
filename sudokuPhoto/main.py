@@ -3,17 +3,13 @@ from typing import TypedDict
 
 from fastapi import FastAPI, UploadFile
 from starlette.middleware.cors import CORSMiddleware
-from pydantic import BaseModel
 import cv2
 import numpy as np
 from read_sudoku import read_sudoku
-import tensorflow as tf
-from fastapi.encoders import jsonable_encoder
 app = FastAPI()
 origins = [
     '*'
 ]
-
 
 app.add_middleware(
     CORSMiddleware,

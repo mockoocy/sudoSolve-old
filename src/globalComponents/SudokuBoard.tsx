@@ -9,7 +9,7 @@ type StyledProps = {
 }
 const StyledSudokuBoard = styled.div<StyledProps>`
   display: grid;
-  width: 80%;
+  width: calc(${props => props.sudokuSize}*1.125vw + 36vw);
   height: auto;
   grid-template-columns: repeat(${props => props.sudokuSize}, 1fr);  
   grid-template-rows: repeat(${props => props.sudokuSize}, 1fr);
