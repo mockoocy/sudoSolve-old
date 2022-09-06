@@ -1,11 +1,11 @@
-import { Coords, Counter, SudokuBoard, SudokuCache } from "../types";
+import { Coords, Counter, Matrix2D, SudokuCache } from "../types";
 import isValid from "./isValid";
 import getCurrentGrid from "./getCurrentGrid";
 import counter from "./counter";
 
 const getCellIndex = (row:number, col: number, sudokuSize : number) => row * sudokuSize + col
 
-export function findEmpty(board: SudokuBoard) : (Coords | null){
+export function findEmpty(board: Matrix2D) : (Coords | null){
   for (let row=0; row<board.length; row++){
     for(let col=0; col<board.length; col++){
       if (board[row][col] === 0) return {row, column: col}
@@ -14,7 +14,7 @@ export function findEmpty(board: SudokuBoard) : (Coords | null){
   return null
 }
 
-function allowedValues(board: SudokuBoard, currentRow: number, currentCol: number, smallGridSize: number){
+function allowedValues(board: Matrix2D, currentRow: number, currentCol: number, smallGridSize: number){
   const numbersList: number[] = [];
 
   for (let num=1; num<=board.length; num++){
@@ -51,7 +51,7 @@ function allowedValues(board: SudokuBoard, currentRow: number, currentCol: numbe
   return numbersList
 }
 
-export function cacheValidValues(board: SudokuBoard, smallGridSize: number){
+export function cacheValidValues(board: Matrix2D, smallGridSize: number){
   const cache : SudokuCache = {};
   for (let row=0; row<board.length; row++){
     for (let col=0; col<board.length; col++){
@@ -64,7 +64,7 @@ export function cacheValidValues(board: SudokuBoard, smallGridSize: number){
 
 
 
-function orderValidValues(board: SudokuBoard, cache: SudokuCache, smallGridSize: number) : [boolean, SudokuCache]{
+function orderValidValues(board: Matrix2D, cache: SudokuCache, smallGridSize: number) : [boolean, SudokuCache]{
 
   const cachePriority: SudokuCache = {};
   const countAppearanceRow: Counter[] = new Array(board.length);
@@ -179,7 +179,7 @@ function orderValidValues(board: SudokuBoard, cache: SudokuCache, smallGridSize:
   }
   return [valuesChanged, cache]
 }
-export default function solveSudoku(board: SudokuBoard, smallGridSize: number, cache = cacheValidValues(board, smallGridSize), valuesFound = true){
+export default function solveSudoku(board: Matrix2D, smallGridSize: number, cache = cacheValidValues(board, smallGridSize), valuesFound = true){
 
   while (valuesFound){
     const cacheValid = cacheValidValues(board, smallGridSize)

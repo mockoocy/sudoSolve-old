@@ -1,10 +1,10 @@
 import React, {useState, useContext, useEffect} from "react";
-import { Board, Cell, Options, SudokuBoard } from "./types";
+import { Board, Cell, Options, Matrix2D } from "./types";
 import generateSudoku from "./utils/generateSudoku";
 import getCurrentGrid from "./utils/getCurrentGrid";
 import isValid from "./utils/isValid";
-import nestedNumbersToSudoku from "./utils/nestedNumbersToSudoku";
-import sudokuToNestedNumbers from "./utils/sudokuToNestedNumbers";
+import { nestedNumbersToSudoku, sudokuToNestedNumbers } from './utils/arrayMethods';
+
 
 type Props = {
   children: React.ReactNode[] | React.ReactNode
@@ -17,7 +17,7 @@ type ContextValue = {
   options: Options;
   setOptions:  Function;
   selectCell: (arg0:number, arg1: number, arg2: Cell) => void;
-  initialBoardInfo: {board: SudokuBoard, filledBoard: SudokuBoard};
+  initialBoardInfo: {board: Matrix2D, filledBoard: Matrix2D};
 }
 
 export const SudokuContext = React.createContext<ContextValue >({
@@ -45,17 +45,14 @@ export function SudokuProvider({children}: Props){
     SELECTED_FONT: "Rubik moonrocks"
   })
   const [boardState, setBoardState] = useState<Board>([]);
-  const [initialBoardInfo, setInitialBoardInfo] = useState<{board: SudokuBoard, filledBoard: SudokuBoard}>({board: [], filledBoard: []})
+  const [initialBoardInfo, setInitialBoardInfo] = useState<{board: Matrix2D, filledBoard: Matrix2D}>({board: [], filledBoard: []})
 
-  useEffect(()=>{
-    const initialBoardInfo = generateSudoku(options.SUDOKU_SIZE, options.FILLED_CELLS_AMOUNT);
-    const initialBoardFilled = initialBoardInfo.filledBoard;
-    const initialBoard = initialBoardInfo.board
-    const initialBoardState: Board = nestedNumbersToSudoku(initialBoard);
-    setInitialBoardInfo({board: initialBoard, filledBoard: initialBoardFilled})
-    setBoardState(initialBoardState)
-  }, [])
-
+  
+  useEffect(()=> {
+    const newBoardInfo = generateSudoku(options.SUDOKU_SIZE, options.FILLED_CELLS_AMOUNT);
+    setInitialBoardInfo(newBoardInfo)
+    setBoardState(nestedNumbersToSudoku(newBoardInfo.board))
+  }, [options.SUDOKU_SIZE, options.FILLED_CELLS_AMOUNT])
 
 
   // function setRemovable(board: Board){
@@ -119,12 +116,7 @@ export function SudokuProvider({children}: Props){
     }
   },[gameWon])
 
-  useEffect(()=> {
-    const newBoardInfo = generateSudoku(options.SUDOKU_SIZE, options.FILLED_CELLS_AMOUNT);
-    setInitialBoardInfo(newBoardInfo)
-    setBoardState(nestedNumbersToSudoku(newBoardInfo.board))
 
-  }, [options.SUDOKU_SIZE, options.FILLED_CELLS_AMOUNT])
   
   return (
     <SudokuContext.Provider value= {{

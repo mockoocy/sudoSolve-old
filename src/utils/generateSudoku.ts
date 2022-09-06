@@ -1,11 +1,11 @@
-import { SudokuBoard } from "../types";
+import { Matrix2D } from "../types";
 import randomSample from "./randomSample";
 
 function range(end: number, start=0){
   return Array.from(Array(end).keys()).map(i => i + start)
 }
 
-export function generateSudokuFilled(sudokuSize: number) : SudokuBoard{
+export function generateSudokuFilled(sudokuSize: number) : Matrix2D{
   //generates valid sudoku board of sudokuSize x sudokuSize dimensions
   const base = Math.sqrt(sudokuSize); // length of a small grid's side
   // size is the direction of one of sudoku board's side, the classic one would be size = 9;
@@ -41,7 +41,7 @@ export function generateSudokuFilled(sudokuSize: number) : SudokuBoard{
 }
 
 export default function generateSudoku(sudokuSize: number, filledCellsAmount=27) 
-: {board: SudokuBoard, filledBoard: SudokuBoard} {
+: {board: Matrix2D, filledBoard: Matrix2D} {
   const board = generateSudokuFilled(sudokuSize);
   const filledBoard = structuredClone(board)
   const cellsAmount = sudokuSize * sudokuSize;

@@ -1,7 +1,7 @@
-import { Coords, SudokuBoard } from "../types";
+import { Coords, Matrix2D } from "../types";
 import getCurrentGrid from "./getCurrentGrid";
 
-export default function isValid(board: SudokuBoard, currentCell: Coords, value: number, smallGridSize: number){
+export default function isValid(board: Matrix2D, currentCell: Coords, value: number, smallGridSize: number){
 
 
   const sudokuSize = smallGridSize * smallGridSize;

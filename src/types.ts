@@ -32,7 +32,7 @@ export type Coords = {
 type Row = Cell[];
 export type Board = Row[];
 
-export type SudokuBoard = number[][];
+export type Matrix2D = number[][];
 
 
 export type Options = {

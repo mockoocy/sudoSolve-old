@@ -2,10 +2,11 @@ import React, { useEffect, useState } from 'react';
 import SudokuBoard from './SudokuBoard';
 import styled from 'styled-components';
 import { useGlobalContext } from '../globalContext';
-import sudokuToNestedNumbers from '../utils/sudokuToNestedNumbers';
-import nestedNumbersToSudoku from '../utils/nestedNumbersToSudoku';
+import { nestedNumbersToSudoku, sudokuToNestedNumbers, arrayToSquareMatrix  } from '../utils/arrayMethods';
 import solveSudoku from '../utils/solveSudoku';
 import axios from "axios"
+import { Matrix2D } from '../types';
+import apiClient from '../utils/apiClient';
 
 const StyledSudokuMenu = styled.div`
   margin: 1.25% 5%;
@@ -41,6 +42,7 @@ export default function SudokuMenu() {
 
   const {initialBoardInfo, boardState, setBoardState, options} = useGlobalContext();
   const [sudokuImage, setSudokuImage] = useState<File | null>(null);
+  const [axiosResponse, setAxiosResponse] = useState<number[]>([])
 
 
   function displaySolvedSudoku(){
@@ -56,7 +58,7 @@ export default function SudokuMenu() {
     solveSudoku(sudokuBoard, options.SMALL_GRID_SIZE);
     setBoardState(nestedNumbersToSudoku(sudokuBoard))
 
-    console.log(`%csolving took ${Date.now() - startTime}ms, avg:${(Date.now() - startTime)/options.FILLED_CELLS_AMOUNT}`, 'color: #7fffd4; font-size: 2rem; font-weight: 600; text-shadow: .25rem .25rem .5rem #f0f8f5')
+    console.log(`%csolving took ${Date.now() - startTime}ms`, 'color: #7fffd4; font-size: 2rem; font-weight: 600; text-shadow: .25rem .25rem .5rem #f0f8f5')
   }
 
   function fastSolve(){
@@ -75,11 +77,15 @@ export default function SudokuMenu() {
     if (!sudokuImage) return;
     const formData = new FormData();
     formData.append('image', sudokuImage, sudokuImage.name)
-    axios.post("http://localhost:8000/postImage", formData,{
+    const responseArray = []
+    const elo =apiClient.post("postImage", formData,{
       onUploadProgress: ProgressEvent => console.log(`Upload Progress: ${ProgressEvent.loaded / ProgressEvent.total*100}`)
     })
       .then(res => console.log(res.data))
+    console.log(elo)
   }
+
+  // useEffect(()=>{set},[axiosResponse])
 
   return (  
     <StyledSudokuMenu>

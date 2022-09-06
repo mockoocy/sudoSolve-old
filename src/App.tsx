@@ -4,23 +4,33 @@ import {Theme} from "./types";
 import themes from "./utils/themes";
 import GlobalStyle from './globalComponents/styles/Global';
 import Navbar from './globalComponents/Navbar';
-import SudokuBoard from './globalComponents/SudokuBoard';
 import { SudokuProvider, useGlobalContext } from './globalContext';
 import SudokuMenu from './globalComponents/SudokuMenu';
+import {QueryClient, QueryClientProvider} from '@tanstack/react-query'
 
 export default function App() {
 
   const [theme, setTheme] = useState<Theme>(themes.darkTheme);
 
+  const queryClient = new QueryClient({
+    defaultOptions: {
+      queries: {
+        refetchOnWindowFocus : false
+      }
+    }
+  })
+
   const {options} = useGlobalContext();
   
   return (
-    <SudokuProvider>
-      <ThemeProvider theme={theme}>
-        <GlobalStyle font={options.SELECTED_FONT}/>
-        <Navbar setTheme={setTheme} />
-        <SudokuMenu/>
-      </ThemeProvider>
-    </SudokuProvider>
+    <QueryClientProvider client={queryClient}>
+      <SudokuProvider>
+        <ThemeProvider theme={theme}>
+          <GlobalStyle font={options.SELECTED_FONT}/>
+          <Navbar setTheme={setTheme} />
+          <SudokuMenu/>
+        </ThemeProvider>
+      </SudokuProvider>
+    </QueryClientProvider>
   )
 }
