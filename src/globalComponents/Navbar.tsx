@@ -62,22 +62,33 @@ export default function Navbar({setTheme}: Props) {
   ))
 
   function incrementGridSize(){
-    const newOptions: Options = {...options, SMALL_GRID_SIZE: options.SMALL_GRID_SIZE + 1,
-    SUDOKU_SIZE: (options.SMALL_GRID_SIZE + 1)  * (options.SMALL_GRID_SIZE + 1)}
-    setOptions(newOptions)
+    setOptions(prevOptions => (
+      {
+        ...prevOptions,
+        SMALL_GRID_SIZE: options.SMALL_GRID_SIZE + 1,
+        SUDOKU_SIZE: (options.SMALL_GRID_SIZE + 1) * (options.SMALL_GRID_SIZE + 1)
+      }
+    ))
   }
   function decrementGridSize(){
-    const newOptions: Options = {...options,
-      SMALL_GRID_SIZE: options.SMALL_GRID_SIZE - 1
-    , SUDOKU_SIZE: (options.SMALL_GRID_SIZE -1)  * (options.SMALL_GRID_SIZE -1) }
-    setOptions(newOptions)
+    setOptions(prevOptions => (
+      {
+        ...prevOptions,
+        SMALL_GRID_SIZE: options.SMALL_GRID_SIZE - 1,
+        SUDOKU_SIZE: (options.SMALL_GRID_SIZE - 1) * (options.SMALL_GRID_SIZE - 1)
+      }
+    ))
   }
 
   function changeFilledCellsAmount(e: React.ChangeEvent<HTMLInputElement>){
     const newAmount = Number(e.target.value);
     if (newAmount < 0 || newAmount > options.SUDOKU_SIZE * options.SUDOKU_SIZE) return;
-    const newOptions: Options= {...options, FILLED_CELLS_AMOUNT: newAmount}
-    setOptions(newOptions)
+    setOptions(prevOptions => (
+      {
+        ...prevOptions,
+        FILLED_CELLS_AMOUNT: newAmount
+      }
+    ))
   }
 
   const optionsElements = [

@@ -20,13 +20,12 @@ export default function App() {
     }
   })
 
-  const {options} = useGlobalContext();
   
   return (
     <QueryClientProvider client={queryClient}>
       <SudokuProvider>
         <ThemeProvider theme={theme}>
-          <GlobalStyle font={options.SELECTED_FONT}/>
+          <GlobalStyle />
           <Navbar setTheme={setTheme} />
           <SudokuMenu/>
         </ThemeProvider>

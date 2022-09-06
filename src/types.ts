@@ -39,7 +39,6 @@ export type Options = {
   SUDOKU_SIZE: number;
   SMALL_GRID_SIZE: number;
   FILLED_CELLS_AMOUNT: number;
-  SELECTED_FONT: string;
 }
 
 export type SmallGrid = {

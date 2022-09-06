@@ -12,56 +12,47 @@ type Props = {
 
 type ContextValue = {
   boardState: Board;
-  setBoardState: Function;
+  setBoardState: React.Dispatch<React.SetStateAction<Board>>;
   modifyBoard: (arg0: number, arg1: number, arg2: number) => void;
   options: Options;
-  setOptions:  Function;
+  setOptions:  React.Dispatch<React.SetStateAction<Options>>;
   selectCell: (arg0:number, arg1: number, arg2: Cell) => void;
   initialBoardInfo: {board: Matrix2D, filledBoard: Matrix2D};
+  setInitialBoardInfo: React.Dispatch<React.SetStateAction<{
+    board: Matrix2D;
+    filledBoard: Matrix2D;
+}>>;
+  loadedImage: File | null;
+  setLoadedImage: React.Dispatch<React.SetStateAction<File | null>>
 }
 
-export const SudokuContext = React.createContext<ContextValue >({
-  boardState: [],
-  setBoardState: () => {},
-  modifyBoard: () => {},
-  options: {SUDOKU_SIZE: 0,
-    SMALL_GRID_SIZE: 0,
-    FILLED_CELLS_AMOUNT: 0 ,
-    SELECTED_FONT: "Inter, sans-serif"
-  },
-  setOptions: () => {},
-  selectCell: () => {},
-  initialBoardInfo: {board: [], filledBoard: []},
-});
+export const SudokuContext = React.createContext<ContextValue | undefined>(undefined);
 
 
 
 export function SudokuProvider({children}: Props){
   const [gameWon, setGameWon] = useState(false)
+  const [loadedImage, setLoadedImage] = useState<File | null>(null)
   const [options, setOptions] = useState<Options>({
     SUDOKU_SIZE: 16,
     SMALL_GRID_SIZE: 4,
-    FILLED_CELLS_AMOUNT: 75  ,
-    SELECTED_FONT: "Rubik moonrocks"
+    FILLED_CELLS_AMOUNT: 7,
   })
   const [boardState, setBoardState] = useState<Board>([]);
   const [initialBoardInfo, setInitialBoardInfo] = useState<{board: Matrix2D, filledBoard: Matrix2D}>({board: [], filledBoard: []})
 
   
   useEffect(()=> {
+    if (loadedImage) return;
     const newBoardInfo = generateSudoku(options.SUDOKU_SIZE, options.FILLED_CELLS_AMOUNT);
     setInitialBoardInfo(newBoardInfo)
     setBoardState(nestedNumbersToSudoku(newBoardInfo.board))
   }, [options.SUDOKU_SIZE, options.FILLED_CELLS_AMOUNT])
 
-
-  // function setRemovable(board: Board){
-  //   setBoardState(board => board.map((rows, row) =>{
-  //     return rows.map((cell, col) => {
-  //       return {...cell, isRemovable: false}
-  //     })
-  //   }))
-  // }
+  useEffect(()=>{
+    setBoardState(nestedNumbersToSudoku(initialBoardInfo.board))
+    setLoadedImage(null)
+  },[initialBoardInfo])
 
   function modifyBoard(currentRow: number, currentColumn: number, value: number){
     if (value > options.SUDOKU_SIZE) value %= 10;
@@ -127,6 +118,9 @@ export function SudokuProvider({children}: Props){
       setOptions,
       selectCell,
       initialBoardInfo,
+      setInitialBoardInfo,
+      loadedImage,
+      setLoadedImage
     }}>
       {children}
     </SudokuContext.Provider>
@@ -134,5 +128,7 @@ export function SudokuProvider({children}: Props){
 }
 
 export function useGlobalContext(){
-  return useContext(SudokuContext)
+  const contextValue = useContext(SudokuContext)
+  if (contextValue === undefined) throw new Error("context value is unset")
+  return contextValue
 }

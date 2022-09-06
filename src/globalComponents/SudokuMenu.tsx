@@ -1,12 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import SudokuBoard from './SudokuBoard';
 import styled from 'styled-components';
 import { useGlobalContext } from '../globalContext';
 import { nestedNumbersToSudoku, sudokuToNestedNumbers, arrayToSquareMatrix  } from '../utils/arrayMethods';
 import solveSudoku from '../utils/solveSudoku';
-import axios from "axios"
-import { Matrix2D } from '../types';
 import apiClient from '../utils/apiClient';
+import { useMutation } from '@tanstack/react-query';
 
 const StyledSudokuMenu = styled.div`
   margin: 1.25% 5%;
@@ -40,19 +39,13 @@ const StyledSudokuMenu = styled.div`
 
 export default function SudokuMenu() {
 
-  const {initialBoardInfo, boardState, setBoardState, options} = useGlobalContext();
-  const [sudokuImage, setSudokuImage] = useState<File | null>(null);
-  const [axiosResponse, setAxiosResponse] = useState<number[]>([])
+  const {initialBoardInfo, boardState, setBoardState, setInitialBoardInfo, options, setOptions, loadedImage, setLoadedImage} = useGlobalContext();
+
 
 
   function displaySolvedSudoku(){
     const startTime = Date.now(); 
 
-    // for (let i=0; i<25; i++){
-    //   const newBoard = generateSudoku(options.SUDOKU_SIZE, options.FILLED_CELLS_AMOUNT).board;
-    //   const sudokuCache = cacheValidValues(newBoard, options.SMALL_GRID_SIZE);
-    //   solveSudoku(newBoard, options.SMALL_GRID_SIZE)
-    // }
     const boardCopy = structuredClone(boardState);
     const sudokuBoard = sudokuToNestedNumbers(boardCopy);
     solveSudoku(sudokuBoard, options.SMALL_GRID_SIZE);
@@ -70,32 +63,57 @@ export default function SudokuMenu() {
   }
 
   function sendSudokuImage(e: React.ChangeEvent<HTMLInputElement>){
-    if (e.target.files) setSudokuImage(e.target.files[0])
+    if (e.target.files) setLoadedImage(e.target.files[0])
+    // setOptions(prevOptions => ({...prevOptions, SUDOKU_SIZE: 9, SMALL_GRID_SIZE: 3 }))
+
   }
 
-  function uploadSudokuImage(){
-    if (!sudokuImage) return;
+  const {mutate: getSudokuBoard} = useMutation(getSudokuFromImage, {
+    onSuccess: res => {
+      if (!res) return;
+      const loadedBoard: number[] = res.data
+      const sudokuMatrix = arrayToSquareMatrix(loadedBoard)
+      setOptions(prevOptions => ({
+        ...prevOptions,
+        SUDOKU_SIZE: 9,
+        SMALL_GRID_SIZE: 3,
+        FILLED_CELLS_AMOUNT: loadedBoard.filter(el => el > 0).length
+      }))
+
+      setInitialBoardInfo({
+        board: sudokuMatrix,
+        filledBoard: sudokuMatrix
+      })
+    },
+    onError: err => {
+      console.log(err)
+    }
+  })
+
+  async function getSudokuFromImage(){
+    if (!loadedImage) return;
     const formData = new FormData();
-    formData.append('image', sudokuImage, sudokuImage.name)
-    const responseArray = []
-    const elo =apiClient.post("postImage", formData,{
+    formData.append('image', loadedImage, loadedImage.name)
+    const response = await apiClient.post('postImage', formData, {
       onUploadProgress: ProgressEvent => console.log(`Upload Progress: ${ProgressEvent.loaded / ProgressEvent.total*100}`)
     })
-      .then(res => console.log(res.data))
-    console.log(elo)
+    return response
   }
 
-  // useEffect(()=>{set},[axiosResponse])
+
 
   return (  
     <StyledSudokuMenu>
       <SudokuBoard />
       <div className="buttons">
         {options.SUDOKU_SIZE <= 9 && <button onClick={()=> displaySolvedSudoku() }>Slow solve</button>}
-        <button onClick={()=> fastSolve()}>Fast solve</button>
+        {!loadedImage &&
+          <button onClick={()=> fastSolve()}>Fast solve</button>
+        }
         <button onClick={()=> unSolve()}>unsolve</button>
         <input type="file" accept='image/*' onChange={e => sendSudokuImage(e)}/>
-        <button onClick={uploadSudokuImage}></button>
+        <button onClick={() => getSudokuBoard()}></button>
+
       </div>
       
     </StyledSudokuMenu>

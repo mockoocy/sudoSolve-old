@@ -1,7 +1,7 @@
 import { createGlobalStyle } from "styled-components";
 import { Theme } from "../../types";
 
-const GlobalStyle = createGlobalStyle<{theme: Theme, font: string}>`
+const GlobalStyle = createGlobalStyle<{theme: Theme, font?: string}>`
   :root{
 /* Colors */
   --bgClr: ${({theme})=> theme.colors.bgClr};
@@ -14,8 +14,6 @@ const GlobalStyle = createGlobalStyle<{theme: Theme, font: string}>`
   --prefilledCellClr: ${({theme})=> theme.colors.prefilledCellClr};
 
 /* Fonts */
-  --fontDefault: ${({font}) => font}
-
 
   }
 

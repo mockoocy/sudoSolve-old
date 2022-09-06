@@ -23,15 +23,16 @@ export function sudokuToNestedNumbers(board: Board): Matrix2D{
   })
 }
 
-export function arrayToSquareMatrix(arr: any[] ){
-  const newMatrix: Matrix2D = [] 
+export function arrayToSquareMatrix(arr: any[]){
   const rowSize = Math.sqrt(arr.length)
+  const newMatrix = Array.from(new Array(rowSize), _ => Array(rowSize).fill(0));
 
-  for (let cell=0; cell< rowSize; cell++){
+  for (let cell=0; cell< rowSize * rowSize; cell++){
     const row = Math.floor(cell / rowSize)
     const col = cell % rowSize
     newMatrix[row][col] = arr[cell]
   }
+  console.log(newMatrix)
   return newMatrix
 }
 
