@@ -29,11 +29,24 @@ const StyledSudokuMenu = styled.div<StyledProps>`
     display: flex;
     width: 100%;
     gap: .25rem;
+    align-items: center;
+    justify-content: center;
 
 
+    
+    .icon {
+      width: 1.375em;
+      height: 1.375em;
+      stroke-width: 2px;
+    }
     .btn {
-      width: 20%;
+      width: 15%;
       height: 3rem;
+      font-size: 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: .25rem;
       background-color: var(--standOutClr);
       border: 0;
       margin: .25rem;
@@ -42,24 +55,29 @@ const StyledSudokuMenu = styled.div<StyledProps>`
 
       :hover {
         transform: scale(1.1);
-        transition: all 250ms ease-in-out
+        transition: all 250ms ease-in-out;
+        filter: brightness(1.2);
       }
     }
     #file-label {
-      font-size: 1.125rem;
       opacity: 0.8;
       background-color: var(--standOutClr);
-      display: flex;
-      align-items: center;
-      justify-content: center;
 
-      .icon {
-        width: 1em;
-        height: 1em
-      }
     }
     #file-selector {
       display: none;
+    }
+    #file-submit{
+      width: auto;
+      padding: 0.5rem;
+
+      h5 {
+        font-size: 1.25rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: .25rem
+      }
     }
   }
 `
@@ -141,15 +159,25 @@ export default function SudokuMenu() {
     <StyledSudokuMenu sudokuSize={options.SUDOKU_SIZE}>
       <SudokuBoard />
       <div className="buttons">
-        <button className="btn" onClick={()=> chooseSolver()}>solve</button>
-        <button className="btn" onClick={()=> unSolve()}>unsolve</button>
+        <button className="btn" onClick={()=> chooseSolver()}>
+          solve
+          <Icon className="icon" icon="arcticons:offlinepuzzlesolver" />
+        </button>
+        <button className="btn" onClick={()=> unSolve()}> 
+          unsolve
+          <Icon className="icon" icon="mdi:keyboard-return" />
+        </button>
         <label htmlFor="file-selector" id="file-label" className='btn'>
           Upload an image!
-          <Icon id="icon upload-icon" icon="ic:baseline-file-upload" />
+          <Icon className="icon" id="icon upload-icon" icon="ic:baseline-file-upload" />
         </label>
         <input id="file-selector" type="file" accept='image/*' onChange={e => sendSudokuImage(e)}/>
         <button className="btn" id="file-submit" onClick={() => getSudokuBoard()}>
-          {isSudokuLoading ? "Proccessing image..." : "Submit image" }
+          {isSudokuLoading
+            ? <h5>Processing Image... <Icon className="icon" icon="line-md:loading-loop" /> </h5> 
+            : <h5>Submit image <Icon className="icon" icon="ic:baseline-input" /></h5>
+            
+          }
         </button>
 
       </div>
