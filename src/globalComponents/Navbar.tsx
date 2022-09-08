@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import {Icon} from "@iconify/react";
 import { useGlobalContext } from '../globalContext';
 import DropDownMenu from './DropDownMenu';
-import { Options, Theme } from '../types';
+import { Theme } from '../types';
 import themes from '../utils/themes';
 
 
@@ -50,8 +50,9 @@ type Props = {
 }
 
 export default function Navbar({setTheme}: Props) {
-
   const {options, setOptions} = useGlobalContext();
+
+  const maxGridSize = 7 // Not sure if a cap is a good idea, but on the other hand - who wants to solve 64x64 sudoku or bigger, seems "a bit" hard
 
   const listEls = Object.values(themes).map((theme, id) => (
     <li 
@@ -62,6 +63,7 @@ export default function Navbar({setTheme}: Props) {
   ))
 
   function incrementGridSize(){
+    if (options.SMALL_GRID_SIZE >= maxGridSize) return;
     setOptions(prevOptions => (
       {
         ...prevOptions,

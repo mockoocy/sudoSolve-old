@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import SudokuBoard from './SudokuBoard';
 import styled from 'styled-components';
 import { useGlobalContext } from '../globalContext';
@@ -7,6 +7,7 @@ import solveSudoku from '../utils/solveSudoku';
 import apiClient from '../utils/apiClient';
 import { useMutation } from '@tanstack/react-query';
 import { Icon } from '@iconify/react';
+import Timer from "./Timer"
 
 type StyledProps = {
   sudokuSize: number
@@ -179,6 +180,7 @@ export default function SudokuMenu() {
             
           }
         </button>
+        <Timer />
 
       </div>
       
