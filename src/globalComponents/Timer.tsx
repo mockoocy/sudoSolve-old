@@ -5,6 +5,7 @@ const StyledTimer = styled.div`
   background-color: var(--prefilledCellClr);
   text-align: center;
   font-family: aboreto;
+  width: 13ch;
   height: 3rem;
   font-size: 2rem;
   padding: 0 0.25rem;
@@ -13,7 +14,11 @@ const StyledTimer = styled.div`
 
 `
 
-export default function Timer() {
+type Props = {
+  paused: boolean
+}
+
+export default function Timer({paused}: Props) {
   const [timeString, setTimeString] = useState("")
   const [startTime, _] = useState(new Date().getTime())
 

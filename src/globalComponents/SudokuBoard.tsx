@@ -1,24 +1,36 @@
-import React, { useRef } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import styled from 'styled-components';
 import { useGlobalContext } from '../globalContext';
 import SudokuCell from './SudokuCell';
 
 
 type StyledProps = {
-  sudokuSize: number
+  sudokuSize: number;
+  smallGridSize: number;
 }
 const StyledSudokuBoard = styled.div<StyledProps>`
-  display: grid;
-  width: calc(${props => props.sudokuSize}*1.125vw + 36vw);
-  height: auto;
-  grid-template-columns: repeat(${props => props.sudokuSize}, 1fr);  
-  grid-template-rows: repeat(${props => props.sudokuSize}, 1fr);
+  --sudokuSize: ${props => props.sudokuSize};
+  --smallGridSize: ${props => props.smallGridSize};
 
+
+  display: grid;
+  width: calc(var(--sudokuSize)*1.125vw + 36vw);
+  height: auto;
+  grid-template-columns: repeat(var(--sudokuSize), 1fr);  
+  grid-template-rows: repeat(var(--sudokuSize), 1fr);
+
+
+  @media (max-width: 820px){
+    min-width: 100%;
+    grid-template-columns: repeat(var(--sudokuSize), minmax( calc(2rem - 0.1rem * var(--smallGridSize)), 1fr));  
+    grid-template-rows: repeat(var(--sudokuSize), minmax( calc(2rem - 0.1rem * var(--smallGridSize)), 1fr));
+  }
 
 
 `
 
 export default function SudokuBoard() {
+  const [gameWon, setGameWon] = useState(false)
   const {boardState, options } = useGlobalContext();
   const cellRefs : React.MutableRefObject<any[]> = useRef([]);
 
@@ -74,9 +86,17 @@ export default function SudokuBoard() {
     })
   })
 
+  useEffect(()=>{
+    const boardStateFlattened = boardState.reduce((acc, val) => acc.concat(val), [])
+    if (boardState.length > 0 
+      && !boardStateFlattened.some(cell => cell.value === 0 || !cell.isValid)){
+      setGameWon(true)
+    }
+  },[boardState, gameWon])
+
 
   return (
-    <StyledSudokuBoard sudokuSize={options.SUDOKU_SIZE}>
+    <StyledSudokuBoard sudokuSize={options.SUDOKU_SIZE} smallGridSize={options.SMALL_GRID_SIZE}>
       {sudokuCellElements}
     </StyledSudokuBoard>
   )

@@ -27,9 +27,12 @@ const StyledNavbar = styled.nav`
       transform: rotate(10deg);
       color: var(--standOutClr)
     }
-    h1 {
+    #logo-text {
       font-size: 2rem;
       color: var(--standOutClr);
+      @media (max-width: 820px){
+        display: none;
+      }
     }
   }
   .btn-container{
@@ -52,7 +55,7 @@ type Props = {
 export default function Navbar({setTheme}: Props) {
   const {options, setOptions} = useGlobalContext();
 
-  const maxGridSize = 7 // Not sure if a cap is a good idea, but on the other hand - who wants to solve 64x64 sudoku or bigger, seems "a bit" hard
+  const maxGridSize = 6 // Not sure if a cap is a good idea, but on the other hand - who wants to solve 64x64 sudoku or bigger, seems "a bit" hard
 
   const listEls = Object.values(themes).map((theme, id) => (
     <li 
@@ -117,7 +120,7 @@ export default function Navbar({setTheme}: Props) {
     <StyledNavbar>
       <div className="logo-container">
         <Icon icon="arcticons:sudokuoss" id="logo-svg" />
-        <h1>Sudoku solver</h1>
+        <h1 id='logo-text'>Sudoku solver</h1>
       </div>
       <div className="btn-container">
         <DropDownMenu 

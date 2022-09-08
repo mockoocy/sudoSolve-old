@@ -32,7 +32,6 @@ export function arrayToSquareMatrix(arr: any[]){
     const col = cell % rowSize
     newMatrix[row][col] = arr[cell]
   }
-  console.log(newMatrix)
   return newMatrix
 }
 

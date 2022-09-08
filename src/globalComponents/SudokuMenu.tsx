@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import SudokuBoard from './SudokuBoard';
 import styled from 'styled-components';
 import { useGlobalContext } from '../globalContext';
@@ -24,7 +24,9 @@ const StyledSudokuMenu = styled.div<StyledProps>`
    */
   width: 80vw;
   @media (max-width: 820px){
-    width: 80vw
+    overflow-x: scroll;
+    min-width: 95vw;
+    margin: 1.25% 2.5% ;
   }
     .buttons {
     display: flex;
@@ -41,9 +43,10 @@ const StyledSudokuMenu = styled.div<StyledProps>`
       stroke-width: 2px;
     }
     .btn {
-      width: 15%;
+      min-width: 12%;
       height: 3rem;
-      font-size: 1.5rem;
+      padding: 0 1rem;
+      font-size: 1.25rem;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -51,7 +54,6 @@ const StyledSudokuMenu = styled.div<StyledProps>`
       background-color: var(--standOutClr);
       border: 0;
       margin: .25rem;
-      padding: 0;
       border-radius: 1rem;
 
       :hover {
@@ -84,12 +86,14 @@ const StyledSudokuMenu = styled.div<StyledProps>`
 `
 
 export default function SudokuMenu() {
-
+  const [paused, setPaused] = useState(false)
+  
   const {initialBoardInfo, boardState, setBoardState, setInitialBoardInfo, options, setOptions, loadedImage, setLoadedImage} = useGlobalContext();
 
 
 
   function displaySolvedSudoku(){
+    
     const startTime = Date.now(); 
 
     const boardCopy = structuredClone(boardState);
@@ -180,7 +184,7 @@ export default function SudokuMenu() {
             
           }
         </button>
-        <Timer />
+        <Timer paused={paused}/>
 
       </div>
       

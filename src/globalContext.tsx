@@ -31,7 +31,6 @@ export const SudokuContext = React.createContext<ContextValue | undefined>(undef
 
 
 export function SudokuProvider({children}: Props){
-  const [gameWon, setGameWon] = useState(false)
   const [loadedImage, setLoadedImage] = useState<File | null>(null)
   const [options, setOptions] = useState<Options>({
     SUDOKU_SIZE: 16,
@@ -95,17 +94,7 @@ export function SudokuProvider({children}: Props){
       })
     }))
   }
-  useEffect(()=>{
-    if (boardState.length > 0 && !boardState.some(row => row.some(cell => cell.value === 0 || cell.isValid)) && !gameWon){
-      setGameWon(true)
-    }
-  },[boardState, gameWon])
 
-  useEffect(()=>{
-    if (gameWon) {
-      alert('you won')
-    }
-  },[gameWon])
 
 
   

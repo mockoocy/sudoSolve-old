@@ -20,8 +20,8 @@ const StyledDropDownMenu = styled.div`
     left: -10vw;
 
     @media (max-width:820px){
-      width: 100%;
-      right: 0;
+      min-width: 50vw;
+      left: -50vw;
       font-size: 0.875rem;
     }
 
@@ -39,7 +39,8 @@ const StyledDropDownMenu = styled.div`
       transition: all 250ms ease-in-out;
 
       @media (max-width:820px){
-        height: 2rem;
+        font-size: 1rem;
+        height: 3rem;
       }
 
       :not(:last-child){
@@ -57,7 +58,7 @@ const StyledDropDownMenu = styled.div`
       .size-selector{
         display: flex;
         align-items: center;
-        font-size: 1.5rem;
+        font-size: 2rem;
         gap: .25rem;
 
         .sizer:hover {
