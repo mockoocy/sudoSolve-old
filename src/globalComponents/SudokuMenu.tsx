@@ -17,26 +17,20 @@ const StyledSudokuMenu = styled.div<StyledProps>`
   margin: 1.25% 10%;
   display: flex;
   align-items: center;
+  padding: 0;
   justify-content: center;
-  flex-direction: column;
-
-  /* width: calc(${props => props.sudokuSize}*1.125vw + 36vw);
-   */
-  width: 80vw;
+  gap: 2rem; 
   @media (max-width: 820px){
     overflow-x: scroll;
     min-width: 95vw;
     margin: 1.25% 2.5% ;
   }
     .buttons {
-    display: flex;
-    width: 100%;
+    display: grid;
     gap: .25rem;
     align-items: center;
     justify-content: center;
 
-
-    
     .icon {
       width: 1.375em;
       height: 1.375em;
@@ -164,6 +158,7 @@ export default function SudokuMenu() {
     <StyledSudokuMenu sudokuSize={options.SUDOKU_SIZE}>
       <SudokuBoard />
       <div className="buttons">
+        <Timer paused={paused}/>
         <button className="btn" onClick={()=> chooseSolver()}>
           solve
           <Icon className="icon" icon="arcticons:offlinepuzzlesolver" />
@@ -173,7 +168,10 @@ export default function SudokuMenu() {
           <Icon className="icon" icon="mdi:keyboard-return" />
         </button>
         <label htmlFor="file-selector" id="file-label" className='btn'>
-          Upload an image!
+          {loadedImage?.name 
+            ? loadedImage.name
+            : "Upload an image!"
+          }
           <Icon className="icon" id="icon upload-icon" icon="ic:baseline-file-upload" />
         </label>
         <input id="file-selector" type="file" accept='image/*' onChange={e => sendSudokuImage(e)}/>
@@ -181,10 +179,8 @@ export default function SudokuMenu() {
           {isSudokuLoading
             ? <h5>Processing Image... <Icon className="icon" icon="line-md:loading-loop" /> </h5> 
             : <h5>Submit image <Icon className="icon" icon="ic:baseline-input" /></h5>
-            
           }
         </button>
-        <Timer paused={paused}/>
 
       </div>
       

@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from 'react'
 import styled from 'styled-components';
 import { useGlobalContext } from '../globalContext';
 import SudokuCell from './SudokuCell';
+import {boxShadowOutline} from "../utils/css-mixins"
 
 
 type StyledProps = {
@@ -12,9 +13,11 @@ const StyledSudokuBoard = styled.div<StyledProps>`
   --sudokuSize: ${props => props.sudokuSize};
   --smallGridSize: ${props => props.smallGridSize};
 
+  ${boxShadowOutline(.0625,.25 , "var(--gridGapClr)")};
+
 
   display: grid;
-  width: calc(var(--sudokuSize)*1.125vw + 36vw);
+  width: calc(var(--sudokuSize)*1vw + 36vw);
   height: auto;
   grid-template-columns: repeat(var(--sudokuSize), 1fr);  
   grid-template-rows: repeat(var(--sudokuSize), 1fr);

@@ -76,6 +76,7 @@ export default function Navbar({setTheme}: Props) {
     ))
   }
   function decrementGridSize(){
+    if (options.SMALL_GRID_SIZE <= 1) return;
     setOptions(prevOptions => (
       {
         ...prevOptions,

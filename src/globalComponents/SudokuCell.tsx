@@ -21,7 +21,7 @@ const StyledSudokuCell = styled.div<StyledProps>`
     all: unset;
     width: 100%;
     height: 100%;
-    font-size: calc(2rem * 16 / ${props => props.sudokuSize});
+    font-size: calc(2rem * 5 / ${props => props.sudokuSize});
     color: var(--gridGapClr);
     text-align: center;
     font-family: var(--fontDefault);
@@ -77,7 +77,7 @@ const  SudokuCell = React.forwardRef<HTMLInputElement, Props>(({maxNumber, cell,
     <StyledSudokuCell 
     cellClr={getCellClr(cell)}
     border={getBorderStyles(row, column)} 
-    sudokuSize={options.SUDOKU_SIZE}
+    sudokuSize={options.SMALL_GRID_SIZE}
     onFocus={() => selectCell(row, column, cell)}
     // Using onKeyDown event, because then I can prevent numbers from (in/de)crementing on pressing
     // up/down arrow
