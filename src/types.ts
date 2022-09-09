@@ -4,6 +4,7 @@ export type Theme = {
   },
   colors: {
     bgClr: string;
+    textClr: string;
     standOutClr: string;
     notSelectedCellClr: string;
     selectedCellClr: string;

@@ -20,7 +20,8 @@ const StyledSudokuMenu = styled.div<StyledProps>`
   padding: 0;
   justify-content: center;
   gap: 2rem; 
-  @media (max-width: 820px){
+  @media (max-width: 1200px){
+    flex-direction: column;
     overflow-x: scroll;
     min-width: 95vw;
     margin: 1.25% 2.5% ;
@@ -175,12 +176,14 @@ export default function SudokuMenu() {
           <Icon className="icon" id="icon upload-icon" icon="ic:baseline-file-upload" />
         </label>
         <input id="file-selector" type="file" accept='image/*' onChange={e => sendSudokuImage(e)}/>
-        <button className="btn" id="file-submit" onClick={() => getSudokuBoard()}>
+        {loadedImage &&
+          <button className="btn" id="file-submit" onClick={() => getSudokuBoard()}>
           {isSudokuLoading
             ? <h5>Processing Image... <Icon className="icon" icon="line-md:loading-loop" /> </h5> 
             : <h5>Submit image <Icon className="icon" icon="ic:baseline-input" /></h5>
           }
         </button>
+        }
 
       </div>
       

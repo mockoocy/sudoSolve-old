@@ -2,7 +2,6 @@ import React, { useEffect, useRef, useState } from 'react'
 import styled from 'styled-components';
 import { useGlobalContext } from '../globalContext';
 import SudokuCell from './SudokuCell';
-import {boxShadowOutline} from "../utils/css-mixins"
 
 
 type StyledProps = {
@@ -13,20 +12,20 @@ const StyledSudokuBoard = styled.div<StyledProps>`
   --sudokuSize: ${props => props.sudokuSize};
   --smallGridSize: ${props => props.smallGridSize};
 
-  ${boxShadowOutline(.0625,.25 , "var(--gridGapClr)")};
 
 
-  display: grid;
   width: calc(var(--sudokuSize)*1vw + 36vw);
   height: auto;
+  display: grid;
+  gap: 1px;
   grid-template-columns: repeat(var(--sudokuSize), 1fr);  
   grid-template-rows: repeat(var(--sudokuSize), 1fr);
 
 
   @media (max-width: 820px){
     min-width: 100%;
-    grid-template-columns: repeat(var(--sudokuSize), minmax( calc(2rem - 0.1rem * var(--smallGridSize)), 1fr));  
-    grid-template-rows: repeat(var(--sudokuSize), minmax( calc(2rem - 0.1rem * var(--smallGridSize)), 1fr));
+    grid-template-columns: repeat(var(--sudokuSize), minmax( calc(2rem - 0.05rem * var(--smallGridSize)), 1fr));  
+    grid-template-rows: repeat(var(--sudokuSize), minmax( calc(2rem - 0.05rem * var(--smallGridSize)), 1fr));
   }
 
 
