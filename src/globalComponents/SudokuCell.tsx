@@ -13,8 +13,9 @@ const StyledSudokuCell = styled.div<StyledProps>`
   /* outline: 1px solid var(--gridGapClr); */
   background-color: ${props => props.cellClr};
   aspect-ratio: 1;
-  border-top: 3px solid black;
-  border-left: 3px solid black;
+  border: 1px solid var(--gridGapClr);
+  /* border-top: 1px solid var(--gridGapClr); */
+  /* border-left: 1px solid var(--gridGapClr); */
   --sudokuSize: ${props => props.sudokuSize};
 
   ${props => props.border}
@@ -24,7 +25,7 @@ const StyledSudokuCell = styled.div<StyledProps>`
     all: unset;
     width: 100%;
     height: 100%;
-    font-size: calc(2rem * 5 / var(--sudokuSize));
+    font-size: calc(3rem * 2 / var(--sudokuSize));
     color: var(--gridGapClr);
     text-align: center;
     font-family: "jetbrains mono", "Lato", sans-serif;
@@ -53,8 +54,8 @@ const  SudokuCell = React.forwardRef<HTMLInputElement, Props>(({maxNumber, cell,
   const {row, column} = cell;
   const {modifyBoard, selectCell, options} = useGlobalContext();
 
-  const CELL_BORDER_RADIUS = "1.625rem"
-  const CELL_BORDER_WIDTH = "3px" 
+  const cellBorderRadius = `${16 / options.SUDOKU_SIZE}rem`
+  const CELL_BORDER_WIDTH = "2px" 
 
 
   function getBorderStyles(row: number, column: number, smallGridSize: number) : string{
@@ -86,22 +87,22 @@ const  SudokuCell = React.forwardRef<HTMLInputElement, Props>(({maxNumber, cell,
     if (smallGridSize === 1) return ""
     const radiusTopLeft = `${
       (row + 1 ) % smallGridSize === 1 && (col + 1) % smallGridSize === 1
-      ? `border-top-left-radius: ${CELL_BORDER_RADIUS};`
+      ? `border-top-left-radius: ${cellBorderRadius};`
       : ""
     }`
     const radiusTopRight = `${
       (row + 1 ) % smallGridSize === 1 && (col + 1) % smallGridSize === 0
-      ? `border-top-right-radius: ${CELL_BORDER_RADIUS};`
+      ? `border-top-right-radius: ${cellBorderRadius};`
       : ""
     }`
     const radiusBottomRight = `${
       (row + 1 ) % smallGridSize === 0 && (col + 1) % smallGridSize === 0
-      ? `border-bottom-right-radius: ${CELL_BORDER_RADIUS};`
+      ? `border-bottom-right-radius: ${cellBorderRadius};`
       : ""
     }`
     const radiusBottomLeft = `${
       (row + 1 ) % smallGridSize === 0 && (col + 1) % smallGridSize === 1
-      ? `border-bottom-left-radius: ${CELL_BORDER_RADIUS};`
+      ? `border-bottom-left-radius: ${cellBorderRadius};`
       : ""
     }`
     return radiusTopLeft + radiusTopRight + radiusBottomLeft + radiusBottomRight
@@ -125,7 +126,7 @@ const  SudokuCell = React.forwardRef<HTMLInputElement, Props>(({maxNumber, cell,
       ref={ref}
       max={maxNumber}
       value={cell.value > 0 ? cell.value : " "}
-      onChange={(e) => modifyBoard(row, column, e.target.valueAsNumber) }/>
+      onChange={(e) => modifyBoard(row, column, e.target.valueAsNumber, options) }/>
     </StyledSudokuCell>
   )
 })

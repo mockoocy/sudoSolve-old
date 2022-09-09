@@ -13,7 +13,6 @@ const StyledSudokuBoard = styled.div<StyledProps>`
   --smallGridSize: ${props => props.smallGridSize};
 
 
-
   width: calc(var(--sudokuSize)*1vw + 36vw);
   height: auto;
   display: grid;

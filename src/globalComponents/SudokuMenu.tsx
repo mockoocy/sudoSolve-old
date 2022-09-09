@@ -14,17 +14,16 @@ type StyledProps = {
 }
 
 const StyledSudokuMenu = styled.div<StyledProps>`
-  margin: 1.25% 10%;
   display: flex;
   align-items: center;
   padding: 0;
-  justify-content: center;
+  justify-content: space-around;
   gap: 2rem; 
+  margin-top: 2.5%;
   @media (max-width: 1200px){
     flex-direction: column;
     overflow-x: scroll;
     min-width: 95vw;
-    margin: 1.25% 2.5% ;
   }
     .buttons {
     display: grid;
@@ -41,7 +40,7 @@ const StyledSudokuMenu = styled.div<StyledProps>`
       min-width: 12%;
       height: 3rem;
       padding: 0 1rem;
-      font-size: 1.25rem;
+      font-size: 1.5rem;
       display: flex;
       align-items: center;
       justify-content: center;

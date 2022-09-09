@@ -24,12 +24,12 @@ const darkTheme: Theme = {
   colors: {
     bgClr: '#0e0e10',
     textClr: '#f0f8f5',
-    standOutClr: '#7b2df5',
+    standOutClr: '#FCE694',
     notSelectedCellClr: '#272729',
-    selectedCellClr: '#9B2CF5',
+    selectedCellClr: '#F8FEC2',
     gridGapClr: '#373737',
-    highlightCellClr: '#E02CF5',
-    invalidCellClr: '#f04848',
+    highlightCellClr: '#EAF7CF',
+    invalidCellClr: '#FF708A',
     prefilledCellClr: '#1f1f1a '
   }
 }

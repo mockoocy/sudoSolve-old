@@ -13,7 +13,7 @@ type Props = {
 type ContextValue = {
   boardState: Board;
   setBoardState: React.Dispatch<React.SetStateAction<Board>>;
-  modifyBoard: (arg0: number, arg1: number, arg2: number) => void;
+  modifyBoard: (arg0: number, arg1: number, arg2: number, arg3: Options) => void;
   options: Options;
   setOptions:  React.Dispatch<React.SetStateAction<Options>>;
   selectCell: (arg0:number, arg1: number, arg2: Cell) => void;
@@ -53,8 +53,9 @@ export function SudokuProvider({children}: Props){
     setLoadedImage(null)
   },[initialBoardInfo])
 
-  function modifyBoard(currentRow: number, currentColumn: number, value: number){
-    if (value > options.SUDOKU_SIZE) value %= 10;
+  function modifyBoard(currentRow: number, currentColumn: number, value: number, options: Options){
+    if (value > options.SUDOKU_SIZE && value < 10) return;
+    value = value > options.SUDOKU_SIZE ? value % 10 : value
     // if the field is already filled, the previous number is replaced with the new one
     // because then the value is like <prevNum><newNum>, so % 10 leaves only <newNum>
     setBoardState(board => board.map((rows, row) => rows.map((cell, col) => {
