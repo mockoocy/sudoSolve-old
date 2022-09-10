@@ -23,7 +23,7 @@ const darkTheme: Theme = {
   },
   colors: {
     bgClr: '#0e0e10',
-    textClr: '#f0f8f5',
+    textClr: '#765',
     standOutClr: '#FCE694',
     notSelectedCellClr: '#272729',
     selectedCellClr: '#F8FEC2',

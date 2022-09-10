@@ -38,9 +38,13 @@ const StyledSudokuMenu = styled.div<StyledProps>`
     }
     .btn {
       min-width: 12%;
+      max-width: 20ch;
       height: 3rem;
       padding: 0 1rem;
       font-size: 1.5rem;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      overflow: hidden;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -80,20 +84,27 @@ const StyledSudokuMenu = styled.div<StyledProps>`
 `
 
 export default function SudokuMenu() {
-  const [paused, setPaused] = useState(false)
+  const [paused, setPaused] = useState(true)
+
+  console.log(paused)
+
+
   
   const {initialBoardInfo, boardState, setBoardState, setInitialBoardInfo, options, setOptions, loadedImage, setLoadedImage} = useGlobalContext();
+  const MAX_FILENAME_LENGTH = 12
 
 
 
-  function displaySolvedSudoku(){
-    
+  function algoSolveSudoku(){
     const startTime = Date.now(); 
 
     const boardCopy = structuredClone(boardState);
     const sudokuBoard = sudokuToNestedNumbers(boardCopy);
-    solveSudoku(sudokuBoard, options.SMALL_GRID_SIZE);
-    setBoardState(nestedNumbersToSudoku(sudokuBoard))
+    if (solveSudoku(sudokuBoard, options.SMALL_GRID_SIZE)){
+      setBoardState(nestedNumbersToSudoku(sudokuBoard));
+    } else {
+      alert("Couldn't solve it bro")
+    }
 
     console.log(`%csolving took ${Date.now() - startTime}ms`, 'color: #7fffd4; font-size: 2rem; font-weight: 600; text-shadow: .25rem .25rem .5rem #f0f8f5')
   }
@@ -135,7 +146,7 @@ export default function SudokuMenu() {
 
   function chooseSolver(){
     if (options.SUDOKU_SIZE <= 9){
-      displaySolvedSudoku()
+      algoSolveSudoku()
   } else {
     fastSolve()
   }
@@ -152,13 +163,20 @@ export default function SudokuMenu() {
     return response
   }
 
+  function togglePause(){
+    setPaused(prev => !prev)
+  }
 
 
   return (  
     <StyledSudokuMenu sudokuSize={options.SUDOKU_SIZE}>
       <SudokuBoard />
       <div className="buttons">
-        <Timer paused={paused}/>
+        <Timer
+        paused={paused}
+        togglePause={togglePause}
+        />
+
         <button className="btn" onClick={()=> chooseSolver()}>
           solve
           <Icon className="icon" icon="arcticons:offlinepuzzlesolver" />
@@ -169,7 +187,9 @@ export default function SudokuMenu() {
         </button>
         <label htmlFor="file-selector" id="file-label" className='btn'>
           {loadedImage?.name 
-            ? loadedImage.name
+            ? loadedImage.name.length > MAX_FILENAME_LENGTH 
+              ? `${loadedImage.name.slice(0, MAX_FILENAME_LENGTH)}...`
+              : loadedImage.name
             : "Upload an image!"
           }
           <Icon className="icon" id="icon upload-icon" icon="ic:baseline-file-upload" />

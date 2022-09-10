@@ -10,12 +10,9 @@ type StyledProps = {
 }
 
 const StyledSudokuCell = styled.div<StyledProps>`
-  /* outline: 1px solid var(--gridGapClr); */
   background-color: ${props => props.cellClr};
   aspect-ratio: 1;
   border: 1px solid var(--gridGapClr);
-  /* border-top: 1px solid var(--gridGapClr); */
-  /* border-left: 1px solid var(--gridGapClr); */
   --sudokuSize: ${props => props.sudokuSize};
 
   ${props => props.border}
@@ -26,7 +23,7 @@ const StyledSudokuCell = styled.div<StyledProps>`
     width: 100%;
     height: 100%;
     font-size: calc(3rem * 2 / var(--sudokuSize));
-    color: var(--gridGapClr);
+    color: var(--textClr);
     text-align: center;
     font-family: "jetbrains mono", "Lato", sans-serif;
     -moz-appearance: textfield;

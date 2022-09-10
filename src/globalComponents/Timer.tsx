@@ -19,20 +19,42 @@ const StyledTimer = styled.div`
 `
 
 type Props = {
-  paused: boolean
+  paused: boolean;
+  togglePause: () => void;
 }
 
-export default function Timer({paused} : Props) {
-  const [timeString, setTimeString] = useState("")
+export default function Timer({paused, togglePause} : Props) {
   const [startTime, setStartTime] = useState(new Date().getTime())
+  const [timeElapsed, setTimeElapsed] = useState(0)
+  // const [pausedTime, setPausedTime] = useState(0)
   const {initialBoardInfo} = useGlobalContext();
 
+  useEffect(()=>{
+    function changeTimeElapsed(){
+      const newTime =  new Date().getTime() - startTime 
+      setTimeElapsed(newTime)
+    }
+    const timer = setInterval(() => changeTimeElapsed(), 16)
+
+    return () => clearInterval(timer)
+  },[])
   useEffect(()=> {
     setStartTime(new Date().getTime())
   }, [initialBoardInfo])
 
-  function getStringTime(startTime: number){
-    const timeElapsed = new Date().getTime() - startTime
+  // useEffect(() => {
+  //   if (paused){
+  //     setPausedTime(new Date().getTime())
+  //   }
+  //   else {
+  //     setPausedTime(new Date(). getTime() - pausedTime )
+  //   }
+  //   console.log(pausedTime, paused)
+  // }, [paused])
+
+  useEffect(()=>{console.log(paused)},[paused])
+
+  function getStringTime(timeElapsed: number){
     let sliceRange: [number, number] = [0,0]
     // slices range in the following if / else statement are responsible for 
     // HH:MM:SS:sss / MM:SS:sss / SS:sss formats
@@ -49,14 +71,13 @@ export default function Timer({paused} : Props) {
     return new Date(new Date().getTime() - startTime).toISOString().slice(...sliceRange)
   }
 
-  setTimeout(()=> setTimeString(getStringTime(startTime)), 4)
 
   
 
   return (
     <StyledTimer>
       <Icon id="hourglass" icon="ic:baseline-hourglass-top" />
-      {timeString}
+      {getStringTime(timeElapsed)}
     </StyledTimer>
   )
 }

@@ -1,6 +1,3 @@
-import time
-from typing import TypedDict
-
 from fastapi import FastAPI, UploadFile
 from starlette.middleware.cors import CORSMiddleware
 import cv2

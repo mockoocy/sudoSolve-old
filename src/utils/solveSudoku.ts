@@ -179,7 +179,7 @@ function orderValidValues(board: Matrix2D, cache: SudokuCache, smallGridSize: nu
   }
   return [valuesChanged, cache]
 }
-export default function solveSudoku(board: Matrix2D, smallGridSize: number, cache = cacheValidValues(board, smallGridSize), valuesFound = true){
+export default function solveSudoku(board: Matrix2D, smallGridSize: number, cache = cacheValidValues(board, smallGridSize), valuesFound = true): boolean{
 
   while (valuesFound){
     const cacheValid = cacheValidValues(board, smallGridSize)
