@@ -37,7 +37,7 @@ export default function Timer({paused, togglePause} : Props) {
         setTimeElapsed(new Date().getTime() - startTime)
       }, 17)
     }
-
+    setStartTime(new Date().getTime())
     return () => clearInterval(timer)
   },[paused, startTime])
 

@@ -8,6 +8,7 @@ import apiClient from '../utils/apiClient';
 import { useMutation } from '@tanstack/react-query';
 import { Icon } from '@iconify/react';
 import Timer from "./Timer"
+import VictoryScreen from "./VictoryScreen"
 
 type StyledProps = {
   sudokuSize: number
@@ -85,6 +86,7 @@ const StyledSudokuMenu = styled.div<StyledProps>`
 
 export default function SudokuMenu() {
   const [paused, setPaused] = useState(false)
+  const [gameWon, setGameWon] = useState(false)
   
   const {initialBoardInfo, boardState, setBoardState, setInitialBoardInfo, options, setOptions, loadedImage, setLoadedImage} = useGlobalContext();
   const MAX_FILENAME_LENGTH = 12
@@ -165,8 +167,10 @@ export default function SudokuMenu() {
 
   return (  
     <StyledSudokuMenu sudokuSize={options.SUDOKU_SIZE}>
-      
-      <SudokuBoard />
+      {gameWon
+        ? <VictoryScreen />
+        : <SudokuBoard />
+      }
       <div className="buttons">
         <Timer
         paused={paused}
