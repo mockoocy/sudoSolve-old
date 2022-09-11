@@ -25,6 +25,9 @@ const GlobalStyle = createGlobalStyle<{theme: Theme, font?: string}>`
 
   * {
     margin: 0;
+    transition-property: background-color, color, width;
+    transition-duration: 300ms;
+    transition-timing-function: ease-in-out;
   }
 
   html, body, #root {

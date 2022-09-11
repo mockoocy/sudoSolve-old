@@ -26,33 +26,24 @@ type Props = {
 export default function Timer({paused, togglePause} : Props) {
   const [startTime, setStartTime] = useState(new Date().getTime())
   const [timeElapsed, setTimeElapsed] = useState(0)
-  // const [pausedTime, setPausedTime] = useState(0)
   const {initialBoardInfo} = useGlobalContext();
 
+
   useEffect(()=>{
-    function changeTimeElapsed(){
-      const newTime =  new Date().getTime() - startTime 
-      setTimeElapsed(newTime)
+    let timer: NodeJS.Timer
+
+    if (!paused){
+      timer = setInterval(()=> {
+        setTimeElapsed(new Date().getTime() - startTime)
+      }, 17)
     }
-    const timer = setInterval(() => changeTimeElapsed(), 16)
 
     return () => clearInterval(timer)
-  },[])
-  useEffect(()=> {
+  },[paused, startTime])
+
+  useEffect(()=>{
     setStartTime(new Date().getTime())
-  }, [initialBoardInfo])
-
-  // useEffect(() => {
-  //   if (paused){
-  //     setPausedTime(new Date().getTime())
-  //   }
-  //   else {
-  //     setPausedTime(new Date(). getTime() - pausedTime )
-  //   }
-  //   console.log(pausedTime, paused)
-  // }, [paused])
-
-  useEffect(()=>{console.log(paused)},[paused])
+  },[initialBoardInfo])
 
   function getStringTime(timeElapsed: number){
     let sliceRange: [number, number] = [0,0]
@@ -68,7 +59,7 @@ export default function Timer({paused, togglePause} : Props) {
       sliceRange = [17,23]
     }
 
-    return new Date(new Date().getTime() - startTime).toISOString().slice(...sliceRange)
+    return new Date(timeElapsed).toISOString().slice(...sliceRange)
   }
 
 

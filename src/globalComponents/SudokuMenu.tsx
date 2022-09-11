@@ -84,15 +84,10 @@ const StyledSudokuMenu = styled.div<StyledProps>`
 `
 
 export default function SudokuMenu() {
-  const [paused, setPaused] = useState(true)
-
-  console.log(paused)
-
-
+  const [paused, setPaused] = useState(false)
   
   const {initialBoardInfo, boardState, setBoardState, setInitialBoardInfo, options, setOptions, loadedImage, setLoadedImage} = useGlobalContext();
   const MAX_FILENAME_LENGTH = 12
-
 
 
   function algoSolveSudoku(){
@@ -170,12 +165,14 @@ export default function SudokuMenu() {
 
   return (  
     <StyledSudokuMenu sudokuSize={options.SUDOKU_SIZE}>
+      
       <SudokuBoard />
       <div className="buttons">
         <Timer
         paused={paused}
         togglePause={togglePause}
         />
+        <button className="btn" onClick={()=> togglePause()}></button>
 
         <button className="btn" onClick={()=> chooseSolver()}>
           solve
