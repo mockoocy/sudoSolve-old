@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import SudokuBoard from './SudokuBoard';
-import styled from 'styled-components';
+import StyledSudokuMenu from './styles/StyledSudokuMenu';
 import { useGlobalContext } from '../globalContext';
 import { nestedNumbersToSudoku, sudokuToNestedNumbers, arrayToSquareMatrix  } from '../utils/arrayMethods';
 import solveSudoku from '../utils/solveSudoku';
@@ -10,83 +10,11 @@ import { Icon } from '@iconify/react';
 import Timer from "./Timer"
 import VictoryScreen from "./VictoryScreen"
 
-type StyledProps = {
-  sudokuSize: number
-}
-
-const StyledSudokuMenu = styled.div<StyledProps>`
-  display: flex;
-  align-items: center;
-  padding: 0;
-  justify-content: space-around;
-  gap: 2rem; 
-  margin-top: 2.5%;
-  @media (max-width: 1200px){
-    flex-direction: column;
-    overflow-x: scroll;
-    min-width: 95vw;
-  }
-    .buttons {
-    display: grid;
-    gap: .25rem;
-    align-items: center;
-    justify-content: center;
-
-    .icon {
-      width: 1.375em;
-      height: 1.375em;
-      stroke-width: 2px;
-    }
-    .btn {
-      min-width: 12%;
-      max-width: 20ch;
-      height: 3rem;
-      padding: 0 1rem;
-      font-size: 1.5rem;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-      overflow: hidden;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: .25rem;
-      background-color: var(--standOutClr);
-      border: 0;
-      margin: .25rem;
-      border-radius: 1rem;
-
-      :hover {
-        transform: scale(1.1);
-        transition: all 250ms ease-in-out;
-        filter: brightness(1.2);
-      }
-    }
-    #file-label {
-      opacity: 0.8;
-      background-color: var(--standOutClr);
-
-    }
-    #file-selector {
-      display: none;
-    }
-    #file-submit{
-      width: auto;
-      padding: 0.5rem;
-
-      h5 {
-        font-size: 1.25rem;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: .25rem
-      }
-    }
-  }
-`
 
 export default function SudokuMenu() {
   const [paused, setPaused] = useState(false)
   const [gameWon, setGameWon] = useState(false)
+  const menuRef = useRef<HTMLDivElement>(null)
   
   const {initialBoardInfo, boardState, setBoardState, setInitialBoardInfo, options, setOptions, loadedImage, setLoadedImage} = useGlobalContext();
   const MAX_FILENAME_LENGTH = 12
@@ -94,7 +22,6 @@ export default function SudokuMenu() {
 
   function algoSolveSudoku(){
     const startTime = Date.now(); 
-
     const boardCopy = structuredClone(boardState);
     const sudokuBoard = sudokuToNestedNumbers(boardCopy);
     if (solveSudoku(sudokuBoard, options.SMALL_GRID_SIZE)){
@@ -102,7 +29,6 @@ export default function SudokuMenu() {
     } else {
       alert("Couldn't solve it bro")
     }
-
     console.log(`%csolving took ${Date.now() - startTime}ms`, 'color: #7fffd4; font-size: 2rem; font-weight: 600; text-shadow: .25rem .25rem .5rem #f0f8f5')
   }
 
@@ -117,6 +43,7 @@ export default function SudokuMenu() {
   function sendSudokuImage(e: React.ChangeEvent<HTMLInputElement>){
     if (e.target.files) setLoadedImage(e.target.files[0])
   }
+  
 
   const {isLoading: isSudokuLoading, mutate: getSudokuBoard} = useMutation(getSudokuFromImage, {
     onSuccess: res => {
@@ -144,10 +71,20 @@ export default function SudokuMenu() {
   function chooseSolver(){
     if (options.SUDOKU_SIZE <= 9){
       algoSolveSudoku()
-  } else {
+    } else {
     fastSolve()
+    }   
   }
-}
+
+  useEffect(()=>{
+    if (!boardState.flat().some(cell => cell.value === 0 || !cell.isValid)){
+      setGameWon(true)
+    }
+  },[boardState])
+
+  useEffect(()=>{
+    setGameWon(false)
+  }, [options])
 
 
   async function getSudokuFromImage(){
@@ -164,12 +101,22 @@ export default function SudokuMenu() {
     setPaused(prev => !prev)
   }
 
+  function getBoardSize(sudokuSize: number){
+    const WIDTH_BIAS = 36 
+    const boardWidth = `${sudokuSize + WIDTH_BIAS}vw`
+    const boardHeight = `${sudokuSize + WIDTH_BIAS}vw`
+    return {width: boardWidth, height: boardHeight}
+  }
+
 
   return (  
-    <StyledSudokuMenu sudokuSize={options.SUDOKU_SIZE}>
+    <StyledSudokuMenu sudokuSize={options.SUDOKU_SIZE} ref={menuRef}>
       {gameWon
-        ? <VictoryScreen />
-        : <SudokuBoard />
+        ? <VictoryScreen 
+        height={getBoardSize(options.SUDOKU_SIZE).height}
+        width={getBoardSize(options.SUDOKU_SIZE).width}
+        />
+        : <SudokuBoard/>
       }
       <div className="buttons">
         <Timer

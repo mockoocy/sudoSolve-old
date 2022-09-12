@@ -14,7 +14,7 @@ const StyledSudokuBoard = styled.div<StyledProps>`
 
 
   width: calc(var(--sudokuSize)*1vw + 36vw);
-  height: auto;
+  height: calc(var(--sudokuSize)*1vw + 36vw);
   display: grid;
   gap: 1px;
   grid-template-columns: repeat(var(--sudokuSize), 1fr);  
@@ -22,6 +22,7 @@ const StyledSudokuBoard = styled.div<StyledProps>`
 
 
   @media (max-width: 820px){
+    height: auto;
     min-width: 100%;
     grid-template-columns: repeat(var(--sudokuSize), minmax( calc(2rem - 0.05rem * var(--smallGridSize)), 1fr));  
     grid-template-rows: repeat(var(--sudokuSize), minmax( calc(2rem - 0.05rem * var(--smallGridSize)), 1fr));
