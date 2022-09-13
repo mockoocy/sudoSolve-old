@@ -9,7 +9,6 @@ import { useMutation } from '@tanstack/react-query';
 import { Icon } from '@iconify/react';
 import Timer from "./Timer"
 import VictoryScreen from "./VictoryScreen"
-import generateSudoku from '../utils/generateSudoku';
 
 
 export default function SudokuMenu() {

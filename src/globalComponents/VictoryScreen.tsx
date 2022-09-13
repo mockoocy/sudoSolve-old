@@ -39,6 +39,40 @@ const StyledVictoryScreen = styled.div<StyledProps>`
       font-size: 2rem;
     }
   }
+
+  #restart{
+    background-image: linear-gradient(
+      to right,
+      var(--standOutClr) 0%,
+      var(--selectedCellClr) 51%,
+      var(--standOutClr) 100%
+    );
+    border: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    width: 18ch;
+    height: 4rem;
+    text-align: center;
+    text-transform: uppercase;
+    transition: 0.25s ease-in-out;
+    background-size: 200% auto;
+    color: var(--textClr);            
+    box-shadow: 
+      0 .25rem var(--textClr);
+    border-radius: 1rem;
+    cursor: pointer;
+  
+    &:hover {
+      background-position: right center; /* change the direction of the change here */
+      color: var(--boringClr);
+      text-decoration: none;
+      transform: translateY(.5rem);
+      box-shadow: none;
+    }
+
+  }
 `
 
 type Props = {
