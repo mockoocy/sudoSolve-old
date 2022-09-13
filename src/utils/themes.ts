@@ -13,7 +13,9 @@ const lightTheme: Theme = {
     gridGapClr: '#272729',
     highlightCellClr: '#92BDFF',
     invalidCellClr: '#f04848',
-    prefilledCellClr: '#f0f0ff '
+    prefilledCellClr: '#f0f0ff ',
+    victoryScreenBgClr: 'linear-gradient(to bottom, #9796f0, #fbc7d4)'
+    
   }
 }
 
@@ -30,7 +32,8 @@ const darkTheme: Theme = {
     gridGapClr: '#373737',
     highlightCellClr: '#EAF7CF',
     invalidCellClr: '#FF708A',
-    prefilledCellClr: '#1f1f1a '
+    prefilledCellClr: '#1f1f1a ',
+    victoryScreenBgClr: 'linear-gradient(to bottom, #9796f0, #fbc7d4)'
   }
 }
 

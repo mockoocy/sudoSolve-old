@@ -1,7 +1,5 @@
 import { Icon } from '@iconify/react'
-import React, { useEffect, useState } from 'react'
 import styled from 'styled-components';
-import { useGlobalContext } from '../globalContext';
 
 const StyledTimer = styled.div`
   background-color: var(--prefilledCellClr);
@@ -19,31 +17,12 @@ const StyledTimer = styled.div`
 `
 
 type Props = {
-  paused: boolean;
-  togglePause: () => void;
+  timeElapsed: number;
 }
 
-export default function Timer({paused, togglePause} : Props) {
-  const [startTime, setStartTime] = useState(new Date().getTime())
-  const [timeElapsed, setTimeElapsed] = useState(0)
-  const {initialBoardInfo} = useGlobalContext();
+export default function Timer({timeElapsed} : Props) {
 
 
-  useEffect(()=>{
-    let timer: NodeJS.Timer
-
-    if (!paused){
-      timer = setInterval(()=> {
-        setTimeElapsed(new Date().getTime() - startTime)
-      }, 17)
-    }
-    setStartTime(new Date().getTime())
-    return () => clearInterval(timer)
-  },[paused, startTime])
-
-  useEffect(()=>{
-    setStartTime(new Date().getTime())
-  },[initialBoardInfo])
 
   function getStringTime(timeElapsed: number){
     let sliceRange: [number, number] = [0,0]

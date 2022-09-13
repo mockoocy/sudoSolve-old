@@ -13,6 +13,8 @@ const GlobalStyle = createGlobalStyle<{theme: Theme, font?: string}>`
   --invalidCellClr: ${({theme})=> theme.colors.invalidCellClr};
   --prefilledCellClr: ${({theme})=> theme.colors.prefilledCellClr};
   --textClr: ${({theme})=> theme.colors.textClr};
+  --victoryScreenBgClr: ${({theme})=> theme.colors.victoryScreenBgClr};
+
   
 
 /* Fonts */

@@ -12,6 +12,7 @@ export type Theme = {
     highlightCellClr: string;
     invalidCellClr: string;
     prefilledCellClr: string;
+    victoryScreenBgClr: string;
   }
 }
 

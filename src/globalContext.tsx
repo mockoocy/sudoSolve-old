@@ -23,7 +23,10 @@ type ContextValue = {
     filledBoard: Matrix2D;
 }>>;
   loadedImage: File | null;
-  setLoadedImage: React.Dispatch<React.SetStateAction<File | null>>
+  setLoadedImage: React.Dispatch<React.SetStateAction<File | null>>,
+  restartGame: () => void;
+  gameWon: boolean;
+  setGameWon: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export const SudokuContext = React.createContext<ContextValue | undefined>(undefined);
@@ -31,6 +34,7 @@ export const SudokuContext = React.createContext<ContextValue | undefined>(undef
 
 
 export function SudokuProvider({children}: Props){
+  const [gameWon, setGameWon] = useState(false)
   const [loadedImage, setLoadedImage] = useState<File | null>(null)
   const [options, setOptions] = useState<Options>({
     SUDOKU_SIZE: 16,
@@ -40,12 +44,16 @@ export function SudokuProvider({children}: Props){
   const [boardState, setBoardState] = useState<Board>([]);
   const [initialBoardInfo, setInitialBoardInfo] = useState<{board: Matrix2D, filledBoard: Matrix2D}>({board: [], filledBoard: []})
 
-  
-  useEffect(()=> {
-    if (loadedImage) return;
+  function restartGame(){
+    setGameWon(false)
     const newBoardInfo = generateSudoku(options.SUDOKU_SIZE, options.FILLED_CELLS_AMOUNT);
     setInitialBoardInfo(newBoardInfo)
     setBoardState(nestedNumbersToSudoku(newBoardInfo.board))
+  }
+  
+  useEffect(()=> {
+    if (loadedImage) return;
+    restartGame()
   }, [options.SUDOKU_SIZE, options.FILLED_CELLS_AMOUNT])
 
   useEffect(()=>{
@@ -110,7 +118,10 @@ export function SudokuProvider({children}: Props){
       initialBoardInfo,
       setInitialBoardInfo,
       loadedImage,
-      setLoadedImage
+      setLoadedImage,
+      restartGame,
+      gameWon,
+      setGameWon
     }}>
       {children}
     </SudokuContext.Provider>

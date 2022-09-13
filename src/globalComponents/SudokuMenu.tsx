@@ -9,15 +9,19 @@ import { useMutation } from '@tanstack/react-query';
 import { Icon } from '@iconify/react';
 import Timer from "./Timer"
 import VictoryScreen from "./VictoryScreen"
+import generateSudoku from '../utils/generateSudoku';
 
 
 export default function SudokuMenu() {
   const [paused, setPaused] = useState(false)
-  const [gameWon, setGameWon] = useState(false)
+  const [startTime, setStartTime] = useState(new Date().getTime())
+  const [timeElapsed, setTimeElapsed] = useState(0)
+  const [timeFinished, setTimeFinished] = useState(0)
   const menuRef = useRef<HTMLDivElement>(null)
   
-  const {initialBoardInfo, boardState, setBoardState, setInitialBoardInfo, options, setOptions, loadedImage, setLoadedImage} = useGlobalContext();
+  const {initialBoardInfo, boardState, setBoardState, setInitialBoardInfo, options, setOptions, loadedImage, setLoadedImage, gameWon, setGameWon} = useGlobalContext();
   const MAX_FILENAME_LENGTH = 12
+  const TIMER_REFRESH_INTERVAL = 33
 
 
   function algoSolveSudoku(){
@@ -77,14 +81,21 @@ export default function SudokuMenu() {
   }
 
   useEffect(()=>{
-    if (!boardState.flat().some(cell => cell.value === 0 || !cell.isValid)){
+    if (boardState.length > 0 && !boardState.flat().some(cell => cell.value === 0 || !cell.isValid)){
+      console.log('here!')
       setGameWon(true)
+      setTimeFinished(timeElapsed)
     }
   },[boardState])
 
   useEffect(()=>{
     setGameWon(false)
   }, [options])
+
+  useEffect(()=>{
+    setPaused(gameWon)
+    setTimeElapsed(0)
+  },[gameWon])
 
 
   async function getSudokuFromImage(){
@@ -97,9 +108,6 @@ export default function SudokuMenu() {
     return response
   }
 
-  function togglePause(){
-    setPaused(prev => !prev)
-  }
 
   function getBoardSize(sudokuSize: number){
     const WIDTH_BIAS = 36 
@@ -108,6 +116,21 @@ export default function SudokuMenu() {
     return {width: boardWidth, height: boardHeight}
   }
 
+  
+  useEffect(()=>{
+    let timer: NodeJS.Timer
+
+    if (!paused){
+      timer = setInterval(()=> {
+        setTimeElapsed(new Date().getTime() - startTime)
+      }, TIMER_REFRESH_INTERVAL)
+    }
+    return () => clearInterval(timer)
+  },[paused, startTime])
+
+  useEffect(()=>{
+    setStartTime(new Date().getTime())
+  },[initialBoardInfo])
 
   return (  
     <StyledSudokuMenu sudokuSize={options.SUDOKU_SIZE} ref={menuRef}>
@@ -115,16 +138,14 @@ export default function SudokuMenu() {
         ? <VictoryScreen 
         height={getBoardSize(options.SUDOKU_SIZE).height}
         width={getBoardSize(options.SUDOKU_SIZE).width}
+        timeFinished={timeFinished}
         />
         : <SudokuBoard/>
       }
       <div className="buttons">
         <Timer
-        paused={paused}
-        togglePause={togglePause}
+        timeElapsed={timeElapsed}
         />
-        <button className="btn" onClick={()=> togglePause()}></button>
-
         <button className="btn" onClick={()=> chooseSolver()}>
           solve
           <Icon className="icon" icon="arcticons:offlinepuzzlesolver" />
