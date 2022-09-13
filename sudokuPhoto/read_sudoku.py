@@ -16,12 +16,14 @@ CELL_DIMENSIONS = (28, 28)
 
 
 def find_puzzle(image: Matrix3D) -> tuple[Matrix3D, Matrix2D]:
+	blue_kernel_size = (5,5)
+	rectangle_shape = (4,2)
 	epsilon_factor = 0.02
 	if image.shape[2] != 1:
 		gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
 	else:
 		gray = image
-	blurred = cv2.GaussianBlur(gray, (5, 5), 3)
+	blurred = cv2.GaussianBlur(gray, blue_kernel_size, 3)
 
 	thresh = cv2.adaptiveThreshold(blurred, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY_INV, 17, 7)
 
@@ -43,8 +45,8 @@ def find_puzzle(image: Matrix3D) -> tuple[Matrix3D, Matrix2D]:
 	if sudoku_contour is None:
 		raise Exception("Sudoku Contour Not Found")
 
-	puzzle = four_point_transform(image, sudoku_contour.reshape(4, 2))
-	warped = four_point_transform(gray, sudoku_contour.reshape(4, 2))
+	puzzle = four_point_transform(image, sudoku_contour.reshape(*rectangle_shape))
+	warped = four_point_transform(gray, sudoku_contour.reshape(*rectangle_shape))
 	return puzzle, warped
 
 

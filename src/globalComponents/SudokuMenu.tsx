@@ -9,6 +9,7 @@ import { useMutation } from '@tanstack/react-query';
 import { Icon } from '@iconify/react';
 import Timer from "./Timer"
 import VictoryScreen from "./VictoryScreen"
+import { Board, Cell } from '../types';
 
 
 export default function SudokuMenu() {
@@ -115,10 +116,28 @@ export default function SudokuMenu() {
     return {width: boardWidth, height: boardHeight}
   }
 
+  function getHint(sudokuSize: number, boardState: Board){
+    console.log('dupa')
+    const boardStateFlattened = boardState.flat()
+    if (boardStateFlattened.every(cell => cell.value !== 0)) return;
+
+    const validIds = boardStateFlattened.map((cell, id) => {
+      if (cell.value !== 0) return id
+    })
+    if  (!validIds) return 
+    const randomId = Math.floor(Math.random() * validIds.length )
+    const randomRow = Math.floor(randomId / sudokuSize)
+    const randomColumn = randomId % sudokuSize 
+    const newBoard = structuredClone(boardState)
+    // Saving the performance for storage, losing the status of being cool functional programmer this way tho
+    newBoard[randomRow][randomColumn].value = initialBoardInfo.filledBoard[randomRow][randomColumn]
+    setBoardState(newBoard)
+    
+  }
+
   
   useEffect(()=>{
     let timer: NodeJS.Timer
-
     if (!paused){
       timer = setInterval(()=> {
         setTimeElapsed(new Date().getTime() - startTime)
@@ -145,6 +164,10 @@ export default function SudokuMenu() {
         <Timer
         timeElapsed={timeElapsed}
         />
+        <button className='btn' onClick={() => getHint(options.SUDOKU_SIZE, boardState)}>
+          Hint
+          <Icon className="icon" icon="icons8:idea" />
+        </button>
         <button className="btn" onClick={()=> chooseSolver()}>
           solve
           <Icon className="icon" icon="arcticons:offlinepuzzlesolver" />
