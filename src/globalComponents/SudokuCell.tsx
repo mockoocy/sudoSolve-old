@@ -1,7 +1,9 @@
 import React from 'react';
 import styled from "styled-components";
 import { useGlobalContext } from '../globalContext';
-import {Cell, Colors} from "../types"
+import {Cell, Colors, Options} from "../types"
+import { sudokuToNestedNumbers } from '../utils/arrayMethods';
+import isValid from '../utils/isValid';
 type StyledProps = {
   cellClr: string;
   border: string;
@@ -44,15 +46,32 @@ const StyledSudokuCell = styled.div<StyledProps>`
 type Props = {
   maxNumber: number;
   cell: Cell;
-  moveOnBoard: Function;
+  moveOnBoard : (e: React.KeyboardEvent<HTMLDivElement>, row: number, col: number) => void
 }
 
 const  SudokuCell = React.forwardRef<HTMLInputElement, Props>(({maxNumber, cell, moveOnBoard}: Props, ref) =>{
   const {row, column} = cell;
-  const {modifyBoard, selectCell, options} = useGlobalContext();
+  const {selectCell, options, setBoardState} = useGlobalContext();
 
   const cellBorderRadius = `${16 / options.SUDOKU_SIZE}rem`
   const CELL_BORDER_WIDTH = "2px" 
+
+  function modifyBoard(currentRow: number, currentColumn: number, value: number, options: Options){
+    if (value > options.SUDOKU_SIZE) return;
+    setBoardState(board => board.map((rows, row) => rows.map((cell, col) => {
+      if (cell.value === value || !cell.isRemovable) return cell;
+      if (row === currentRow && col === currentColumn) {
+        return value ? {...cell, value:value, isValid: isValid(
+          sudokuToNestedNumbers(board),
+          cell,
+          value,
+          options.SMALL_GRID_SIZE)} : {...cell, value: 0}
+      }
+      return cell
+    })))
+
+  }
+
 
 
   function getBorderStyles(row: number, column: number, smallGridSize: number) : string{

@@ -19,42 +19,24 @@ const StyledSudokuMenu = styled.div<StyledProps>`
   }
     .buttons {
     display: grid;
+    grid-auto-flow: row;
+    grid-auto-columns: calc(30ch);
     gap: .25rem;
-    align-items: center;
     justify-content: center;
 
-    .icon {
-      width: 1.375em;
-      height: 1.375em;
-      stroke-width: 2px;
-    }
-    .btn {
-      min-width: 12%;
-      max-width: 20ch;
-      height: 3rem;
-      padding: 0 1rem;
-      font-size: 1.5rem;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-      overflow: hidden;
+    #file-label {
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: .25rem;
-      background-color: var(--standOutClr);
-      border: 0;
-      margin: .25rem;
       border-radius: 1rem;
-
+      height: 3rem;
+      font-size: 1.5rem;
+      background-color: var(--standOutClr);
       :hover {
         transform: scale(1.1);
         transition: all 250ms ease-in-out;
         filter: brightness(1.2);
       }
-    }
-    #file-label {
-      opacity: 0.8;
-      background-color: var(--standOutClr);
 
     }
     #file-selector {

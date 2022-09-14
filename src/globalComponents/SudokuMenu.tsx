@@ -9,7 +9,7 @@ import { useMutation } from '@tanstack/react-query';
 import { Icon } from '@iconify/react';
 import Timer from "./Timer"
 import VictoryScreen from "./VictoryScreen"
-import { Board, Cell } from '../types';
+import MenuButton from './menuButton';
 
 
 export default function SudokuMenu() {
@@ -17,11 +17,12 @@ export default function SudokuMenu() {
   const [startTime, setStartTime] = useState(new Date().getTime())
   const [timeElapsed, setTimeElapsed] = useState(0)
   const [timeFinished, setTimeFinished] = useState(0)
+  const [finishedWithButton, setFinishedWithButton] = useState(false)
   const menuRef = useRef<HTMLDivElement>(null)
   
   const {initialBoardInfo, boardState, setBoardState, setInitialBoardInfo, options, setOptions, loadedImage, setLoadedImage, gameWon, setGameWon} = useGlobalContext();
   const MAX_FILENAME_LENGTH = 12
-  const TIMER_REFRESH_INTERVAL = 33
+  const TIMER_REFRESH_INTERVAL = 17
 
 
   function algoSolveSudoku(){
@@ -41,6 +42,8 @@ export default function SudokuMenu() {
   }
 
   function unSolve(){
+    setGameWon(false)
+    setFinishedWithButton(false)
     setBoardState(nestedNumbersToSudoku(initialBoardInfo.board))
   }
 
@@ -73,6 +76,8 @@ export default function SudokuMenu() {
 
 
   function chooseSolver(){
+    if (boardState.flat().some(cell => !cell.isValid)) return;
+    setFinishedWithButton(true)
     if (options.SUDOKU_SIZE <= 9){
       algoSolveSudoku()
     } else {
@@ -90,6 +95,7 @@ export default function SudokuMenu() {
 
   useEffect(()=>{
     setGameWon(false)
+    setFinishedWithButton(false)
   }, [options])
 
   useEffect(()=>{
@@ -116,8 +122,8 @@ export default function SudokuMenu() {
     return {width: boardWidth, height: boardHeight}
   }
 
-  function getHint(sudokuSize: number, boardState: Board){
-    console.log('dupa')
+  function getHint(){
+    const sudokuSize = options.SUDOKU_SIZE
     const boardStateFlattened = boardState.flat()
     if (boardStateFlattened.every(cell => cell.value !== 0)) return;
 
@@ -141,7 +147,8 @@ export default function SudokuMenu() {
     if (!paused){
       timer = setInterval(()=> {
         setTimeElapsed(new Date().getTime() - startTime)
-      }, TIMER_REFRESH_INTERVAL)
+      }, TIMER_REFRESH_INTERVAL * options.SMALL_GRID_SIZE)
+      // multiplying by small grid size, to reduce the lag at the highest dificulty
     }
     return () => clearInterval(timer)
   },[paused, startTime])
@@ -152,7 +159,7 @@ export default function SudokuMenu() {
 
   return (  
     <StyledSudokuMenu sudokuSize={options.SUDOKU_SIZE} ref={menuRef}>
-      {gameWon
+      {gameWon && !finishedWithButton
         ? <VictoryScreen 
         height={getBoardSize(options.SUDOKU_SIZE).height}
         width={getBoardSize(options.SUDOKU_SIZE).width}
@@ -164,18 +171,24 @@ export default function SudokuMenu() {
         <Timer
         timeElapsed={timeElapsed}
         />
-        <button className='btn' onClick={() => getHint(options.SUDOKU_SIZE, boardState)}>
-          Hint
-          <Icon className="icon" icon="icons8:idea" />
-        </button>
-        <button className="btn" onClick={()=> chooseSolver()}>
-          solve
-          <Icon className="icon" icon="arcticons:offlinepuzzlesolver" />
-        </button>
-        <button className="btn" onClick={()=> unSolve()}> 
-          unsolve
-          <Icon className="icon" icon="mdi:keyboard-return" />
-        </button>
+        <MenuButton 
+        text="Hint" 
+        tooltip='gives you a number from a random cell' 
+        icon={<Icon className="icon" icon="icons8:idea" />}
+        clickHandler={getHint}
+        />
+        <MenuButton 
+        text="Solve" 
+        tooltip='All cells must have valid numbers inside' 
+        icon={<Icon className="icon" icon="arcticons:offlinepuzzlesolver" />}
+        clickHandler={chooseSolver}
+        />
+        <MenuButton 
+        text="Unsolve" 
+        tooltip='Goes back to initial state of the board' 
+        icon={<Icon className="icon" icon="mdi:keyboard-return" />}
+        clickHandler={unSolve}
+        />
         <label htmlFor="file-selector" id="file-label" className='btn'>
           {loadedImage?.name 
             ? loadedImage.name.length > MAX_FILENAME_LENGTH 
@@ -187,12 +200,15 @@ export default function SudokuMenu() {
         </label>
         <input id="file-selector" type="file" accept='image/*' onChange={e => sendSudokuImage(e)}/>
         {loadedImage &&
-          <button className="btn" id="file-submit" onClick={() => getSudokuBoard()}>
-          {isSudokuLoading
-            ? <h5>Processing Image... <Icon className="icon" icon="line-md:loading-loop" /> </h5> 
-            : <h5>Submit image <Icon className="icon" icon="ic:baseline-input" /></h5>
-          }
-        </button>
+        <MenuButton 
+        text={isSudokuLoading ? "Processing Image..." : "Submit image"}
+        icon={isSudokuLoading 
+          ? <Icon className="icon" icon="line-md:loading-loop" /> 
+          : <Icon className="icon" icon="ic:baseline-input" />
+        }
+        tooltip="You can upload image of 9x9 sudoku grid"
+        clickHandler={getSudokuBoard}
+        />
         }
 
       </div>

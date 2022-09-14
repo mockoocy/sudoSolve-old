@@ -2,6 +2,7 @@ import React, { useRef } from 'react'
 import styled from 'styled-components'
 import {ReactComponent as Celebration} from "../assets/celebration.svg"
 import { useGlobalContext } from '../globalContext';
+import { boxShadowOutline } from '../utils/css-mixins';
 
 type StyledProps = {
   height: string;
@@ -15,6 +16,8 @@ const StyledVictoryScreen = styled.div<StyledProps>`
   width: var(--width);
   height: var(--height);
   padding: 5%;
+
+  ${boxShadowOutline(.0625, .125, 'var(--standOutClr)')};
   background: var(--victoryScreenBgClr);
   color: var(--textClr);
   display: flex;
