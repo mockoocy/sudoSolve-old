@@ -5,23 +5,25 @@ import useOuterClick from '../hooks/useOuterClick';
 
 const StyledDropDownMenu = styled.div`
   position: relative;
+  --min-width: 20vw;
+  
   .drop-down {
     position: absolute;
     display: flex;
     flex-direction: column;
     gap: 0.125rem;
     align-items: center;
-    min-width: 16vw;
+    min-width: var(--min-width);
     background: var(--bgClr);
     border: 2px solid var(--standOutClr);
     border-radius: 1rem;
     padding: 0 .5rem;
     right: 0;
-    left: -10vw;
+    left: calc(-.75*var(--min-width));
 
     @media (max-width:820px){
+      --min-width: 60vw;
       min-width: 50vw;
-      left: -50vw;
       font-size: 0.875rem;
     }
 
@@ -58,7 +60,7 @@ const StyledDropDownMenu = styled.div`
       .size-selector{
         display: flex;
         align-items: center;
-        font-size: 2rem;
+        font-size: 1.5rem;
         gap: .25rem;
 
         .sizer:hover {

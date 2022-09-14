@@ -14,15 +14,13 @@ import MenuButton from './menuButton';
 
 export default function SudokuMenu() {
   const [paused, setPaused] = useState(false)
-  const [startTime, setStartTime] = useState(new Date().getTime())
-  const [timeElapsed, setTimeElapsed] = useState(0)
   const [timeFinished, setTimeFinished] = useState(0)
   const [finishedWithButton, setFinishedWithButton] = useState(false)
   const menuRef = useRef<HTMLDivElement>(null)
   
   const {initialBoardInfo, boardState, setBoardState, setInitialBoardInfo, options, setOptions, loadedImage, setLoadedImage, gameWon, setGameWon} = useGlobalContext();
   const MAX_FILENAME_LENGTH = 12
-  const TIMER_REFRESH_INTERVAL = 17
+  const BOARD_SIZE: {width: string, height: string} = getBoardSize(options.SUDOKU_SIZE, options.BOARD_SIZE_FACTOR)
 
 
   function algoSolveSudoku(){
@@ -85,23 +83,13 @@ export default function SudokuMenu() {
     }   
   }
 
-  useEffect(()=>{
-    if (boardState.length > 0 && !boardState.flat().some(cell => cell.value === 0 || !cell.isValid)){
-      console.log('here!')
-      setGameWon(true)
-      setTimeFinished(timeElapsed)
-    }
-  },[boardState])
 
   useEffect(()=>{
     setGameWon(false)
     setFinishedWithButton(false)
-  }, [options])
+  }, [options.FILLED_CELLS_AMOUNT, options.SUDOKU_SIZE, setGameWon])
 
-  useEffect(()=>{
-    setPaused(gameWon)
-    setTimeElapsed(0)
-  },[gameWon])
+
 
 
   async function getSudokuFromImage(){
@@ -115,10 +103,12 @@ export default function SudokuMenu() {
   }
 
 
-  function getBoardSize(sudokuSize: number){
+  function getBoardSize(sudokuSize: number, sizeFactor: number){
     const WIDTH_BIAS = 36 
-    const boardWidth = `${sudokuSize + WIDTH_BIAS}vw`
-    const boardHeight = `${sudokuSize + WIDTH_BIAS}vw`
+    const MAX_MOBILE_WIDTH = 820
+    if (window.innerWidth <= MAX_MOBILE_WIDTH) return {width: "100vw", height: "auto"}
+    const boardWidth = `${sizeFactor * (sudokuSize + WIDTH_BIAS)}vw`
+    const boardHeight = `${sizeFactor * (sudokuSize + WIDTH_BIAS)}vw`
     return {width: boardWidth, height: boardHeight}
   }
 
@@ -126,14 +116,18 @@ export default function SudokuMenu() {
     const sudokuSize = options.SUDOKU_SIZE
     const boardStateFlattened = boardState.flat()
     if (boardStateFlattened.every(cell => cell.value !== 0)) return;
+    const validIds: number[] = []
 
-    const validIds = boardStateFlattened.map((cell, id) => {
-      if (cell.value !== 0) return id
+    boardStateFlattened.forEach((cell, id) => {
+      if (cell.value === 0 || !cell.isValid) validIds.push(id)
     })
     if  (!validIds) return 
-    const randomId = Math.floor(Math.random() * validIds.length )
+    const randomIdId = Math.floor(Math.random() * validIds.length )
+    //naming masterpiece
+    const randomId = validIds[randomIdId]
     const randomRow = Math.floor(randomId / sudokuSize)
     const randomColumn = randomId % sudokuSize 
+    console.log(randomRow, randomColumn)
     const newBoard = structuredClone(boardState)
     // Saving the performance for storage, losing the status of being cool functional programmer this way tho
     newBoard[randomRow][randomColumn].value = initialBoardInfo.filledBoard[randomRow][randomColumn]
@@ -141,35 +135,24 @@ export default function SudokuMenu() {
     
   }
 
-  
-  useEffect(()=>{
-    let timer: NodeJS.Timer
-    if (!paused){
-      timer = setInterval(()=> {
-        setTimeElapsed(new Date().getTime() - startTime)
-      }, TIMER_REFRESH_INTERVAL * options.SMALL_GRID_SIZE)
-      // multiplying by small grid size, to reduce the lag at the highest dificulty
-    }
-    return () => clearInterval(timer)
-  },[paused, startTime])
-
-  useEffect(()=>{
-    setStartTime(new Date().getTime())
-  },[initialBoardInfo])
-
   return (  
     <StyledSudokuMenu sudokuSize={options.SUDOKU_SIZE} ref={menuRef}>
       {gameWon && !finishedWithButton
         ? <VictoryScreen 
-        height={getBoardSize(options.SUDOKU_SIZE).height}
-        width={getBoardSize(options.SUDOKU_SIZE).width}
+        height={BOARD_SIZE.height}
+        width={BOARD_SIZE.width}
         timeFinished={timeFinished}
         />
-        : <SudokuBoard/>
+        : <SudokuBoard
+        width={BOARD_SIZE.width}
+        height={BOARD_SIZE.height}
+        />
       }
       <div className="buttons">
-        <Timer
-        timeElapsed={timeElapsed}
+        <Timer 
+        paused={paused}
+        setPaused={setPaused}
+        setTimeFinished={setTimeFinished}
         />
         <MenuButton 
         text="Hint" 

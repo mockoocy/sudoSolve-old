@@ -9,13 +9,15 @@ type StyledProps = {
   border: string;
   sudokuSize: number;
   radiuses: string;
+  sizeFactor: number
 }
 
 const StyledSudokuCell = styled.div<StyledProps>`
+  --sudokuSize: ${props => props.sudokuSize};
+  --sizeFactor: ${props => props.sizeFactor};
   background-color: ${props => props.cellClr};
   aspect-ratio: 1;
   border: 1px solid var(--gridGapClr);
-  --sudokuSize: ${props => props.sudokuSize};
 
   ${props => props.border}
   ${props => props.radiuses}
@@ -24,7 +26,7 @@ const StyledSudokuCell = styled.div<StyledProps>`
     all: unset;
     width: 100%;
     height: 100%;
-    font-size: calc(3rem * 2 / var(--sudokuSize));
+    font-size: calc(3rem * 2 / var(--sudokuSize) * var(--sizeFactor));
     color: var(--textClr);
     text-align: center;
     font-family: "jetbrains mono", "Lato", sans-serif;
@@ -32,7 +34,6 @@ const StyledSudokuCell = styled.div<StyledProps>`
 
     @media (max-width:820px){
       font-size: calc(2rem * 3 / var(--sudokuSize));
-
     }
     
   } 
@@ -127,6 +128,7 @@ const  SudokuCell = React.forwardRef<HTMLInputElement, Props>(({maxNumber, cell,
 
   return (
     <StyledSudokuCell 
+    sizeFactor={options.BOARD_SIZE_FACTOR}
     cellClr={getCellClr(cell)}
     border={getBorderStyles(row, column, options.SMALL_GRID_SIZE)} 
     sudokuSize={options.SMALL_GRID_SIZE}

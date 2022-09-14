@@ -56,6 +56,10 @@ export default function Navbar({setTheme}: Props) {
   const {options, setOptions} = useGlobalContext();
 
   const maxGridSize = 6 // Not sure if a cap is a good idea, but on the other hand - who wants to solve 64x64 sudoku or bigger, seems "a bit" hard
+  const BOARD_SIZE_FACTOR_INCREMENT_VALUE = .125
+  const BOARD_SIZE_FACTOR_MIN = .5
+  const BOARD_SIZE_FACTOR_MAX = 1.5
+
 
   const listEls = Object.values(themes).map((theme, id) => (
     <li 
@@ -97,6 +101,21 @@ export default function Navbar({setTheme}: Props) {
     ))
   }
 
+  function incrementBoardSizeFactor(){
+    if (options.BOARD_SIZE_FACTOR >= BOARD_SIZE_FACTOR_MAX) return;
+
+    setOptions({
+      ...options, BOARD_SIZE_FACTOR: options.BOARD_SIZE_FACTOR + BOARD_SIZE_FACTOR_INCREMENT_VALUE
+    })
+  }
+
+  function decrementBoardSizeFactor(){
+    if (options.BOARD_SIZE_FACTOR <= BOARD_SIZE_FACTOR_MIN) return;
+    setOptions({
+      ...options, BOARD_SIZE_FACTOR: options.BOARD_SIZE_FACTOR - BOARD_SIZE_FACTOR_INCREMENT_VALUE
+    })
+  }
+
   const optionsElements = [
     <li key={"Option-SudokuSize"}>  
       Sudoku Size
@@ -115,6 +134,14 @@ export default function Navbar({setTheme}: Props) {
       value={options.FILLED_CELLS_AMOUNT} 
       onChange={e => changeFilledCellsAmount(e)}/>
     </li>,
+        <li key={"Option-boardSizeFactor"}>  
+        Board Size
+        <div className="size-selector">
+          <Icon icon="akar-icons:circle-minus" onClick={decrementBoardSizeFactor} className="sizer"/>
+          {options.BOARD_SIZE_FACTOR}
+          <Icon icon="akar-icons:circle-plus" onClick={incrementBoardSizeFactor} className="sizer"/>
+        </div>
+      </li>,
   ]
 
   return (

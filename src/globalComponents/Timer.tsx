@@ -1,5 +1,7 @@
 import { Icon } from '@iconify/react'
+import { useEffect, useState } from 'react';
 import styled from 'styled-components';
+import { useGlobalContext } from '../globalContext';
 
 const StyledTimer = styled.div`
   background-color: var(--prefilledCellClr);
@@ -15,13 +17,33 @@ const StyledTimer = styled.div`
   gap: .125rem;
 
 `
-
 type Props = {
-  timeElapsed: number;
+  paused: boolean;
+  setPaused: React.Dispatch<React.SetStateAction<boolean>>;
+  setTimeFinished: React.Dispatch<React.SetStateAction<number>>
 }
 
-export default function Timer({timeElapsed} : Props) {
+export default function Timer({paused, setPaused, setTimeFinished}: Props) {
+  const [timeElapsed, setTimeElapsed] = useState(0)
+  const [startTime, setStartTime] = useState(new Date().getTime())
 
+  const {gameWon, boardState, initialBoardInfo, setGameWon} = useGlobalContext()
+
+  const TIMER_REFRESH_INTERVAL = 17 
+
+  useEffect(()=>{
+    let timer: NodeJS.Timer
+    if (!paused){
+      timer = setInterval(()=> {
+        setTimeElapsed(new Date().getTime() - startTime)
+      }, TIMER_REFRESH_INTERVAL)
+    }
+    return () => clearInterval(timer)
+  },[paused, startTime])
+
+  useEffect(()=>{
+    setStartTime(new Date().getTime())
+  },[initialBoardInfo])
 
 
   function getStringTime(timeElapsed: number){
@@ -42,7 +64,18 @@ export default function Timer({timeElapsed} : Props) {
   }
 
 
-  
+  useEffect(()=>{
+    setPaused(gameWon)
+    setStartTime(new Date().getTime())
+  },[gameWon, setPaused])
+
+  useEffect(()=>{
+    if (boardState.length > 0 && !boardState.flat().some(cell => cell.value === 0 || !cell.isValid)){
+      setGameWon(true)
+      setTimeFinished(timeElapsed)
+      setStartTime(new Date().getTime())
+    }
+  },[boardState, setGameWon, setTimeFinished, timeElapsed])
 
   return (
     <StyledTimer>

@@ -2,8 +2,7 @@ import React, {useState, useContext, useEffect} from "react";
 import { Board, Cell, Options, Matrix2D } from "./types";
 import generateSudoku from "./utils/generateSudoku";
 import getCurrentGrid from "./utils/getCurrentGrid";
-import isValid from "./utils/isValid";
-import { nestedNumbersToSudoku, sudokuToNestedNumbers } from './utils/arrayMethods';
+import { nestedNumbersToSudoku } from './utils/arrayMethods';
 
 
 type Props = {
@@ -30,16 +29,17 @@ type ContextValue = {
 
 export const SudokuContext = React.createContext<ContextValue | undefined>(undefined);
 
-
+const DEFAULT_OPTIONS: Options = {
+  SUDOKU_SIZE: 9,
+  SMALL_GRID_SIZE: 3,
+  FILLED_CELLS_AMOUNT: 17,
+  BOARD_SIZE_FACTOR: 1
+}
 
 export function SudokuProvider({children}: Props){
   const [gameWon, setGameWon] = useState(false)
   const [loadedImage, setLoadedImage] = useState<File | null>(null)
-  const [options, setOptions] = useState<Options>({
-    SUDOKU_SIZE: 16,
-    SMALL_GRID_SIZE: 4,
-    FILLED_CELLS_AMOUNT: 7,
-  })
+  const [options, setOptions] = useState<Options>(DEFAULT_OPTIONS)
   const [boardState, setBoardState] = useState<Board>([]);
   const [initialBoardInfo, setInitialBoardInfo] = useState<{board: Matrix2D, filledBoard: Matrix2D}>({board: [], filledBoard: []})
 
@@ -53,6 +53,7 @@ export function SudokuProvider({children}: Props){
   useEffect(()=> {
     if (loadedImage) return;
     restartGame()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [options.SUDOKU_SIZE, options.FILLED_CELLS_AMOUNT])
 
   useEffect(()=>{
@@ -63,7 +64,7 @@ export function SudokuProvider({children}: Props){
 
   function selectCell(currentRow: number, currentColumn: number){
     const currentGrid = getCurrentGrid(currentRow, currentColumn, options.SMALL_GRID_SIZE)
-    // Cell is Selected -> if I just select it lol, if it's in the same 
+    // Cell is Selected -> if I just selected it lol, if it's in the same 
     // row || column || small grid, it's highlighted
     setBoardState(prevBoard =>prevBoard.map((rows,row) => {
       return rows.map((cell, col) => {

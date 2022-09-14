@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useRef } from 'react'
 import styled from 'styled-components';
 import { useGlobalContext } from '../globalContext';
 import SudokuCell from './SudokuCell';
@@ -7,14 +7,17 @@ import SudokuCell from './SudokuCell';
 type StyledProps = {
   sudokuSize: number;
   smallGridSize: number;
+  width: string;
+  height: string
 }
 const StyledSudokuBoard = styled.div<StyledProps>`
+  --width: ${props => props.width};
+  --height: ${props => props.height};
   --sudokuSize: ${props => props.sudokuSize};
   --smallGridSize: ${props => props.smallGridSize};
 
-
-  width: calc(var(--sudokuSize)*1vw + 36vw);
-  height: calc(var(--sudokuSize)*1vw + 36vw);
+  width: var(--width);
+  height: var(--height);
   display: grid;
   gap: 1px;
   grid-template-columns: repeat(var(--sudokuSize), 1fr);  
@@ -31,10 +34,14 @@ const StyledSudokuBoard = styled.div<StyledProps>`
 
 `
 
-export default function SudokuBoard() {
+type Props = {
+  width: string;
+  height: string
+}
+
+export default function SudokuBoard({width, height} : Props) {
   const {boardState, options, gameWon, setGameWon } = useGlobalContext();
   const cellRefs : React.MutableRefObject<any[]> = useRef([]);
-
 
   function moveOnBoard(e: React.KeyboardEvent<HTMLDivElement>, row: number, col: number){
     const { code } = e;
@@ -64,7 +71,6 @@ export default function SudokuBoard() {
       }
     if (nextInputId !== undefined &&  nextInputId >= 0 && nextInputId < options.SUDOKU_SIZE ** 2){
       const nextInput = cellRefs.current[nextInputId];
-      console.log(nextInputId)
       nextInput.focus();
       nextInput.select();
       e.preventDefault();
@@ -93,11 +99,15 @@ export default function SudokuBoard() {
       && !boardStateFlattened.some(cell => cell.value === 0 || !cell.isValid)){
       setGameWon(true)
     }
-  },[boardState, gameWon])
-
+  },[boardState, gameWon, setGameWon])
 
   return (
-    <StyledSudokuBoard sudokuSize={options.SUDOKU_SIZE} smallGridSize={options.SMALL_GRID_SIZE}>
+    <StyledSudokuBoard 
+    sudokuSize={options.SUDOKU_SIZE} 
+    smallGridSize={options.SMALL_GRID_SIZE}
+    width={width}
+    height={height}
+    >
       {sudokuCellElements}
     </StyledSudokuBoard>
   )
