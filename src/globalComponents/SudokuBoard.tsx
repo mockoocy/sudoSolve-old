@@ -32,8 +32,7 @@ const StyledSudokuBoard = styled.div<StyledProps>`
 `
 
 export default function SudokuBoard() {
-  const [gameWon, setGameWon] = useState(false)
-  const {boardState, options } = useGlobalContext();
+  const {boardState, options, gameWon, setGameWon } = useGlobalContext();
   const cellRefs : React.MutableRefObject<any[]> = useRef([]);
 
 

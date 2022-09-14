@@ -194,7 +194,7 @@ export default function SudokuMenu() {
             ? loadedImage.name.length > MAX_FILENAME_LENGTH 
               ? `${loadedImage.name.slice(0, MAX_FILENAME_LENGTH)}...`
               : loadedImage.name
-            : "Upload an image!"
+            : "From image"
           }
           <Icon className="icon" id="icon upload-icon" icon="ic:baseline-file-upload" />
         </label>
@@ -206,7 +206,7 @@ export default function SudokuMenu() {
           ? <Icon className="icon" icon="line-md:loading-loop" /> 
           : <Icon className="icon" icon="ic:baseline-input" />
         }
-        tooltip="You can upload image of 9x9 sudoku grid"
+        tooltip="You can only upload image of a 9x9 sudoku grid"
         clickHandler={getSudokuBoard}
         />
         }
