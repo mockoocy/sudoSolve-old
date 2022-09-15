@@ -10,6 +10,7 @@ import { Icon } from '@iconify/react';
 import Timer from "./Timer"
 import VictoryScreen from "./VictoryScreen"
 import MenuButton from './menuButton';
+import { AxiosError } from 'axios';
 
 
 export default function SudokuMenu() {
@@ -53,6 +54,7 @@ export default function SudokuMenu() {
   const {isLoading: isSudokuLoading, mutate: getSudokuBoard} = useMutation(getSudokuFromImage, {
     onSuccess: res => {
       if (!res) return;
+      console.log(res)
       const loadedBoard: number[] = res.data
       const sudokuMatrix = arrayToSquareMatrix(loadedBoard)
       setOptions(prevOptions => ({
@@ -67,8 +69,9 @@ export default function SudokuMenu() {
         filledBoard: sudokuMatrix
       })
     },
-    onError: err => {
-      console.log(err)
+    onError: (err: AxiosError ) => {
+      console.log(err )
+      alert(`error while trying to proccess the image, status code: ${err?.response?.status} | ${JSON.stringify(err.response?.data)}`)
     }
   })
 

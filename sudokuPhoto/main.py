@@ -1,4 +1,4 @@
-from fastapi import FastAPI, UploadFile
+from fastapi import FastAPI, UploadFile, status, HTTPException
 from starlette.middleware.cors import CORSMiddleware
 import cv2
 import numpy as np
@@ -24,8 +24,11 @@ async def hello(img):
 @app.post("/api/postImage")
 async def get_image(image: UploadFile) -> list[int]:
     contents = await image.read()
-    img = cv2.imdecode(np.frombuffer(contents, dtype="uint8"), 0)
-    img = img.reshape(*img.shape, 1)
+    try:
+        img = cv2.imdecode(np.frombuffer(contents, dtype="uint8"), 0)
+        img = img.reshape(*img.shape, 1)
+    except AttributeError:
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Invalid file type")
     digits = await read_sudoku(img, "digit_recognition_model.h5")
     print(digits)
     # I don't really know why do I have to do this comprehension, but ok.
