@@ -1,16 +1,17 @@
 import React, { useEffect, useRef, useState } from 'react';
-import SudokuBoard from './SudokuBoard';
+import SudokuBoard from '../../globalComponents/SudokuBoard';
 import StyledSudokuMenu from './styles/StyledSudokuMenu';
-import { useGlobalContext } from '../globalContext';
-import { nestedNumbersToSudoku, sudokuToNestedNumbers, arrayToSquareMatrix  } from '../utils/arrayMethods';
-import solveSudoku from '../utils/solveSudoku';
-import apiClient from '../utils/apiClient';
+import { useGlobalContext } from '../../globalContext';
+import { nestedNumbersToSudoku, sudokuToNestedNumbers, arrayToSquareMatrix  } from '../../utils/arrayMethods';
+import solveSudoku from '../../utils/solveSudoku';
+import apiClient from '../../utils/apiClient';
 import { useMutation } from '@tanstack/react-query';
 import { Icon } from '@iconify/react';
 import Timer from "./Timer"
-import VictoryScreen from "./VictoryScreen"
+import VictoryScreen from "../../globalComponents/VictoryScreen"
 import MenuButton from './menuButton';
 import { AxiosError } from 'axios';
+import getBoardSize from '../../utils/getBoardSize';
 
 
 export default function SudokuMenu() {
@@ -103,16 +104,6 @@ export default function SudokuMenu() {
       onUploadProgress: ProgressEvent => console.log(`Upload Progress: ${ProgressEvent.loaded / ProgressEvent.total*100}`)
     })
     return response
-  }
-
-
-  function getBoardSize(sudokuSize: number, sizeFactor: number){
-    const WIDTH_BIAS = 36 
-    const MAX_MOBILE_WIDTH = 820
-    if (window.innerWidth <= MAX_MOBILE_WIDTH) return {width: "100vw", height: "auto"}
-    const boardWidth = `${sizeFactor * (sudokuSize + WIDTH_BIAS)}vw`
-    const boardHeight = `${sizeFactor * (sudokuSize + WIDTH_BIAS)}vw`
-    return {width: boardWidth, height: boardHeight}
   }
 
   function getHint(){

@@ -8,7 +8,7 @@ export default function useOuterClick(callback: Function) {
   const innerRef = useRef<any>(); // returned to client, who marks "border" element
 
   // update cb on each render, so second useEffect has access to current value 
-  useEffect(() => { callbackRef.current = callback; });
+  useEffect(() => { callbackRef.current = callback;});
   
   useEffect(() => {
     document.addEventListener("click", handleClick);
