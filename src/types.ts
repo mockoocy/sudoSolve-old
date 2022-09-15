@@ -1,5 +1,3 @@
-import { AxiosError } from "axios";
-
 export type Theme = {
   info : {
     displayName: string;
@@ -15,6 +13,10 @@ export type Theme = {
     invalidCellClr: string;
     prefilledCellClr: string;
     victoryScreenBgClr: string;
+  },
+  utils ?: {
+    hueRotationDeg: string;
+    // degree to rotate from hsl(0, 100%, 65%)
   }
 }
 

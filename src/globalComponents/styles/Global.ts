@@ -15,6 +15,9 @@ const GlobalStyle = createGlobalStyle<{theme: Theme, font?: string}>`
   --textClr: ${({theme})=> theme.colors.textClr};
   --victoryScreenBgClr: ${({theme})=> theme.colors.victoryScreenBgClr};
 
+  /* Utils */
+  --hueRotationDeg: ${({theme}) => theme.utils?.hueRotationDeg};
+
   
 
 /* Fonts */

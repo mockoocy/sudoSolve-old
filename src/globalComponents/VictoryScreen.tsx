@@ -2,7 +2,7 @@ import React, { useRef } from 'react'
 import styled from 'styled-components'
 import {ReactComponent as Celebration} from "../assets/celebration.svg"
 import { useGlobalContext } from '../globalContext';
-import { boxShadowOutline } from '../utils/css-mixins';
+import { boxShadowOutline, textShadowOutline } from '../utils/css-mixins';
 
 type StyledProps = {
   height: string;
@@ -15,7 +15,7 @@ const StyledVictoryScreen = styled.div<StyledProps>`
 
   width: var(--width);
   height: var(--height);
-  padding: 5%;
+  padding: 2.5%;
 
   ${boxShadowOutline(.0625, .125, 'var(--standOutClr)')};
   background: var(--victoryScreenBgClr);
@@ -27,13 +27,18 @@ const StyledVictoryScreen = styled.div<StyledProps>`
   font-family: Lato, sans-serif;
   border-radius: 2rem;
   .svg {
-    height: 75%;
-    width: 75%;
+    height: 100%;
+    width: 100%;
+    filter: hue-rotate(var(--hueRotationDeg));
   }
   .main-text{
+    color: var(--textClr);
+    ${textShadowOutline(.0625, .125, 'var(--standOutClr)')};
     font-size: 3rem;
   }
   .stats {
+    ${textShadowOutline(.0625, .125, 'var(--standOutClr)')};
+
     padding: 0;
     li::marker {
       content: none;
@@ -101,7 +106,7 @@ export default function VictoryScreen({height, width, timeFinished}: Props) {
   }
   return (
     <StyledVictoryScreen height={height} width={width} ref={dupaRef} onClick={displayHeight} onMouseDown={() => getLongTimeString(timeFinished)}>
-      <h1 className="main-text">You've won!</h1>
+      <h1 className="main-text">Well done!</h1>
       <ul className="stats">
         <li className="sub-text">Initial cell amount: {options.FILLED_CELLS_AMOUNT}</li>
         <li className="sub-text">Finished in: {getLongTimeString(timeFinished)}</li>
