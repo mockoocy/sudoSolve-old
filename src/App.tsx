@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { ThemeProvider } from 'styled-components';
 import {Theme} from "./types";
 import themes from "./utils/themes";
@@ -9,8 +9,12 @@ import SudokuMenu from './globalComponents/SudokuMenu';
 import {QueryClient, QueryClientProvider} from '@tanstack/react-query'
 
 export default function App() {
+  const themeFromStorage = localStorage.getItem("theme")
+  const [theme, setTheme] = useState<Theme>(themeFromStorage ? JSON.parse(themeFromStorage) :themes.darkTheme);
 
-  const [theme, setTheme] = useState<Theme>(themes.darkTheme);
+  useEffect(()=>{
+    localStorage.setItem("theme", JSON.stringify(theme))
+  },[theme])
 
   const queryClient = new QueryClient({
     defaultOptions: {

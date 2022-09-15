@@ -29,6 +29,8 @@ type ContextValue = {
 
 export const SudokuContext = React.createContext<ContextValue | undefined>(undefined);
 
+const optionsFromStorage = localStorage.getItem("options")
+
 const DEFAULT_OPTIONS: Options = {
   SUDOKU_SIZE: 9,
   SMALL_GRID_SIZE: 3,
@@ -36,10 +38,11 @@ const DEFAULT_OPTIONS: Options = {
   BOARD_SIZE_FACTOR: 1
 }
 
+
 export function SudokuProvider({children}: Props){
   const [gameWon, setGameWon] = useState(false)
   const [loadedImage, setLoadedImage] = useState<File | null>(null)
-  const [options, setOptions] = useState<Options>(DEFAULT_OPTIONS)
+  const [options, setOptions] = useState<Options>(optionsFromStorage ? JSON.parse(optionsFromStorage) :DEFAULT_OPTIONS)
   const [boardState, setBoardState] = useState<Board>([]);
   const [initialBoardInfo, setInitialBoardInfo] = useState<{board: Matrix2D, filledBoard: Matrix2D}>({board: [], filledBoard: []})
 
@@ -50,18 +53,8 @@ export function SudokuProvider({children}: Props){
     setBoardState(nestedNumbersToSudoku(newBoardInfo.board))
   }
   
-  useEffect(()=> {
-    if (loadedImage) return;
-    restartGame()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [options.SUDOKU_SIZE, options.FILLED_CELLS_AMOUNT])
-
-  useEffect(()=>{
-    setBoardState(nestedNumbersToSudoku(initialBoardInfo.board))
-    setLoadedImage(null)
-  },[initialBoardInfo])
-
-
+  
+  
   function selectCell(currentRow: number, currentColumn: number){
     const currentGrid = getCurrentGrid(currentRow, currentColumn, options.SMALL_GRID_SIZE)
     // Cell is Selected -> if I just selected it lol, if it's in the same 
@@ -79,23 +72,34 @@ export function SudokuProvider({children}: Props){
           && col  < currentGrid.colEnd
           ){
             return {...cell, isSelected: false, isHighlighted: true}
-        }
-        return {...cell, isSelected: false, isHighlighted: false}
-      })
-    }))
-  }
-
-
-
+          }
+          return {...cell, isSelected: false, isHighlighted: false}
+        })
+      }))
+    }
+    useEffect(()=> {
+      if (loadedImage) return;
+      restartGame()
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [options.SUDOKU_SIZE, options.FILLED_CELLS_AMOUNT])
   
-  return (
-    <SudokuContext.Provider value= {{
-      boardState,
-      setBoardState,
-      options,
-      setOptions,
-      selectCell,
-      initialBoardInfo,
+    useEffect(()=>{
+      setBoardState(nestedNumbersToSudoku(initialBoardInfo.board))
+      setLoadedImage(null)
+    },[initialBoardInfo])
+
+    useEffect(()=>{
+      localStorage.setItem("options", JSON.stringify(options))
+    },[options])
+    
+    return (
+      <SudokuContext.Provider value= {{
+        boardState,
+        setBoardState,
+        options,
+        setOptions,
+        selectCell,
+        initialBoardInfo,
       setInitialBoardInfo,
       loadedImage,
       setLoadedImage,
