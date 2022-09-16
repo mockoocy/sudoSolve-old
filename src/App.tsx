@@ -12,7 +12,20 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom'
 
 export default function App() {
   const themeFromStorage = localStorage.getItem("theme")
+  const customThemeFromStorage = localStorage.getItem('customTheme')
+
   const [theme, setTheme] = useState<Theme>(themeFromStorage ? JSON.parse(themeFromStorage) :themes.darkTheme);
+
+  const [customTheme, setCustomTheme] = useState<Theme>(
+    customThemeFromStorage 
+    ? JSON.parse(customThemeFromStorage) 
+    :themes.darkTheme
+    )
+
+  useEffect(()=>{
+    localStorage.setItem("customTheme", JSON.stringify(customTheme))
+    setTheme(customTheme)
+},[customTheme, setTheme])
 
   useEffect(()=>{
     localStorage.setItem("theme", JSON.stringify(theme))
@@ -33,10 +46,16 @@ export default function App() {
         <ThemeProvider theme={theme}>
           <BrowserRouter>
             <GlobalStyle />
-            <Navbar setTheme={setTheme} />
+            <Navbar setTheme={setTheme} customTheme={customTheme} />
             <Routes>
               <Route path='/' element={<Home/>} />
-              <Route path='/themeCreator' element={<ThemeCreator setTheme={setTheme}/>} />
+              <Route path='/themeCreator' element={
+                <ThemeCreator  
+                customTheme={customTheme} 
+                setCustomTheme={setCustomTheme}
+                setTheme={setTheme}
+                />} 
+              />
 
             </Routes>
           </BrowserRouter>

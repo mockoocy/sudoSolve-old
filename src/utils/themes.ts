@@ -14,6 +14,8 @@ const lightTheme: Theme = {
     highlightCellClr: '#92BDFF',
     invalidCellClr: '#f04848',
     prefilledCellClr: '#f0f0ff ',
+  },
+  gradientColors: {
     victoryScreenBgClr: 'linear-gradient(to bottom, #9796f0, #fbc7d4)'
   },
   utils: {
@@ -35,6 +37,8 @@ const darkTheme: Theme = {
     highlightCellClr: '#EAF7CF',
     invalidCellClr: '#FF708A',
     prefilledCellClr: '#1f1f1a ',
+  },
+  gradientColors: {
     victoryScreenBgClr: 'linear-gradient(to bottom, #9796f0, #fbc7d4)'
   },
   utils: {
@@ -54,10 +58,12 @@ const crimsonTheme: Theme = {
     selectedCellClr: '#D9002B',
     gridGapClr: '#373737',
     highlightCellClr: 'rgb(170,0,34)',
-    invalidCellClr: '#242436',
+    invalidCellClr: '#242436',  
     prefilledCellClr: '#470F1B ',
-    victoryScreenBgClr: 'linear-gradient(to bottom, #FFE0F6, #FFEAE0)'
   },
+  gradientColors: {
+    victoryScreenBgClr: 'linear-gradient(to bottom, #FFE0F6, #FFEAE0)'
+  }
 }
 
 const themes = {

@@ -3,6 +3,7 @@ export type Theme = {
     displayName: string;
   },
   colors: {
+    [key: string] : string;
     bgClr: string;
     textClr: string;
     standOutClr: string;
@@ -12,7 +13,9 @@ export type Theme = {
     highlightCellClr: string;
     invalidCellClr: string;
     prefilledCellClr: string;
-    victoryScreenBgClr: string;
+  },
+  gradientColors: {
+    victoryScreenBgClr: string
   },
   utils ?: {
     hueRotationDeg: string;

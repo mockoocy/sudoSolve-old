@@ -5,6 +5,7 @@ import { useGlobalContext } from '../globalContext';
 import DropDownMenu from './DropDownMenu';
 import { Theme } from '../types';
 import themes from '../utils/themes';
+import { Link } from 'react-router-dom';
 
 
 const StyledNavbar = styled.nav`
@@ -50,9 +51,10 @@ const StyledNavbar = styled.nav`
 
 type Props = {
   setTheme: React.Dispatch<React.SetStateAction<Theme>>;
+  customTheme: Theme
 }
 
-export default function Navbar({setTheme}: Props) {
+export default function Navbar({setTheme, customTheme}: Props) {
   const {options, setOptions} = useGlobalContext();
 
   const maxGridSize = 6 // Not sure if a cap is a good idea, but on the other hand - who wants to solve 64x64 sudoku or bigger, seems "a bit" hard
@@ -61,13 +63,20 @@ export default function Navbar({setTheme}: Props) {
   const BOARD_SIZE_FACTOR_MAX = 1.5
 
 
-  const listEls = Object.values(themes).map((theme, id) => (
+  const themeElements = [...Object.values(themes).map((theme, id) => (
     <li 
     key={`themeOption-${id}`}
     onClick={() => setTheme(theme)}>
       {theme.info.displayName}
     </li>
-  ))
+  )), 
+  <li
+  key={`customThemeOption`}
+  onClick={() => setTheme(customTheme)}>
+    <Link to='/themeCreator'>
+      Custom
+    </Link>
+  </li>]
 
   function incrementGridSize(){
     if (options.SMALL_GRID_SIZE >= maxGridSize) return;
@@ -146,14 +155,16 @@ export default function Navbar({setTheme}: Props) {
 
   return (
     <StyledNavbar>
-      <div className="logo-container">
-        <Icon icon="arcticons:sudokuoss" id="logo-svg" />
-        <h1 id='logo-text'>Sudoku solver</h1>
-      </div>
+        <Link to ="/">
+        <div className="logo-container">
+          <Icon icon="arcticons:sudokuoss" id="logo-svg" />
+          <h1 id='logo-text'>Sudoku solver</h1>
+        </div>
+      </Link>
       <div className="btn-container">
         <DropDownMenu 
           icon={<Icon icon="carbon:color-palette" id="options-btn" className="svg"/>}
-          listElements={listEls}
+          listElements={themeElements}
         />
         <DropDownMenu
           icon={<Icon icon="eva:options-2-outline" id="theme-selector-btn" className="svg"/>}
