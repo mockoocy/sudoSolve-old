@@ -1,27 +1,27 @@
-import styled from "styled-components"
+import styled from "styled-components";
 
 type StyledProps = {
-  sudokuSize: number
-}
+  sudokuSize: number;
+};
 
 const StyledSudokuMenu = styled.div<StyledProps>`
   display: flex;
   align-items: center;
   padding: 0;
   justify-content: space-around;
-  gap: 2rem; 
+  gap: 2rem;
   margin-top: 2.5%;
-  @media (max-width: 1200px){
+  @media (max-width: 1200px) {
     flex-direction: column;
-    justify-content: space-between  ;
+    justify-content: space-between;
     overflow-x: scroll;
     min-width: 95vw;
   }
-    .buttons {
+  .buttons {
     display: grid;
     grid-auto-flow: row;
     grid-auto-columns: calc(30ch);
-    gap: .25rem;
+    gap: 0.25rem;
     justify-content: center;
 
     #file-label {
@@ -37,12 +37,11 @@ const StyledSudokuMenu = styled.div<StyledProps>`
         transition: all 250ms ease-in-out;
         filter: brightness(1.2);
       }
-
     }
     #file-selector {
       display: none;
     }
-    #file-submit{
+    #file-submit {
       width: auto;
       padding: 0.5rem;
 
@@ -51,10 +50,10 @@ const StyledSudokuMenu = styled.div<StyledProps>`
         display: flex;
         align-items: center;
         justify-content: center;
-        gap: .25rem
+        gap: 0.25rem;
       }
     }
   }
-`
+`;
 
-export default StyledSudokuMenu
+export default StyledSudokuMenu;

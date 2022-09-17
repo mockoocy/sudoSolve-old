@@ -1,5 +1,5 @@
-import React, { useState } from 'react'
-import styled from 'styled-components'
+import React, { useState } from "react";
+import styled from "styled-components";
 
 const StyledMenuButton = styled.div`
   display: flex;
@@ -19,11 +19,11 @@ const StyledMenuButton = styled.div`
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: .25rem;
+    gap: 0.25rem;
     border: 0;
-    margin: .25rem;
+    margin: 0.25rem;
 
-    @media (max-width: 820px){
+    @media (max-width: 820px) {
       font-size: 1rem;
     }
     :hover {
@@ -38,7 +38,7 @@ const StyledMenuButton = styled.div`
     height: 1.375em;
     stroke-width: 2px;
   }
-  .tooltip-container{
+  .tooltip-container {
     display: flex;
     width: 90%;
     align-items: center;
@@ -47,40 +47,40 @@ const StyledMenuButton = styled.div`
       padding: 0 5%;
       color: var(--standOutClr);
       font-size: 1.125rem;
-      font-family:  Lato, sans-serif;
+      font-family: Lato, sans-serif;
     }
   }
-`
+`;
 
 type Props = {
   text: string;
   tooltip: string;
-  icon?: React.ReactNode
-  clickHandler?: () => void
-}
+  icon?: React.ReactNode;
+  clickHandler?: () => void;
+};
 
-
-export default function MenuButton({tooltip, icon, clickHandler, text}: Props) {
-  const [tooltipVisible, setTooltipVisible] = useState(false)
+export default function MenuButton({
+  tooltip,
+  icon,
+  clickHandler,
+  text,
+}: Props) {
+  const [tooltipVisible, setTooltipVisible] = useState(false);
 
   return (
     <StyledMenuButton
       onMouseEnter={() => setTooltipVisible(true)}
       onMouseLeave={() => setTooltipVisible(false)}
     >
-      <button 
-      className="btn" 
-      onClick={clickHandler}>
+      <button className="btn" onClick={clickHandler}>
         {text}
         {icon}
       </button>
-      {
-        tooltipVisible &&
-      <div className="tooltip-container">
-        <span className="tooltip">{tooltip}</span>
-      </div>
-      }
-
+      {tooltipVisible && (
+        <div className="tooltip-container">
+          <span className="tooltip">{tooltip}</span>
+        </div>
+      )}
     </StyledMenuButton>
-  )
+  );
 }

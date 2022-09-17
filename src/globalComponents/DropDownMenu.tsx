@@ -1,12 +1,11 @@
-import React, { useState } from 'react';
-import styled from 'styled-components';
-import useOuterClick from '../hooks/useOuterClick';
-
+import React, { useState } from "react";
+import styled from "styled-components";
+import useOuterClick from "../hooks/useOuterClick";
 
 const StyledDropDownMenu = styled.div`
   position: relative;
   --min-width: 20vw;
-  
+
   .drop-down {
     position: absolute;
     display: flex;
@@ -17,17 +16,17 @@ const StyledDropDownMenu = styled.div`
     background: var(--bgClr);
     border: 2px solid var(--standOutClr);
     border-radius: 1rem;
-    padding: 0 .5rem;
+    padding: 0 0.5rem;
     right: 0;
-    left: calc(-.75*var(--min-width));
+    left: calc(-0.75 * var(--min-width));
 
-    @media (max-width:820px){
+    @media (max-width: 820px) {
       --min-width: 60vw;
       min-width: 50vw;
       font-size: 0.875rem;
     }
 
-    &>li{
+    & > li {
       position: relative;
       width: 95%;
       height: 3rem;
@@ -40,36 +39,36 @@ const StyledDropDownMenu = styled.div`
       padding: 0 2.5%;
       transition: all 250ms ease-in-out;
 
-      @media (max-width:820px){
+      @media (max-width: 820px) {
         font-size: 1rem;
         height: 3rem;
       }
 
-      :not(:last-child){
+      :not(:last-child) {
         border-bottom: 1px solid var(--standOutClr);
       }
 
-      :hover{
+      :hover {
         transform: scale(1.1);
-        filter: brightness(1.2) ;
+        filter: brightness(1.2);
       }
 
       ::marker {
-        content: '';
+        content: "";
       }
-      .size-selector{
+      .size-selector {
         display: flex;
         align-items: center;
         font-size: 1.5rem;
-        gap: .25rem;
+        gap: 0.25rem;
 
         .sizer:hover {
-          cursor: pointer;  
+          cursor: pointer;
           transform: scale(1.15);
           transition: all 250ms ease-in-out;
         }
       }
-      .cells-amount{
+      .cells-amount {
         all: unset;
         width: 3ch;
         height: 100%;
@@ -77,7 +76,7 @@ const StyledDropDownMenu = styled.div`
         text-align: center;
         font-family: var(--fontDefault);
         -moz-appearance: textfield;
-      } 
+      }
       input::-webkit-outer-spin-button,
       input::-webkit-inner-spin-button {
         -webkit-appearance: none;
@@ -85,30 +84,23 @@ const StyledDropDownMenu = styled.div`
       }
     }
   }
-`
+`;
 
 type Props = {
   icon: React.ReactNode;
   listElements?: React.ReactNode | React.ReactNode[];
-}
+};
 
-
-export default function DropDownMenu({icon, listElements}: Props) {
-
+export default function DropDownMenu({ icon, listElements }: Props) {
   const [open, setOpen] = useState(false);
   const openMenu = () => setOpen(true);
   const closeMenu = () => setOpen(false);
-  const selfRef = useOuterClick(closeMenu)
-
+  const selfRef = useOuterClick(closeMenu);
 
   return (
     <StyledDropDownMenu ref={selfRef} onClick={openMenu}>
       {icon}
-      {open &&
-        <ul className="drop-down">
-          {listElements}
-        </ul>
-      }
+      {open && <ul className="drop-down">{listElements}</ul>}
     </StyledDropDownMenu>
-  )
+  );
 }
