@@ -1,7 +1,7 @@
 import { Icon } from "@iconify/react";
 import { useEffect, useState } from "react";
 import styled from "styled-components";
-import { useGlobalContext } from "../../globalContext";
+import { useGlobalContext } from "../../../globalContext";
 
 const StyledTimer = styled.div`
   background-color: var(--prefilledCellClr);

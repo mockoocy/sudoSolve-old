@@ -71,6 +71,8 @@ export default function MenuButton({
     <StyledMenuButton
       onMouseEnter={() => setTooltipVisible(true)}
       onMouseLeave={() => setTooltipVisible(false)}
+      onTouchStart={() => setTooltipVisible(true)}
+      onTouchEnd={() => setTooltipVisible(false)}
     >
       <button className="btn" onClick={clickHandler}>
         {text}

@@ -1,21 +1,21 @@
 import React, { useEffect, useRef, useState } from "react";
-import SudokuBoard from "../../globalComponents/SudokuBoard";
+import SudokuBoard from "../../../globalComponents/SudokuBoard";
 import StyledSudokuMenu from "./styles/StyledSudokuMenu";
-import { useGlobalContext } from "../../globalContext";
+import { useGlobalContext } from "../../../globalContext";
 import {
   nestedNumbersToSudoku,
   sudokuToNestedNumbers,
   arrayToSquareMatrix,
-} from "../../utils/arrayMethods";
-import solveSudoku from "../../utils/solveSudoku";
-import apiClient from "../../utils/apiClient";
+} from "../../../utils/arrayMethods";
+import solveSudoku from "../../../utils/solveSudoku";
+import apiClient from "../../../utils/apiClient";
 import { useMutation } from "@tanstack/react-query";
 import { Icon } from "@iconify/react";
 import Timer from "./Timer";
-import VictoryScreen from "../../globalComponents/VictoryScreen";
+import VictoryScreen from "../../../globalComponents/VictoryScreen";
 import MenuButton from "./menuButton";
 import { AxiosError } from "axios";
-import getBoardSize from "../../utils/getBoardSize";
+import getBoardSize from "../../../utils/getBoardSize";
 
 export default function SudokuMenu() {
   const [paused, setPaused] = useState(false);
@@ -75,7 +75,6 @@ export default function SudokuMenu() {
     {
       onSuccess: (res) => {
         if (!res) return;
-        console.log(res);
         const loadedBoard: number[] = res.data;
         const sudokuMatrix = arrayToSquareMatrix(loadedBoard);
         setOptions((prevOptions) => ({
@@ -91,7 +90,6 @@ export default function SudokuMenu() {
         });
       },
       onError: (err: AxiosError) => {
-        console.log(err);
         alert(
           `error while trying to proccess the image, status code: ${
             err?.response?.status
@@ -146,7 +144,6 @@ export default function SudokuMenu() {
     const randomId = validIds[randomIdId];
     const randomRow = Math.floor(randomId / sudokuSize);
     const randomColumn = randomId % sudokuSize;
-    console.log(randomRow, randomColumn);
     const newBoard = structuredClone(boardState);
     // Saving the performance for storage, losing the status of being cool functional programmer this way tho
     newBoard[randomRow][randomColumn].value =
