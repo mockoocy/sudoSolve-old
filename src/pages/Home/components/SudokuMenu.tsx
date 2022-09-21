@@ -100,7 +100,10 @@ export default function SudokuMenu() {
   );
 
   function chooseSolver() {
-    if (boardState.flat().some((cell) => !cell.isValid)) return;
+    if (boardState.flat().some((cell) => !cell.isValid)) {
+      alert("Cannot solve it, you have some invalid cells");
+      return;
+    }
     setFinishedWithButton(true);
     if (options.SUDOKU_SIZE <= 9) {
       algoSolveSudoku();
