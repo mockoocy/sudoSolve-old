@@ -26,7 +26,7 @@ const StyledColorInput = styled.div<StyledProps>`
   }
 
   .caption {
-    ${textShadowOutline(0.0625, 0.125, "var(--bgClr)")};
+    ${textShadowOutline(0.0625, 0, "var(--bgClr)")};
     font-size: 1.25rem;
     font-family: Lato, sans-serif;
   }
