@@ -26,7 +26,11 @@ type Props = {
   customTheme: Theme;
 };
 
-export default function ThemeCreator({ setCustomTheme, customTheme }: Props) {
+export default function ThemeCreator({
+  setCustomTheme,
+  customTheme,
+  setTheme,
+}: Props) {
   const { options } = useGlobalContext();
   const boardSize = getBoardSize(
     options.SUDOKU_SIZE,
@@ -41,6 +45,7 @@ export default function ThemeCreator({ setCustomTheme, customTheme }: Props) {
         customTheme={customTheme}
         setCustomTheme={setCustomTheme}
         text={propertyName}
+        setTheme={setTheme}
       />
     )
   );

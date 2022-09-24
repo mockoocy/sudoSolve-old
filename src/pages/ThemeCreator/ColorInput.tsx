@@ -38,6 +38,7 @@ type Props = {
   customTheme: Theme;
   setCustomTheme: React.Dispatch<React.SetStateAction<Theme>>;
   text: string;
+  setTheme: React.Dispatch<React.SetStateAction<Theme>>;
 };
 
 export default function ColorInput({
@@ -45,6 +46,7 @@ export default function ColorInput({
   customTheme,
   setCustomTheme,
   text,
+  setTheme,
 }: Props) {
   const [colorPickerVisible, setColorPickerVisible] = useState(false);
   const hide = () => setColorPickerVisible(false);
@@ -62,10 +64,9 @@ export default function ColorInput({
       color.rgb.a && decimalToHex(color.rgb.a)
     }`;
     newCustomThemeColors[propertyKey] = newColorHex;
-    setCustomTheme((prevCustomTheme) => ({
-      ...prevCustomTheme,
-      colors: newCustomThemeColors,
-    }));
+    const newCustomTheme = { ...customTheme, colors: newCustomThemeColors };
+    setCustomTheme(newCustomTheme);
+    setTheme(customTheme);
   }
 
   const PickerRef = useOuterClick(hide);

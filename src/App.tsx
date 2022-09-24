@@ -26,7 +26,6 @@ export default function App() {
 
   useEffect(() => {
     localStorage.setItem("customTheme", JSON.stringify(customTheme));
-    setTheme(customTheme);
   }, [customTheme, setTheme]);
 
   useEffect(() => {
