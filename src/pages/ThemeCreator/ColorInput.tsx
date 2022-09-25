@@ -79,9 +79,9 @@ export default function ColorInput({
       {colorPickerVisible ? (
         <ChromePicker
           className="picker"
+          disableAlpha={false}
           color={customTheme.colors[propertyKey]}
           onChangeComplete={(color) => changeCustomTheme(propertyKey, color)}
-          disableAlpha={false}
         />
       ) : (
         <div className="caption" onClick={() => {}}>

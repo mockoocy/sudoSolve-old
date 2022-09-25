@@ -6,24 +6,27 @@ const StyledInfoBox = styled.section`
   display: flex;
   justify-content: space-around;
   align-items: center;
+  gap: 5%;
   width: 80%;
   margin: 1.25% 10%;
-  padding: 1.25% 0;
+  padding: 1.25%;
   ${boxShadowOutline(0.0625, 0.125, "var(--gridGapClr)")};
   border-radius: 0.25rem;
-  height: 50vh;
 
   @media (max-width: 820px) {
     flex-direction: column;
     justify-content: space-between;
-    height: 80%;
     width: 90%;
     margin: 1.25% 5%;
-    padding: 0;
   }
 
   * {
     font-family: Lato, sans-serif;
+    font-size: 1.125rem;
+
+    @media (max-width: 820px) {
+      font-size: 0.875rem;
+    }
   }
 
   .container {
@@ -33,26 +36,42 @@ const StyledInfoBox = styled.section`
   }
 
   .visual-content-container {
-    height: 100%;
     > img {
-      height: 100%;
+      min-height: 25%;
+      max-height: 75%;
+      min-width: 25%;
+      max-width: 75%;
       border-radius: 1rem;
       @media (max-width: 820px) {
-        height: 80%;
+        mix-width: 100%;
       }
     }
   }
   .description-container {
-    > ul {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+
+    .heading {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--standOutClr);
+    }
+
+    > * {
+      max-width: 45ch;
       color: var(--textClr);
-      max-width: 40ch;
-      padding: 0;
       @media (max-width: 820px) {
-        max-width: 90%;
+        max-width: 80%;
       }
+    }
+    p {
+      word-wrap: break-word;
+    }
+    > ul {
+      padding: 0;
       > li {
         margin-left: 4ch;
-        font-size: 1.25rem;
 
         @media (max-width: 820px) {
           font-size: 0.875rem;
@@ -76,13 +95,17 @@ type Props = {
   // it will be an image or a svg
   description: React.ReactNode;
   // it doesnt matter if you send an <ul> or a heading, css will handle it at ease
+  heading?: string;
 };
 
-export default function InfoBox({ visualChild, description }: Props) {
+export default function InfoBox({ visualChild, description, heading }: Props) {
   return (
     <StyledInfoBox>
       <div className="container visual-content-container">{visualChild}</div>
-      <div className="container description-container">{description}</div>
+      <div className="container description-container">
+        <h2 className="heading">{heading}</h2>
+        {description}
+      </div>
     </StyledInfoBox>
   );
 }

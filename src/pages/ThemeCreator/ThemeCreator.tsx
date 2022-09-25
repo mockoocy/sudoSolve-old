@@ -5,12 +5,29 @@ import getBoardSize from "../../utils/getBoardSize";
 import { Theme } from "../../types";
 import styled from "styled-components";
 import ColorInput from "./ColorInput";
+import InfoBox from "../../globalComponents/InfoBox";
+
+const themeCreatorOverview = require(`../../assets/themeCreatorImage1.png`);
+const colorInputOverview = require(`../../assets/ColorInputImage.png`);
 
 const StyledThemeCreator = styled.section`
   margin: 2.5% 0;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: space-around;
+
+  .main-container {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    width: 100%;
+
+    @media (max-width: 820px) {
+      flex-direction: column;
+      gap: 1vh;
+    }
+  }
 
   #color-inputs-container {
     width: 20%;
@@ -52,8 +69,34 @@ export default function ThemeCreator({
 
   return (
     <StyledThemeCreator>
-      <SudokuBoard width={boardSize.width} height={boardSize.height} />
-      <div id="color-inputs-container">{colorInputElements}</div>
+      <div className="main-container">
+        <SudokuBoard width={boardSize.width} height={boardSize.height} />
+        <div id="color-inputs-container">{colorInputElements}</div>
+      </div>
+      <InfoBox
+        visualChild={
+          <img src={themeCreatorOverview} alt="Theme Creator page screenshot" />
+        }
+        description={
+          <p>
+            In the Theme Creator, you have a preview of the board and the color
+            inputs, which change appearance of certain elements of the website.
+          </p>
+        }
+        heading="How to use Theme Creator"
+      />
+      <InfoBox
+        visualChild={
+          <img src={colorInputOverview} alt="Theme Creator page screenshot" />
+        }
+        description={
+          <p>
+            This is how the color input looks. You can select which color you
+            want using sliders or input the color code in hex, hsla or rgba.
+          </p>
+        }
+        heading="How to choose colors"
+      />
     </StyledThemeCreator>
   );
 }
