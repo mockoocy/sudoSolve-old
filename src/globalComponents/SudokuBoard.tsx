@@ -8,12 +8,14 @@ type StyledProps = {
   smallGridSize: number;
   width: string;
   height: string;
+  sizeFactor: number;
 };
 const StyledSudokuBoard = styled.div<StyledProps>`
   --width: ${(props) => props.width};
   --height: ${(props) => props.height};
   --sudokuSize: ${(props) => props.sudokuSize};
   --smallGridSize: ${(props) => props.smallGridSize};
+  --sizeFactor: ${(props) => props.sizeFactor};
 
   width: var(--width);
   height: var(--height);
@@ -21,6 +23,7 @@ const StyledSudokuBoard = styled.div<StyledProps>`
   gap: 1px;
   grid-template-columns: repeat(var(--sudokuSize), 1fr);
   grid-template-rows: repeat(var(--sudokuSize), 1fr);
+  margin-bottom: calc(var(--sudokuSize) * 1 / (var(--sizeFactor)) * 1vh);
 
   @media (max-width: 820px) {
     height: auto;
@@ -123,6 +126,7 @@ export default function SudokuBoard({ width, height }: Props) {
       smallGridSize={options.SMALL_GRID_SIZE}
       width={width}
       height={height}
+      sizeFactor={options.BOARD_SIZE_FACTOR}
     >
       {sudokuCellElements}
     </StyledSudokuBoard>

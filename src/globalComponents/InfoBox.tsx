@@ -8,7 +8,6 @@ const StyledInfoBox = styled.section`
   align-items: center;
   gap: 5%;
   width: 80%;
-  margin: 1.25% 10%;
   padding: 1.25%;
   ${boxShadowOutline(0.0625, 0.125, "var(--gridGapClr)")};
   border-radius: 0.25rem;
@@ -17,7 +16,7 @@ const StyledInfoBox = styled.section`
     flex-direction: column;
     justify-content: space-between;
     width: 90%;
-    margin: 1.25% 5%;
+    padding: 5ch 1.25%;
   }
 
   * {
