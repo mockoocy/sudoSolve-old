@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { ThemeProvider } from "styled-components";
 import { Theme } from "./types";
-import themes from "./utils/themes";
+import themes from "./themes";
 import GlobalStyle from "./globalComponents/styles/Global";
 import Navbar from "./globalComponents/Navbar";
 import { SudokuProvider } from "./globalContext";

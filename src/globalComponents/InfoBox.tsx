@@ -1,6 +1,5 @@
 import React from "react";
 import styled from "styled-components";
-import { boxShadowOutline } from "../utils/css-mixins";
 
 const StyledInfoBox = styled.section`
   display: flex;
@@ -52,6 +51,7 @@ const StyledInfoBox = styled.section`
 
     .heading {
       font-size: 1.5rem;
+      font-family: Roboto, Lato, sans-serif;
       font-weight: 700;
       color: var(--standOutClr);
     }

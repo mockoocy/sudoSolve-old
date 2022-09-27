@@ -56,18 +56,6 @@ const StyledDropDownMenu = styled.div`
       ::marker {
         content: "";
       }
-      .size-selector {
-        display: flex;
-        align-items: center;
-        font-size: 1.5rem;
-        gap: 0.25rem;
-
-        .sizer:hover {
-          cursor: pointer;
-          transform: scale(1.15);
-          transition: all 250ms ease-in-out;
-        }
-      }
       .cells-amount {
         all: unset;
         width: 3ch;

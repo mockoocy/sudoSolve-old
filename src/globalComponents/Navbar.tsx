@@ -1,13 +1,13 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import { Icon } from "@iconify/react";
 import { useGlobalContext } from "../globalContext";
 import DropDownMenu from "./DropDownMenu";
 import { Theme } from "../types";
-import themes from "../utils/themes";
+import themes from "../themes";
 import { Link } from "react-router-dom";
 import { ReactComponent as Logo } from "../assets/sudoSolveLogo.svg";
-
+import OptionSetterButton from "./OptionSetterButton";
 const StyledNavbar = styled.nav`
   --navHeight: 10vh;
   width: 100vw;
@@ -53,6 +53,7 @@ type Props = {
 };
 
 export default function Navbar({ setTheme, customTheme }: Props) {
+  const [currentFontId, setCurrentFontId] = useState(0);
   const { options, setOptions } = useGlobalContext();
 
   const maxGridSize = 6; // Not sure if a cap is a good idea, but on the other hand - who wants to solve 64x64 sudoku or bigger, seems "a bit" hard
@@ -121,20 +122,12 @@ export default function Navbar({ setTheme, customTheme }: Props) {
 
   const optionsElements = [
     <li key={"Option-SudokuSize"}>
-      Sudoku Size
-      <div className="size-selector">
-        <Icon
-          icon="akar-icons:circle-minus"
-          onClick={decrementGridSize}
-          className="sizer"
-        />
-        {options.SMALL_GRID_SIZE}
-        <Icon
-          icon="akar-icons:circle-plus"
-          onClick={incrementGridSize}
-          className="sizer"
-        />
-      </div>
+      <OptionSetterButton
+        text="Sudoku Size"
+        value={options.SMALL_GRID_SIZE}
+        incrementFunction={incrementGridSize}
+        decrementFunction={decrementGridSize}
+      />
     </li>,
     <li key={"Option-filledCells"}>
       Filled cells
@@ -147,21 +140,13 @@ export default function Navbar({ setTheme, customTheme }: Props) {
         onChange={(e) => changeFilledCellsAmount(e)}
       />
     </li>,
-    <li key={"Option-boardSizeFactor"}>
-      Board Size
-      <div className="size-selector">
-        <Icon
-          icon="akar-icons:circle-minus"
-          onClick={decrementBoardSizeFactor}
-          className="sizer"
-        />
-        {options.BOARD_SIZE_FACTOR}
-        <Icon
-          icon="akar-icons:circle-plus"
-          onClick={incrementBoardSizeFactor}
-          className="sizer"
-        />
-      </div>
+    <li key="Option-boardSizeFactor">
+      <OptionSetterButton
+        text="Board Size"
+        value={options.BOARD_SIZE_FACTOR}
+        incrementFunction={incrementBoardSizeFactor}
+        decrementFunction={decrementBoardSizeFactor}
+      />
     </li>,
   ];
 

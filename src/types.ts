@@ -75,3 +75,21 @@ export enum Colors {
   invalidCellClr = "var(--invalidCellClr)",
   prefilledCellClr = "var(--prefilledCellClr)",
 }
+
+export enum FontsEnum {
+  Caveat = "Caveat",
+  Inter = "Inter",
+  JetBrainsMono = "JetBrains Mono",
+  Lato = "Lato",
+  Roboto = "Roboto",
+  Rubik = "Rubik",
+  DancingScript = "Dancing Script",
+}
+
+export enum FontWeights {
+  light = 300,
+  regular = 400,
+  medium = 500,
+  semiBold = 600,
+  bold = 700,
+}
