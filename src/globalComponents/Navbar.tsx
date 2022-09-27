@@ -18,6 +18,11 @@ const StyledNavbar = styled.nav`
   align-items: center;
   justify-content: space-between;
 
+  a:focus {
+    outline: none;
+    border: none;
+  }
+
   .logo-container {
     display: flex;
     align-items: center;
@@ -27,6 +32,7 @@ const StyledNavbar = styled.nav`
       width: auto;
       height: 100%;
       filter: hue-rotate(var(--hueRotationDeg));
+      border-radius: 19% 81% 38% 62% / 67% 19% 81% 33%;
     }
   }
   .btn-container {

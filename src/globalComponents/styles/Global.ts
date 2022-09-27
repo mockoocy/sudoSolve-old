@@ -1,22 +1,23 @@
 import { createGlobalStyle } from "styled-components";
 import { Theme } from "../../types";
 
-const GlobalStyle = createGlobalStyle<{theme: Theme, font?: string}>`
+const GlobalStyle = createGlobalStyle<{ theme: Theme; font?: string }>`
   :root{
 /* Colors */
-  --bgClr: ${({theme})=> theme.colors.bgClr};
-  --standOutClr: ${({theme})=> theme.colors.standOutClr}; 
-  --gridGapClr: ${({theme})=> theme.colors.gridGapClr}; 
-  --selectedCellClr: ${({theme})=> theme.colors.selectedCellClr};
-  --notSelectedCellClr: ${({theme})=> theme.colors.notSelectedCellClr};
-  --highlightCellClr: ${({theme})=> theme.colors.highlightCellClr};
-  --invalidCellClr: ${({theme})=> theme.colors.invalidCellClr};
-  --prefilledCellClr: ${({theme})=> theme.colors.prefilledCellClr};
-  --textClr: ${({theme})=> theme.colors.textClr};
-  --victoryScreenBgClr: ${({theme})=> theme.colors.victoryScreenBgClr};
+  --bgClr: ${({ theme }) => theme.colors.bgClr};
+  --standOutClr: ${({ theme }) => theme.colors.standOutClr}; 
+  --gridGapClr: ${({ theme }) => theme.colors.gridGapClr}; 
+  --selectedCellClr: ${({ theme }) => theme.colors.selectedCellClr};
+  --notSelectedCellClr: ${({ theme }) => theme.colors.notSelectedCellClr};
+  --highlightCellClr: ${({ theme }) => theme.colors.highlightCellClr};
+  --invalidCellClr: ${({ theme }) => theme.colors.invalidCellClr};
+  --prefilledCellClr: ${({ theme }) => theme.colors.prefilledCellClr};
+  --textClr: ${({ theme }) => theme.colors.textClr};
+  --victoryScreenBgClr: ${({ theme }) =>
+    theme.gradientColors.victoryScreenBgClr};
 
   /* Utils */
-  --hueRotationDeg: ${({theme}) => theme.utils?.hueRotationDeg};
+  --hueRotationDeg: ${({ theme }) => theme.utils?.hueRotationDeg};
 
   
 
@@ -62,6 +63,6 @@ const GlobalStyle = createGlobalStyle<{theme: Theme, font?: string}>`
   #root {
     isolation: isolate;
   }
-`
+`;
 
 export default GlobalStyle;
