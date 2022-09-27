@@ -6,6 +6,7 @@ import { Theme } from "../../types";
 import styled from "styled-components";
 import ColorInput from "./ColorInput";
 import InfoBox from "../../globalComponents/InfoBox";
+import InfoBoxes from "../../globalComponents/InfoBoxes";
 
 const themeCreatorOverview = require(`../../assets/themeCreatorImage1.png`);
 const colorInputOverview = require(`../../assets/ColorInputImage.png`);
@@ -73,30 +74,36 @@ export default function ThemeCreator({
         <SudokuBoard width={boardSize.width} height={boardSize.height} />
         <div id="color-inputs-container">{colorInputElements}</div>
       </div>
-      <InfoBox
-        visualChild={
-          <img src={themeCreatorOverview} alt="Theme Creator page screenshot" />
-        }
-        description={
-          <p>
-            In the Theme Creator, you have a preview of the board and the color
-            inputs, which change appearance of certain elements of the website.
-          </p>
-        }
-        heading="How to use Theme Creator"
-      />
-      <InfoBox
-        visualChild={
-          <img src={colorInputOverview} alt="Theme Creator page screenshot" />
-        }
-        description={
-          <p>
-            This is how the color input looks. You can select which color you
-            want using sliders or input the color code in hex, hsla or rgba.
-          </p>
-        }
-        heading="How to choose colors"
-      />
+      <InfoBoxes>
+        <InfoBox
+          visualChild={
+            <img
+              src={themeCreatorOverview}
+              alt="Theme Creator page screenshot"
+            />
+          }
+          description={
+            <p>
+              In the Theme Creator, you have a preview of the board and the
+              color inputs, which change appearance of certain elements of the
+              website.
+            </p>
+          }
+          heading="How to use Theme Creator"
+        />
+        <InfoBox
+          visualChild={
+            <img src={colorInputOverview} alt="Theme Creator page screenshot" />
+          }
+          description={
+            <p>
+              This is how the color input looks. You can select which color you
+              want using sliders or input the color code in hex, hsla or rgba.
+            </p>
+          }
+          heading="How to choose colors"
+        />
+      </InfoBoxes>
     </StyledThemeCreator>
   );
 }

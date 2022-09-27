@@ -9,8 +9,7 @@ const StyledInfoBox = styled.section`
   gap: 5%;
   width: 80%;
   padding: 1.25%;
-  ${boxShadowOutline(0.0625, 0.125, "var(--gridGapClr)")};
-  border-radius: 0.25rem;
+  border-top: 1px solid #0f0f0f2f;
 
   @media (max-width: 820px) {
     flex-direction: column;
